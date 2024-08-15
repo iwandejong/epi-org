@@ -2,7 +2,7 @@
     <div class="bg-slate-900 rounded-md w-full h-full">
         <div class="space-y-4">
             <p class="text-xl">Organization Tree</p>
-            <div class="border border-slate-700 rounded-md pt-6">
+            <div class="border border-slate-700 rounded-md pt-6 flex justify-center">
                 <OrganizationChart v-model:selectionKeys="selection" :value="data" collapsible selectionMode="multiple">
                     <template #person="slotProps">
                         <div class="flex flex-col">
