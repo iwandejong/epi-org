@@ -1,7 +1,7 @@
 <template>
     <div class="bg-slate-900 border border-slate-700 rounded-md p-6 w-full h-full hover:border-blue-500 cursor-pointer duration-300" @click="toggle">
-        <div ref="wrapper" class="grid grid-cols-5 items-center w-full h-full transition-all duration-1000 ease-in-out">
-            <div ref="profile" class="transition-all duration-1000 ease-in-out flex _flex-col _justify-end col-span-2 items-center space-x-4 _space-y-4 _bg-gradient-to-t from-purple-700 to-pink-600 _p-6 _rounded-md h-full bg-opacity-0">
+        <div ref="wrapper" class="grid grid-cols-5 items-center w-full h-full _transition-all duration-1000 ease-in-out">
+            <div ref="profile" class="_transition-all duration-1000 ease-in-out flex _flex-col _justify-end col-span-2 items-center space-x-4 _space-y-4 _bg-gradient-to-t from-purple-700 to-pink-600 _p-6 _rounded-md h-full bg-opacity-0">
                 <div class="h-12 w-12 bg-white text-black rounded-full shrink-0 flex items-center justify-center">
                     <p>
                         PD
@@ -12,7 +12,7 @@
                     <p class="text-slate-400 text-sm">Senior Software Engineer</p>
                 </div>
             </div>
-            <div ref="info" class="hidden col-span-3 pl-8 space-y-8 transition-all duration-1000 ease-in-out"> 
+            <div ref="info" class="hidden col-span-3 pl-8 space-y-8 _transition-all duration-1000 ease-in-out"> 
                 <div>
                     <p class="text-lg">Bio</p>
                     <p class="text-slate-400 text-sm">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <div ref="dropdown" class="h-full flex items-center col-span-3 justify-end transition-all duration-1000 ease-in-out">
+            <div ref="dropdown" class="h-full flex items-center col-span-3 justify-end _transition-all duration-1000 ease-in-out">
                 <div class="flex items-center space-x-4 h-12 w-12 justify-center rounded-full hover:bg-slate-700">
                     <i class="pi pi-chevron-down text-xl"></i>
                 </div>
