@@ -3,9 +3,16 @@ import path from 'path';
 export default defineNuxtConfig({
     modules: [
         '@primevue/nuxt-module',
-		'@nuxtjs/tailwindcss',
-		'@nuxtjs/color-mode',
+        '@nuxtjs/tailwindcss',
+        '@nuxtjs/color-mode',
+        "@sidebase/nuxt-auth",
     ],
+    auth: { 
+        baseURL: process.env.AUTH_BASE_URL,
+        provider: {
+            type: 'authjs',
+        },
+    },
     primevue: {
 		importPT: { from: path.resolve(__dirname, './assets/lara/') },
     },
@@ -31,5 +38,13 @@ export default defineNuxtConfig({
         vueJsx: {
             mergeProps: true
         }
-    }
+    },
+    typescript: {
+        strict: false
+    },
+    runtimeConfig: {
+        auth: {
+            secret: process.env.AUTH_SECRET
+        }
+    },
 })
