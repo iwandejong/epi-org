@@ -1,4 +1,4 @@
-import Lara from '@primevue/themes/lara';
+import Lara from '@/assets/lara';
 
 export default defineNuxtConfig({
     modules: [
