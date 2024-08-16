@@ -1,10 +1,10 @@
-<script setup lang="ts">
-definePageMeta({
-  middleware:[
-    'auth',
-  ],
-});
-</script>
+<!-- <script setup lang="ts">
+// definePageMeta({
+//   middleware:[
+//     'auth',
+//   ],
+// });
+</script> -->
 
 <template>
     <div class="text-white bg-slate-900 overflow-hidden">

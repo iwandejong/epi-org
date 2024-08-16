@@ -1,8 +1,9 @@
 import { NuxtAuthHandler } from '#auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { pool } from '../db/connection';
-import bcrypt from 'bcrypt';
-
+import {
+    getEmployee,
+    createEmployee
+} from '../db/auth';
 
 export default NuxtAuthHandler ({
     secret: useRuntimeConfig().auth.secret,
@@ -10,40 +11,30 @@ export default NuxtAuthHandler ({
         signIn: '/login',
         signOut: '/logout',
         error: '/login',
-        verifyRequest: '/verify-email',
         newUser: '/register',
     },
     providers: [
-        // @ts-expect-error
         CredentialsProvider.default({
             name: 'credentials',
             credentials: {},
-            async authorize(credentials: { username: string, password: string }) {
+            async authorize(credentials: { email: string, password: string }) {
+                const { email, password } = credentials;
                 try {
-                    const request = pool.request();
-                    const result = await request
-                        .input('username', credentials.username)
-                        .query('SELECT * FROM users WHERE username = @username');
-
-                    const user = result.recordset[0];
-
-                    let password = credentials.password;
-                    // hash the password
-                    const hash = await bcrypt.hash(password, 10);
-                    // compare the hashed password with the one in the database
-                    const match = await bcrypt.compare(hash, user.password);
-
-                    if (user && match) {
-                        return user;
-                    } else {
-                        return null;
+                    const user = await getEmployee(email);
+                    if (!user) {
+                        throw new Error('User not found');
                     }
-                } catch (error) {
+                    if (user.password !== password) {
+                        throw new Error('Password does not match');
+                    }
+                    return user;
+                }
+                catch (error) {
                     console.error('Error during authorization:', error);
                     return null;
                 }
             }
-        })
+        }),
     ],
     session: {
         strategy: 'jwt',
@@ -61,6 +52,6 @@ export default NuxtAuthHandler ({
                 ...session.user
             };
             return session;
-        }
+        },
     }
 })

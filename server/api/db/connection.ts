@@ -1,4 +1,4 @@
-import * as sql from 'mssql';
+import sql from 'mssql';
 
 // Configuration for your Azure SQL database connection
 const cfg: sql.config = {
@@ -8,18 +8,9 @@ const cfg: sql.config = {
     database: process.env.DB_DATABASE,
     options: {
         enableArithAbort: true,
-        encrypt: true
+        encrypt: true // For Azure SQL databases, encryption is required
     }
 };
 
-// Create a connection pool using the configuration object
+// Create and connect the pool globally
 export const pool = new sql.ConnectionPool(cfg);
-
-// Connect to the database
-pool.connect()
-    .then(() => {
-        console.log("Connected to the Azure SQL database successfully.");
-    })
-    .catch(err => {
-        console.error("Error connecting to the Azure SQL database:", err);
-    });

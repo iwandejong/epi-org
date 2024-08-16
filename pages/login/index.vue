@@ -1,9 +1,32 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 definePageMeta({
   layout: 'auth'
 })
 
 const checked = ref(false)
+
+const email = ref('');
+const password = ref('');
+const error = ref('');
+const auth = useAuth();
+
+
+const login = async () => {
+    // try {
+    //     await auth.signIn({
+    //         provider: 'credentials',
+    //         options: {
+    //             email: email.value,
+    //             password: password.value
+    //         }
+    //     });
+    //     navigateTo('/'); // Redirect to home page after login
+    // } catch (err) {
+    //     error.value = 'Invalid email or password';
+    // }
+};
 </script>
 
 <template>
@@ -15,7 +38,7 @@ const checked = ref(false)
                 <p class="text-gray-400">Sign up or login to continue</p>
             </div>
         
-            <form class="flex flex-col space-y-6 w-full" @submit="">
+            <form class="flex flex-col space-y-6 w-full" @submit.prevent="login">
                 <div class="flex flex-col space-y-1">
                     <label for="email" class="text-white">Email</label>
                     <input type="email" id="email" class="bg-slate-700 p-2 rounded-md text-white" placeholder="Email"/>

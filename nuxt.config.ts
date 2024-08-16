@@ -4,7 +4,6 @@ export default defineNuxtConfig({
     modules: [
         '@primevue/nuxt-module',
         '@nuxtjs/tailwindcss',
-        '@nuxtjs/color-mode',
         "@sidebase/nuxt-auth",
     ],
     auth: { 
@@ -14,7 +13,16 @@ export default defineNuxtConfig({
         },
     },
     primevue: {
-		importPT: { from: path.resolve(__dirname, './assets/lara/') },
+        usePrimeVue: true,
+        // options: {
+        //     theme: {
+        //         preset: '
+        //     }
+        // }
+        // options: {
+        //     unstyled: true
+        // },
+		// importPT: { from: path.resolve(__dirname, './presets/lara/') },
     },
     devtools: { enabled: false },
     postcss: {
@@ -25,20 +33,12 @@ export default defineNuxtConfig({
     },
     components: {
 		global: true,
-		dirs: ['`/components'],
+		dirs: ['./components'],
 	},
     css: [
         '~/assets/css/main.css',
         'primeicons/primeicons.css'
     ],
-    vite: {
-        vue: {
-            customElement: true
-        },
-        vueJsx: {
-            mergeProps: true
-        }
-    },
     typescript: {
         strict: false
     },
