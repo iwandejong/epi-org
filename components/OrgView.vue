@@ -24,6 +24,7 @@
 
 <script setup>
 import { ref } from "vue";
+import OrganizationChart from "primevue/organizationchart";
 
 const data = ref({
     key: '0',

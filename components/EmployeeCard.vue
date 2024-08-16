@@ -1,14 +1,17 @@
 <template>
-    <div class="bg-slate-900 border border-slate-700 rounded-md p-6 w-full h-full hover:border-blue-500 cursor-pointer duration-300" @click="toggle">
+    <div class="bg-slate-900 border border-slate-700 rounded-md p-6 w-full h-full hover:border-blue-500 cursor-pointer duration-300">
         <div ref="wrapper" class="grid grid-cols-5 items-center w-full h-full _transition-all duration-1000 ease-in-out">
-            <div ref="profile" class="flex _flex-col _justify-end col-span-4 items-center space-x-4 _space-y-4 _bg-gradient-to-t from-purple-700 to-pink-600 _p-6 _rounded-md h-full bg-opacity-0">
+            <div ref="profile" class="flex _flex-col _justify-end col-span-4 items-center space-x-4 _space-y-4 _bg-gradient-to-t from-blue-700 to-pink-600 _p-6 _rounded-md h-full bg-opacity-0">
                 <div class="h-12 w-12 bg-white text-black rounded-full shrink-0 flex items-center justify-center">
                     <p>
                         PD
                     </p>
                 </div>
                 <div class="space-y-2">
-                    <p class="text-lg">John Doe</p>
+                    <div class="text-lg flex items-center space-x-2">
+                        <p>John Doe</p>
+                        <p class="pi pi-linkedin" v-if="active"></p>
+                    </div>
                     <p class="text-slate-400 text-sm">Senior Software Engineer</p>
                 </div>
             </div>
@@ -32,7 +35,7 @@
                             32.5hrs
                         </p>
                     </div>
-                    <div>
+                    <div class="hidden 2xl:block">
                         <p class="">Satisfaction</p>
                         <p class="text-green-400">
                             8.9
@@ -43,12 +46,12 @@
                     <div class="bg-blue-500 flex rounded-md items-center justify-center px-4 hover:opacity-70 cursor-pointer flex-nowrap flex-shrink-0">
                         <p>Manage Employee</p>
                     </div>
-                    <div class="flex items-center space-x-4 h-12 w-12 justify-center rounded-full hover:bg-slate-700 flex-shrink-0">
+                    <div class="flex items-center space-x-4 h-12 w-12 justify-center rounded-full hover:bg-slate-700 flex-shrink-0" @click="toggle">
                         <i class="pi pi-chevron-up text-xl"></i>
                     </div>
                 </div>
             </div>
-            <div ref="dropdown" class="h-full flex items-center col-span-1 justify-end _transition-all duration-1000 ease-in-out">
+            <div ref="dropdown" class="h-full flex items-center col-span-1 justify-end _transition-all duration-1000 ease-in-out" @click="toggle">
                 <div class="flex items-center space-x-4 h-12 w-12 justify-center rounded-full hover:bg-slate-700">
                     <i class="pi pi-chevron-down text-xl"></i>
                 </div>
