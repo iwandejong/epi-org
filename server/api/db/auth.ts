@@ -1,43 +1,77 @@
-import { pool } from './connection';  // Assuming `sql` is exported from your connection module
+import { pool, poolPromise } from './connection';  // Assuming `sql` is exported from your connection module
 import sql from 'mssql';
 import bcrypt from 'bcrypt';
 
 export const getEmployee = async (email: string) => {
+    await poolPromise;
     const result = await pool.request()
         .input('Email', sql.NVarChar, email)
-        .query('SELECT * FROM Employees WHERE Email = @Email');
+        .query('SELECT * FROM employee WHERE email = @Email');
     return result.recordset[0];
 };
+
+export const authenticateEmployee = async (email: string, password: string) => {
+    await poolPromise;
+    const employee = await getEmployee(email);
+    if (!employee) {
+        return false;
+    }
+
+    password = password.trim();
+
+    const pw = employee.password.trim();
+
+    try {
+        const passwordMatch = await bcrypt.compare(password, pw);
+        if (!passwordMatch) {
+            console.log("Password mismatch");
+        } else {
+            console.log("Password match");
+        }
+        return passwordMatch ? employee : false;
+    } catch (error) {
+        console.error("Error during password comparison:", error);
+        return false;
+    }
+}
 
 export const createEmployee = async (employee: {
     firstName: string,
     lastName: string,
-    birthdate: Date,
-    salary: number,
-    role: string,
-    managerId: string | null,
-    joinDate: Date,
+    birthDate: Date,
     linkedIn: string,
-    orgId: string,
     email: string,
     password: string
+    orgId: string,
+    employeeId: string,
 }) => {
-    const hashedPassword = await bcrypt.hash(employee.password, 10);
+    const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
 
-    await pool.request()
+    await poolPromise;
+    const result = await pool.request()
         .input('FirstName', sql.NVarChar, employee.firstName)
         .input('LastName', sql.NVarChar, employee.lastName)
-        .input('Birthdate', sql.Date, employee.birthdate)
-        .input('Salary', sql.Decimal(18, 2), employee.salary)
-        .input('Role', sql.NVarChar, employee.role)
-        .input('ManagerId', sql.UniqueIdentifier, employee.managerId)
-        .input('JoinDate', sql.Date, employee.joinDate)
+        .input('BirthDate', sql.Date, employee.birthDate)
+        .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
+        .input('Salary', sql.Float, 0)
+        .input('Role', sql.NVarChar, 'unassigned')
+        .input('ManagerId', sql.UniqueIdentifier, null)
+        .input('JoinDate', sql.Date, new Date())
+        .input('LeaveDays', sql.Int, 0)
         .input('LinkedIn', sql.NVarChar, employee.linkedIn)
         .input('OrgId', sql.UniqueIdentifier, employee.orgId)
         .input('Email', sql.NVarChar, employee.email)
         .input('Password', sql.NVarChar, hashedPassword)
+        .input('HierarchyId', sql.NVarChar, null)
+
         .query(`
-            INSERT INTO Employees (FirstName, LastName, Birthdate, Salary, Role, ManagerId, JoinDate, LinkedIn, OrgId, Email, Password)
-            VALUES (@FirstName, @LastName, @Birthdate, @Salary, @Role, @ManagerId, @JoinDate, @LinkedIn, @OrgId, @Email, @Password)
+            INSERT INTO employee (firstName, lastName, birthDate, employeeId, salary, role, manager, joiningDate, leaveDays, linkedIn, orgId, email, password, hierarchyId)
+            VALUES (@FirstName, @LastName, @BirthDate, @EmployeeId, @Salary, @Role, @ManagerId, @JoinDate, @LeaveDays, @LinkedIn, @OrgId, @Email, @Password, @HierarchyId)
         `);
+
+    if (result.rowsAffected[0] === 0) {
+        return false;
+    }
+
+    return true;
 };

@@ -2,18 +2,16 @@ import { NuxtAuthHandler } from '#auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import {
     getEmployee,
-    createEmployee
+    authenticateEmployee,
 } from '../db/auth';
 
 export default NuxtAuthHandler ({
-    secret: useRuntimeConfig().auth.secret,
+    secret: useRuntimeConfig().authSecret,
     pages: {
-        signIn: '/login',
-        signOut: '/logout',
-        error: '/login',
-        newUser: '/register',
+        signIn: '/login'
     },
     providers: [
+        // @ts-expect-error
         CredentialsProvider.default({
             name: 'credentials',
             credentials: {},
@@ -24,10 +22,24 @@ export default NuxtAuthHandler ({
                     if (!user) {
                         throw new Error('User not found');
                     }
-                    if (user.password !== password) {
-                        throw new Error('Password does not match');
+
+                    const authUser = await authenticateEmployee(email, password);
+
+                    if (!authUser) {
+                        throw new Error('Invalid password');
                     }
-                    return user;
+
+                    console.log('User authenticated:', user);
+
+                    // combine first and last name
+                    user.name = `${user.firstName} ${user.lastName}`;
+
+                    // remove password from user object
+                    delete user.password;
+
+                    return {
+                        ...user
+                    }
                 }
                 catch (error) {
                     console.error('Error during authorization:', error);
@@ -41,17 +53,23 @@ export default NuxtAuthHandler ({
     },
     callbacks: {
         async jwt({token, user, account}) {
+            console.log('JWT:', token);
             if (user) {
                 token = { ...token, ...user };
             }
             return token;
         },
         async session({session, token}) {
+            console.log('Session:', session);
             session.user = {
                 ...token,
                 ...session.user
             };
             return session;
+        },
+        async redirect({url, baseUrl}) {
+            console.log('Redirect:', url, baseUrl);
+            return url.startsWith(baseUrl) ? url : baseUrl;
         },
     }
 })

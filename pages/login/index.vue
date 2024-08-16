@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 definePageMeta({
-  layout: 'auth'
+    layout: 'auth'
 })
 
 const checked = ref(false)
@@ -10,23 +10,22 @@ const checked = ref(false)
 const email = ref('');
 const password = ref('');
 const error = ref('');
-const auth = useAuth();
+const isLoading = ref(false);
 
+const { signIn } = useAuth();
 
-const login = async () => {
-    // try {
-    //     await auth.signIn({
-    //         provider: 'credentials',
-    //         options: {
-    //             email: email.value,
-    //             password: password.value
-    //         }
-    //     });
-    //     navigateTo('/'); // Redirect to home page after login
-    // } catch (err) {
-    //     error.value = 'Invalid email or password';
-    // }
-};
+async function login() {
+    try {
+        await signIn('credentials', {
+            email: email.value,
+            password: password.value,
+            callbackUrl: '/'
+        });
+    } catch (err) {
+        error.value = err.message;
+        alert(error.value);
+    }
+}
 </script>
 
 <template>
@@ -41,29 +40,25 @@ const login = async () => {
             <form class="flex flex-col space-y-6 w-full" @submit.prevent="login">
                 <div class="flex flex-col space-y-1">
                     <label for="email" class="text-white">Email</label>
-                    <input type="email" id="email" class="bg-slate-700 p-2 rounded-md text-white" placeholder="Email"/>
+                    <input type="email" id="email" class="bg-slate-700 p-2 rounded-md text-white" placeholder="Email" v-model="email"/>
                 </div>
 
                 <div class="flex flex-col space-y-1">
                     <label for="password" class="text-white">Password</label>
-                    <input type="password" id="password" class="bg-slate-700 p-2 rounded-md text-white" placeholder="Password"/>
+                    <input type="password" id="password" class="bg-slate-700 p-2 rounded-md text-white" placeholder="Password" v-model="password"/>
                 </div>
         
-                <div class="flex flex-col items-center space-y-2 w-full">
-                    <div class="flex w-full">
-                        <input type="submit" class="bg-blue-500 flex rounded-md items-center justify-center px-4 hover:opacity-70 cursor-pointer flex-nowrap flex-shrink-0 h-12 w-full" value="Login"/>
-                    </div>
-                    <!-- <div class="flex justify-center space-x-2">
-                        <a href="" class="flex items-center space-x-1 bg-blue-500 rounded-md px-4 h-12">
-                            <i class="pi pi-github"></i>
-                            <p>Sign in with GitHub</p>
-                        </a>
-                        <a href="" class="flex items-center space-x-1 bg-blue-500 rounded-md px-4 h-12">
-                            <i class="pi pi-google"></i>
-                            <p>Sign in with Google</p>
-                        </a>
-                    </div> -->
-                </div>
+                <button type="submit" class="bg-blue-500 rounded-md flex items-center justify-center px-4 hover:opacity-70 cursor-pointer h-12 w-full" :disabled="isLoading">
+                    <span v-if="isLoading">
+                        <span>
+                            <i class="pi pi-spin animate-spin text-white"></i>
+                            <span class="ml-2">Logging in...</span>
+                        </span>
+                    </span>
+                    <span v-else>
+                        Login
+                    </span>
+                </button>
 
                 <div class="flex justify-center space-x-2">
                     <p class="text-gray-400">Don't have an account?</p>

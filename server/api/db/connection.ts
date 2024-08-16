@@ -8,9 +8,12 @@ const cfg: sql.config = {
     database: process.env.DB_DATABASE,
     options: {
         enableArithAbort: true,
-        encrypt: true // For Azure SQL databases, encryption is required
+        encrypt: true
     }
 };
 
 // Create and connect the pool globally
 export const pool = new sql.ConnectionPool(cfg);
+
+// Connect the pool
+export const poolPromise = pool.connect();

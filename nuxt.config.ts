@@ -6,10 +6,12 @@ export default defineNuxtConfig({
         '@primevue/nuxt-module',
         "@sidebase/nuxt-auth",
     ],
-    auth: { 
+    auth: {
+        isEnabled: true,
         baseURL: process.env.AUTH_BASE_URL,
         provider: {
             type: 'authjs',
+            addDefaultCallbackUrl: true
         },
     },
     primevue: {
@@ -19,7 +21,7 @@ export default defineNuxtConfig({
             }
         }
     },
-    devtools: { enabled: false },
+    devtools: { enabled: true },
     postcss: {
         plugins: {
             tailwindcss: {},
@@ -38,8 +40,6 @@ export default defineNuxtConfig({
         strict: false,
     },
     runtimeConfig: {
-        auth: {
-            secret: process.env.AUTH_SECRET
-        }
+        authSecret: process.env.AUTH_SECRET,
     },
 })

@@ -12,17 +12,20 @@
   "dependencies": {
     "@primevue/themes": "^4.0.4",
     "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
     "mssql": "^11.0.1",
-    "mysql": "^2.18.1",
     "nuxt": "^3.12.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.4",
+    "uuid": "^10.0.0",
     "vue": "latest"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.18.1",
     "@primevue/nuxt-module": "^4.0.4",
     "@sidebase/nuxt-auth": "^0.8.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/mssql": "^9.1.5",
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10"

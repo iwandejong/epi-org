@@ -23,7 +23,7 @@
             <div class="h-12 w-12 block bg-white rounded-full shrink-0 cursor-pointer hover:opacity-70 duration-300" @click="toggle"></div>
             <Popover ref="op">
                 <div class="flex flex-col w-56">
-                    <div class="hover:bg-slate-800 p-4 cursor-pointer">
+                    <div class="hover:bg-slate-800 p-4 cursor-pointer" @click="handleLogout">
                         Sign out
                     </div>
                 </div>
@@ -35,6 +35,8 @@
 <script setup>
 import { ref } from "vue";
 
+const { signOut } = useAuth();
+
 const op = ref();
 const members = ref([
     { name: 'Amy Elsner', image: 'amyelsner.png', email: 'amy@email.com', role: 'Owner' },
@@ -44,5 +46,9 @@ const members = ref([
 
 const toggle = (event) => {
     op.value.toggle(event);
+}
+
+async function handleLogout() {
+  await signOut();
 }
 </script>

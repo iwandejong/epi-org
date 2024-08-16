@@ -1,9 +1,38 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'auth'
+    layout: 'auth'
 })
 
 const checked = ref(false)
+const isLoading = ref(false)
+
+const form = ref({
+    firstName: 'John',
+    lastName: 'Doe',
+    birthDate: '2000-01-01',
+    linkedIn: 'https://linkedin.com/in/johndoe',
+    email: 'john.doe@example.com',
+    password: 'uI61+g6£+X%=',
+    orgId: 'a7a9d4da-d6c6-42bc-911f-5ac38215cd4d',
+    employeeId: 'e4ecacbf-6390-4bbd-a4d3-4d041f1bc553',
+});
+
+async function submitForm() {
+    try {
+        isLoading.value = true;
+        console.log(form.value);
+        const result = await useFetch('/api/auth/register', {
+            method: 'POST',
+            body: form.value
+        });
+
+        return result;
+    } catch (err) {
+        console.error(err);
+    } finally {
+        isLoading.value = false;
+    }
+}
 </script>
 
 <template>
@@ -15,7 +44,7 @@ const checked = ref(false)
                 <p class="text-gray-400">Create an account to continue</p>
             </div>
         
-            <form class="flex flex-col space-y-6 w-full" @submit="">
+            <form class="flex flex-col space-y-6 w-full" @submit.prevent="submitForm">
                 <div class="space-y-2">
                     <p class="text-lg">Personal Information</p>
                     <hr class="border-gray-600 opacity-30"/>
@@ -27,7 +56,7 @@ const checked = ref(false)
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstName"/>
                         </div>
     
                         <div class="flex flex-col space-y-1">
@@ -37,7 +66,7 @@ const checked = ref(false)
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastName"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -47,7 +76,7 @@ const checked = ref(false)
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthDate"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -57,7 +86,7 @@ const checked = ref(false)
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="linkedin" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn"/>
                         </div>
                     </div>
 
@@ -72,22 +101,22 @@ const checked = ref(false)
                     <hr class="border-gray-600 opacity-30"/>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="flex flex-col space-y-1">
-                            <label for="linkedin" class="">
+                            <label for="email" class="">
                                 <span>
                                     Email Address
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="linkedin" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="email" id="email" class="bg-slate-700 p-2 rounded-md" required v-model="form.email"/>
                         </div>
                         <div class="flex flex-col space-y-1">
-                            <label for="linkedin" class="">
+                            <label for="password" class="">
                                 <span>
                                     Password
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="password" id="linkedin" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="password" id="password" class="bg-slate-700 p-2 rounded-md" required v-model="form.password"/>
                         </div>
                     </div>
                     
@@ -102,33 +131,41 @@ const checked = ref(false)
                     <hr class="border-gray-600 opacity-30"/>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="flex flex-col space-y-1">
-                            <label for="organisation" class="">
+                            <label for="orgID" class="">
                                 <span>
                                     Organisation ID
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="organisation" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="text" id="orgID" class="bg-slate-700 p-2 rounded-md" required v-model="form.orgId"/>
                             <div class="flex space-x-1">
                                 <p>Don't have an Organisation ID?</p>
                                 <RouterLink to="/register/organisation" class="text-blue-500">Create Organisation</RouterLink>
                             </div>
                         </div>
                         <div class="flex flex-col space-y-1">
-                            <label for="organisation" class="">
+                            <label for="empID" class="">
                                 <span>
                                     Your Employee ID
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="organisation" class="bg-slate-700 p-2 rounded-md" required/>
+                            <input type="text" id="empID" class="bg-slate-700 p-2 rounded-md" required v-model="form.employeeId"/>
                         </div>
                     </div>
                 </div>
         
-                <div class="flex w-full">
-                    <input type="submit" class="bg-blue-500 flex rounded-md items-center justify-center px-4 hover:opacity-70 cursor-pointer flex-nowrap flex-shrink-0 h-12 w-full" value="Request to join"/>
-                </div>
+                <button type="submit" class="bg-blue-500 rounded-md flex items-center justify-center px-4 hover:opacity-70 cursor-pointer h-12 w-full" :disabled="isLoading">
+                    <span v-if="isLoading">
+                        <span>
+                            <i class="pi pi-spin animate-spin text-white"></i>
+                            <span class="ml-2">Registering...</span>
+                        </span>
+                    </span>
+                    <span v-else>
+                        Register
+                    </span>
+                </button>
 
                 <div class="flex justify-center space-x-2">
                     <p class="text-gray-400">Already have an account?</p>
