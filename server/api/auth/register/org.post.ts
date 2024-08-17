@@ -90,6 +90,10 @@ export default defineEventHandler(async (req) => {
         const employeeId = uuidv4();
         employee.employeeId = employeeId;
 
+        employee.hierarchyId = '/1/';
+
+        console.log(employee);
+
         // create the employee
         const emp = await createEmployee(employee);
         console.log(emp);

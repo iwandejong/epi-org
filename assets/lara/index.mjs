@@ -464,7 +464,7 @@ var index = {
       },
       popover: {
         borderRadius: '{border.radius.md}',
-        padding: '0rem',
+        padding: '1rem',
         shadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
       },
       modal: {

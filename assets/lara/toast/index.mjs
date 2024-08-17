@@ -9,7 +9,7 @@ var index = {
     size: '1.25rem'
   },
   content: {
-    padding: '{overlay.popover.padding}',
+    padding: '1rem',
     gap: '0.5rem'
   },
   text: {

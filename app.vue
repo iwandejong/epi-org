@@ -17,7 +17,7 @@ onBeforeMount(async () => {
     console.log(orgID.value);
 
     try {
-        const response = await useFetch('/api/data/employees', {
+        const response = await useFetch('/api/read/employees', {
             method: 'POST',  // Use POST since you're sending a body
             body: JSON.stringify({ orgId: orgID.value }),
             headers: { 'Content-Type': 'application/json' }

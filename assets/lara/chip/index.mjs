@@ -1,6 +1,6 @@
 var index = {
   root: {
-    borderRadius: '16px',
+    borderRadius: '9999px',
     paddingX: '0.875rem',
     paddingY: '0.625rem',
     gap: '0.5rem',
