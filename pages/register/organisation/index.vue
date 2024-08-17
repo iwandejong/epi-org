@@ -13,8 +13,7 @@ const form = ref({
     linkedIn: 'https://linkedin.com/in/johndoe',
     email: 'john.doe@example.com',
     password: 'uI61+g6£+X%=',
-    orgId: 'a7a9d4da-d6c6-42bc-911f-5ac38215cd4d',
-    employeeId: 'e4ecacbf-6390-4bbd-a4d3-4d041f1bc553',
+    orgName: 'EPI-Hub',
 });
 
 async function submitForm() {
@@ -37,7 +36,7 @@ async function submitForm() {
 
 <template>
     <div class="flex w-full h-screen bg-slate-900 justify-center items-center">
-        <div class="flex flex-col items-center bg-slate-800 p-12 rounded-lg shadow-lg space-y-6">
+        <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
                 <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
                 <p class="text-3xl ">Welcome to EPI-Hub</p>
@@ -80,6 +79,16 @@ async function submitForm() {
                         </div>
 
                         <div class="flex flex-col space-y-1">
+                            <label for="picture" class="">
+                                <span>
+                                    Profile Picture
+                                    <span class="text-red-500">*</span>
+                                </span>
+                            </label>
+                            <input type="file" id="picture" class="bg-slate-700 p-2 rounded-md" required />
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
                             <label for="linkedin" class="">
                                 <span>
                                     LinkedIn Profile
@@ -87,6 +96,16 @@ async function submitForm() {
                                 </span>
                             </label>
                             <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn"/>
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="bio" class="">
+                                <span>
+                                    Short Bio
+                                    <span class="text-red-500">*</span>
+                                </span>
+                            </label>
+                            <input type="text" id="bio" class="bg-slate-700 p-2 rounded-md" required />
                         </div>
                     </div>
 
@@ -125,32 +144,29 @@ async function submitForm() {
                             Organisation Information
                         </p>
                         <p class="text-sm text-gray-400">
-                            Please provide your organisation ID and your employee ID to join an organisation
+                            Please provide your new organisation's Information
                         </p>
                     </div>
                     <hr class="border-gray-600 opacity-30"/>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="flex flex-col space-y-1">
-                            <label for="orgID" class="">
+                            <label for="name" class="">
                                 <span>
-                                    Organisation ID
+                                    Organisation Name
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="orgID" class="bg-slate-700 p-2 rounded-md" required v-model="form.orgId"/>
-                            <div class="flex space-x-1">
-                                <p>Don't have an Organisation ID?</p>
-                                <RouterLink to="/register/organisation" class="text-blue-500">Create Organisation</RouterLink>
-                            </div>
+                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.orgName"/>
                         </div>
+
                         <div class="flex flex-col space-y-1">
-                            <label for="empID" class="">
+                            <label for="avatar" class="">
                                 <span>
-                                    Your Employee ID
+                                    Organisation Logo
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="empID" class="bg-slate-700 p-2 rounded-md" required v-model="form.employeeId"/>
+                            <input type="file" id="avatar" class="bg-slate-700 p-2 rounded-md" required />
                         </div>
                     </div>
                 </div>
@@ -167,18 +183,21 @@ async function submitForm() {
                     </span>
                 </button>
 
-                <div class="flex justify-center space-x-4">
+                <div class="flex justify-center space-x-2">
                     <div class="flex justify-center space-x-2">
                         <p class="text-gray-400">Already have an account?</p>
                         <RouterLink to="/login" class="text-blue-500">Login</RouterLink>
                     </div>
-                    <span class="text-gray-600">|</span>
+                    <div>
+                        <span class="text-gray-400">|</span>
+                    </div>
                     <div class="flex justify-center space-x-2">
-                        <p class="text-gray-400">Already have an organisation and employee ID?</p>
-                        <RouterLink to="/forgot-password" class="text-blue-500">Register Account</RouterLink>
+                        <p class="text-gray-400">Want to join an organisation?</p>
+                        <RouterLink to="/register" class="text-blue-500">Join Organisation</RouterLink>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </template>
+

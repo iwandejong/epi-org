@@ -75,12 +75,12 @@
         </DataTable>
 
         <div class="fixed right-0 bottom-0 z-10 p-8">
-            <RouterLink to="/">
+            <NuxtLink to="/">
                 <div class="bg-blue-500 border border-blue-700 p-2 px-4 rounded-full flex space-x-2 cursor-pointer hover:bg-opacity-70 duration-300">
                     <i class="pi pi-table text-2xl"></i>
                     <p class="text-center text-white">Switch to Dashboard View</p>
                 </div>
-            </RouterLink>
+            </NuxtLink>
         </div>
     </div>
 </template>
@@ -88,7 +88,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
-// import { CustomerService } from '@/service/CustomerService';
 
 const customers = ref();
 const filters = ref({

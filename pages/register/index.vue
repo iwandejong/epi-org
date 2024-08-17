@@ -36,8 +36,8 @@ async function submitForm() {
 </script>
 
 <template>
-    <div class="flex w-full h-screen bg-slate-900 justify-center items-center">
-        <div class="flex flex-col items-center bg-slate-800 p-12 rounded-lg shadow-lg space-y-6">
+    <div class="flex w-full h-screen bg-slate-900 justify-center items-center py-8">
+        <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
                 <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
                 <p class="text-3xl ">Welcome to EPI-Hub</p>
@@ -80,6 +80,16 @@ async function submitForm() {
                         </div>
 
                         <div class="flex flex-col space-y-1">
+                            <label for="picture" class="">
+                                <span>
+                                    Profile Picture
+                                    <span class="text-red-500">*</span>
+                                </span>
+                            </label>
+                            <input type="file" id="picture" class="bg-slate-700 p-2 rounded-md" required />
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
                             <label for="linkedin" class="">
                                 <span>
                                     LinkedIn Profile
@@ -87,6 +97,16 @@ async function submitForm() {
                                 </span>
                             </label>
                             <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn"/>
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="bio" class="">
+                                <span>
+                                    Short Bio
+                                    <span class="text-red-500">*</span>
+                                </span>
+                            </label>
+                            <input type="text" id="bio" class="bg-slate-700 p-2 rounded-md" required />
                         </div>
                     </div>
 
@@ -168,8 +188,17 @@ async function submitForm() {
                 </button>
 
                 <div class="flex justify-center space-x-2">
-                    <p class="text-gray-400">Already have an account?</p>
-                    <RouterLink to="/login" class="text-blue-500">Login</RouterLink>
+                    <div class="flex justify-center space-x-2">
+                        <p class="text-gray-400">Already have an account?</p>
+                        <RouterLink to="/login" class="text-blue-500">Login</RouterLink>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">|</span>
+                    </div>
+                    <div class="flex justify-center space-x-2">
+                        <p class="text-gray-400">Want to create an organisation?</p>
+                        <RouterLink to="/register/organisation" class="text-blue-500">Create Organisation</RouterLink>
+                    </div>
                 </div>
             </form>
         </div>

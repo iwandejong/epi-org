@@ -53,22 +53,20 @@ export default NuxtAuthHandler ({
     },
     callbacks: {
         async jwt({token, user, account}) {
-            console.log('JWT:', token);
             if (user) {
                 token = { ...token, ...user };
             }
             return token;
         },
         async session({session, token}) {
-            console.log('Session:', session);
             session.user = {
                 ...token,
                 ...session.user
             };
+            console.log('Session:', session);
             return session;
         },
         async redirect({url, baseUrl}) {
-            console.log('Redirect:', url, baseUrl);
             return url.startsWith(baseUrl) ? url : baseUrl;
         },
     }
