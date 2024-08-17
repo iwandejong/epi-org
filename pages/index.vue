@@ -32,33 +32,48 @@ let emp = {
 
 const orgData = ref();
 
-onBeforeMount(async () => {
-    const { data } = useAuth();
-    orgID.value = data.value?.user?.orgId || '';
+const { data } = useAuth();
+orgID.value = data.value?.user?.orgId || '';
 
-    console.log(orgID.value);
+console.log(orgID.value);
 
-    try {
-        const response = await useFetch('/api/data/employees', {
-            method: 'POST',
-            body: JSON.stringify({ orgId: orgID.value }),
-            headers: { 'Content-Type': 'application/json' }
-        });
+const totalTenure = ref(0);
+const totalSalary = ref(0);
+const newEmployees = ref(0);
 
-        if (response.error.value) {
-            console.error('Error fetching data:', response.error.value);
-        } else {
-            console.log(response.data.value);
-            orgData.value = response.data.value;
-            console.log(orgData.value);
-        }
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    } finally {
-        loading.value = false;
+try {
+    const response = await useFetch('/api/data/employees', {
+        method: 'POST',
+        body: JSON.stringify({ orgId: orgID.value }),
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (response.error.value) {
+        console.error('Error fetching data:', response.error.value);
+    } else {
+        console.log(response.data.value);
+        orgData.value = response.data.value;
+        console.log(orgData.value);
     }
 
-});
+    // calculate average tenure from orgData.value.body
+    orgData.value.body.forEach((employee) => {
+        totalTenure.value += new Date().getFullYear() - new Date(employee.joiningDate).getFullYear();
+        totalSalary.value += employee.salary;
+    });
+
+    newEmployees.value = orgData.value.body.filter((employee) => new Date(employee.joiningDate).getFullYear() === new Date().getFullYear()).length;
+
+    // monthly salary expenditure
+    totalSalary.value = totalSalary.value * orgData.value.body.length;
+
+
+} catch (error) {
+    console.error('Error fetching data:', error);
+} finally {
+    loading.value = false;
+}
+
 </script>
 
 <template>
@@ -74,7 +89,7 @@ onBeforeMount(async () => {
             <div class="">
                 <!-- <Navbar class="z-20"/> -->
                 <div class="2xl:px-40 xl:px-32">
-                    <p class="text-xl">Organisation Statistics</p>
+                    <p class="text-xl">{{ orgData.body[0].orgId }} Statistics</p>
                     <div class="grid grid-cols-4 gap-4 py-4">
                         <div class="border border-slate-600 p-6 rounded-lg space-y-1">
                             <div class="flex justify-between items-center">
@@ -84,31 +99,45 @@ onBeforeMount(async () => {
                             <p class="text-2xl font-bold">
                                 {{ orgData.body.length }}
                             </p>
-                            <p class="text-xs text-slate-400">+10% from last month</p>
+                            <p class="text-xs text-slate-400 flex items-center space-x-1">
+                                Total number of employees in the organization
+                            </p>
                         </div>
                         <div class="border border-slate-600 p-6 rounded-lg space-y-1">
                             <div class="flex justify-between items-center">
                                 <p class="text-blue-500">Average Tenure</p>
                                 <p class="pi pi-sitemap text-blue-500"></p>
                             </div>
-                            <p class="text-2xl font-bold">3</p>
-                            <p class="text-xs text-slate-400">+0% from last month</p>
+                            <p class="text-2xl font-bold">
+                                {{ totalTenure / orgData.body.length }}
+                            </p>
+                            <p class="text-xs text-slate-400">
+                                Average years employees worked in the organization
+                            </p>
                         </div>
                         <div class="border border-slate-600 p-6 rounded-lg space-y-1">
                             <div class="flex justify-between items-center">
                                 <p class="text-blue-500">Monthly Salary Expenditure</p>
                                 <p class="pi pi-dollar text-blue-500"></p>
                             </div>
-                            <p class="text-2xl font-bold">$100</p>
-                            <p class="text-xs text-slate-400">+10% from last month</p>
+                            <p class="text-2xl font-bold">
+                                {{ "R" + totalSalary + ".00" }}
+                            </p>
+                            <p class="text-xs text-slate-400">
+                                Total monthly salary expenditure
+                            </p>
                         </div>
                         <div class="border border-slate-600 p-6 rounded-lg space-y-1">
                             <div class="flex justify-between items-center">
                                 <p class="text-blue-500">New Employees</p>
                                 <p class="pi pi-user-plus text-blue-500"></p>
                             </div>
-                            <p class="text-2xl font-bold">+4</p>
-                            <p class="text-xs text-slate-400">+10% from last year</p>
+                            <p class="text-2xl font-bold">
+                                +{{ newEmployees }}
+                            </p>
+                            <p class="text-xs text-slate-400">
+                                New employees this year that joined the organization
+                            </p>
                         </div>
                     </div>
                 </div>
