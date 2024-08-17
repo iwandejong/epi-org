@@ -9,7 +9,7 @@ var index = {
     arrowOffset: '1.25rem'
   },
   content: {
-    // padding: '{overlay.popover.padding}'
+    padding: '{overlay.popover.padding}'
   }
 };
 

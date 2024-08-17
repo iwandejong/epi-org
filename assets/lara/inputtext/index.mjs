@@ -24,12 +24,12 @@ var index = {
     },
     transitionDuration: '{form.field.transition.duration}',
     sm: {
-      fontSize: '0.875rem',
+    //   fontSize: '0.875rem',
       paddingX: '0.625rem',
       paddingY: '0.5rem'
     },
     lg: {
-      fontSize: '1.125rem',
+    //   fontSize: '1.125rem',
       paddingX: '0.875rem',
       paddingY: '0.75rem'
     }

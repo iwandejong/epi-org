@@ -38,7 +38,8 @@ var index = {
       color: '{focus.ring.color}',
       offset: '{focus.ring.offset}',
       shadow: 'inset {focus.ring.shadow}'
-    }
+    },
+    fontSize: '{font.size}',
   },
   bodyCell: {
     borderColor: '{datatable.border.color}',

@@ -17,6 +17,8 @@ const totalTenure = ref(0);
 const totalSalary = ref(0);
 const newEmployees = ref(0);
 
+const toast = useToast();
+
 try {
     const response = await useFetch('/api/data/employees', {
         method: 'POST',
@@ -25,7 +27,7 @@ try {
     });
 
     if (response.error.value) {
-        console.error('Error fetching data:', response.error.value);
+        throw new Error('Error fetching data');
     } else {
         console.log(response.data.value);
         orgData.value = response.data.value;
@@ -42,10 +44,8 @@ try {
 
     // monthly salary expenditure
     totalSalary.value = totalSalary.value * orgData.value.body.length;
-
-
 } catch (error) {
-    console.error('Error fetching data:', error);
+    toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
 } finally {
     loading.value = false;
 }
@@ -54,6 +54,7 @@ try {
 
 <template>
     <div class="text-white bg-slate-900 overflow-hidden">
+        <Toast/>
         <div class="absolute top-0 left-0 w-screen h-screen bg-slate-900 z-50" v-if="loading">
             <div class="flex items-center justify-center w-full h-full">
                 <div class="flex flex-col items-center space-y-4">
