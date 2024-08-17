@@ -13,7 +13,7 @@ const form = ref({
     linkedIn: 'https://linkedin.com/in/johndoe',
     email: 'john.doe@example.com',
     password: 'uI61+g6£+X%=',
-    orgName: 'EPI-Hub',
+    orgName: 'EPI-Org',
 });
 
 async function submitForm() {
@@ -39,7 +39,7 @@ async function submitForm() {
         <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
                 <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
-                <p class="text-3xl ">Welcome to EPI-Hub</p>
+                <p class="text-3xl ">Welcome to EPI-Org</p>
                 <p class="text-gray-400">Create an account to continue</p>
             </div>
         

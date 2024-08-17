@@ -6,31 +6,7 @@ definePageMeta({
 const orgID = ref('');
 const loading = ref(true);
 
-
-let emp = {
-    "data" : [
-        {
-            "id": 1,
-            "firstName": "John",
-            "lastName": "Doe",
-            "birthDate": "1990-01-01",
-            "employeeId": "EMP001",
-            "salary": 1000,
-            "role": "Software Engineer",
-            "manager": "Jane Doe",
-            "joiningDate": "2021-01-01",
-            "leaveDays": 10,
-            "linkedIn": "https://www.linkedin.com/in/johndoe",
-            "orgId": "ORG001",
-            "email": "john.doe@example.com",
-            "password": "password",
-            "hierarchyId": "HIER001",
-            "bio": "Software Engineer with 5 years of experience"
-        },
-    ]
-};
-
-const orgData = ref();
+const orgData = ref<any>();
 
 const { data } = useAuth();
 orgID.value = data.value?.user?.orgId || '';
@@ -89,7 +65,7 @@ try {
             <div class="">
                 <!-- <Navbar class="z-20"/> -->
                 <div class="2xl:px-40 xl:px-32">
-                    <p class="text-xl">{{ orgData.body[0].orgId }} Statistics</p>
+                    <p class="text-xl">Organisation Statistics</p>
                     <div class="grid grid-cols-4 gap-4 py-4">
                         <div class="border border-slate-600 p-6 rounded-lg space-y-1">
                             <div class="flex justify-between items-center">

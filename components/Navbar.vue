@@ -2,7 +2,7 @@
     <div class="w-full grid grid-cols-2 justify-between py-4 px-40 sticky top-0 bg-slate-900 bg-opacity-40 backdrop-blur-lg">
         <div class="flex items-center space-x-2 text-xl">
             <i class="pi pi-sitemap text-2xl rotate-180"></i>
-            <p>EPI-Hub</p>
+            <p>EPI-Org</p>
         </div>
         <div class="flex items-center space-x-6 justify-end flex-shrink-0">
             <div class="w-full">
