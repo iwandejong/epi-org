@@ -2,176 +2,91 @@
     import { ref } from "vue";
     import { v4 as uuidv4 } from 'uuid';
     import { useClipboard } from '@vueuse/core';
+    import { fetchOrganisation } from "~/services/fetchOrganisation";
+    import { fetchEmployees } from "~/services/fetchEmployees";
+    import type { Employee } from "~/interfaces/Employee";
+    import type { Organisation } from "~/interfaces/Organisation";
 
     const visible = ref(false);
 
     const { signOut } = useAuth();
 
-    const empID = ref('');
     const loading = ref(false);
-
+    
     const toast = useToast();
-
+    
     const { data } = useAuth();
     
-    const employee = ref();
-    employee.value = data.value?.user || '';
-
+    const empID = ref('');
+    const employees = ref<any>();
+    const organisation = ref<any>();
+    const account = ref<any>();
     empID.value = data.value?.user?.employeeId || '';
 
-    const account = ref();
-
-    const orgName = ref('');
-
-    // fetch org name
     try {
-        const response = await useFetch('/api/read/org', {
+        organisation.value = await $fetch('/api/read/org', {
             method: 'POST',
-            body: JSON.stringify({ orgId: employee.value.orgId }),
-            headers: { 'Content-Type': 'application/json' }
+            body: { orgId: data.value?.user?.orgId },
         });
-
-        if (response.error.value) {
-            throw new Error('Error fetching data');
-        }
-        orgName.value = response.data.value.body.name;
     } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
-    } finally {
-        // console.log(orgName.value);
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to fetch organisation',
+            life: 3000
+        });
     }
 
-    // try {
-    //     const response = await useFetch('/api/read/account', {
-    //         method: 'POST',
-    //         body: JSON.stringify({ empId: empID.value }),
-    //         headers: { 'Content-Type': 'application/json' }
-    //     });
-
-    //     if (response.error.value) {
-    //         throw new Error('Error fetching data');
-    //     }
-    //     // console.log(response.data.value.body);
-    //     account.value = response.data.value.body;
-    // } catch (error) {
-    //     toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
-    // } finally {
-    //     // console.log(account.value);
-    // }
-
-    const employees = ref();
-    const orgID = ref('');
-
-    const orgData = ref<any>();
-
-    orgID.value = data.value?.user?.orgId || '';
-
     try {
-        const response = await useFetch('/api/read/employees', {
+        employees.value = await $fetch('/api/read/employees', {
             method: 'POST',
-            body: JSON.stringify({ orgId: orgID.value }),
-            headers: { 'Content-Type': 'application/json' }
+            body: { orgId: data.value?.user?.orgId },
         });
-
-        if (response.error.value) {
-            throw new Error('Error fetching data');
-        } else {
-            // console.log(response.data.value);
-            orgData.value = response.data.value;
-            // console.log(orgData.value);
-        }
     } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
-    } finally {
-        loading.value = false;
-
-        employees.value = orgData.value.body.map((employee) => {
-            return {
-                id: employee.id,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
-                birthDate: employee.birthDate,
-                employeeId: employee.employeeId,
-                salary: employee.salary,
-                role: employee.role,
-                manager: employee.manager,
-                joiningDate: employee.joiningDate,
-                leaveDays: employee.leaveDays,
-                linkedIn: employee.linkedIn,
-                email: employee.email,
-                bio: employee.bio,
-                gravatarURL: employee.gravatarURL,
-                hierarchyId: employee.hierarchyId
-            }
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to fetch employees',
+            life: 3000
         });
-
-        // console.log(employees.value);
     }
 
-    // managers is all employees (just store the employeeId and name and gravatar and role)
-    const managers = ref(employees.value.map((emp) => {
-        return {
-            employeeId: emp.employeeId,
-            name: emp.firstName + ' ' + emp.lastName,
-            role: emp.role,
-            gravatar: emp.gravatarURL
-        }
-    }));
-
-    account.value = employees.value.find((emp) => emp.employeeId === empID.value);
-
-    // console.log(account.value);
-
-    const form = ref({
-        firstName: account.value.firstName,
-        lastName: account.value.lastName,
-        linkedIn: account.value.linkedIn,
-        email: account.value.email,
-        password: '',
-        bio: account.value.bio,
-        birthDate: account.value.birthDate,
-        gravatarURL: account.value.gravatarURL,
-
-        orgId: account.value.orgId,
-        employeeId: account.value.employeeId,
+    employees.value.body.forEach((emp : Employee) => {
+        delete emp.password;
     });
+
+    account.value = employees.value.body.find((emp : any) => emp.employeeId === empID.value);
+
+    const form = ref(account.value);
 
     // console.log(form.value);
 
     const gravatar = ref('');
-    const gravatarProfileUrl = account.value.gravatarURL;
     const loadingGrav = ref(true);
 
-    fetch(`${gravatarProfileUrl}.json`)
-    .then(response => response.json())
-    .then(data => {
-        gravatar.value = data.entry[0].thumbnailUrl;
-        // console.log(gravatar.value);
-        loadingGrav.value = false;
-    })
-    .catch(err => {
-        console.error('Error fetching Gravatar profile:', err);
-    })
-
-    // collect gravatars for all managers
-    managers.value.forEach((manager) => {
-        fetch(`${manager.gravatar}.json`, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+    // collect gravatars for all employees
+    const gravatars = ref([]);
+    employees.value.body.forEach((emp : Employee) => {
+        fetch(`${emp.gravatarURL}.json`)
         .then(response => response.json())
         .then(data => {
-            manager.gravatar = data.entry[0].thumbnailUrl;
-            // console.log(manager.gravatar);
+            gravatars.value.push(data.entry[0].thumbnailUrl);
         })
         .catch(err => {
-            console.error('Error fetching Gravatar profile:', err);
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to fetch Gravatar profile',
+                life: 3000
+            });
         })
+        .finally(() => {
+            if (emp.employeeId === empID.value) {
+                gravatar.value = gravatars.value[gravatars.value.length - 1];
+            }
+            loadingGrav.value = false;
+        });
     });
-
-    // console.log(managers.value);
-
 
     const op = ref();
 
@@ -186,8 +101,6 @@
     async function handleUpdate() {
         if (loading.value) return;
 
-        // console.log(employee.value);
-
         try {
             loading.value = true;
             const result = await $fetch('/api/update/employee', {
@@ -196,17 +109,15 @@
             });
             let data : any = await result;
 
-            // console.log(data);
-
             if (data.statusCode > 400) {
                 toast.add({ severity: 'error', summary: 'Update Failed', detail: 'Please try again', life: 3000 });
                 loading.value = false;
                 return;
             } else {
                 toast.add({ severity: 'success', summary: 'Update Complete', detail: 'Your account has been updated. Refreshing page...', life: 3000 });
-                // setTimeout(() => {
-                //     window.location.reload();
-                // }, 3000);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
                 return;
             }
         } catch (err) {
@@ -259,13 +170,28 @@
         copy(newEmployee.value.employeeId);
 
         toast.add({ severity: 'success', summary: 'Employee ID Copied', detail: 'The employee ID has been copied to the clipboard.', life: 3000 });
-        toast.add({ severity: 'info', summary: 'Employee ID', detail: newEmployee.employeeId, life: 3000 });
+
+        // prepare Employee object for creation
+        // .input('Email', sql.NVarChar, employee.email)
+        //         .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
+        //         .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
+        //         .input('OrgId', sql.UniqueIdentifier, employee.orgId)
+        //         .input('LeaveDays', sql.Int, employee.leaveDays)
+        //         .input('Salary', sql.Float, employee.salary)
+        //         .input('Role', sql.NVarChar, employee.role)
+        //         .input('ManagerId', sql.UniqueIdentifier, employee.manager)
+        const newEmp = {
+            ...newEmployee.value,
+            orgId: account.value.orgId,
+            leaveDays: 0,
+            salary: 0,
+        };
 
         try {
             loading.value = true;
             const result = await $fetch('/api/create/employee', {
                 method: 'POST',
-                body: newEmployee.value,
+                body: newEmp,
             });
             let data : any = await result;
 
@@ -378,15 +304,15 @@
                                 </span>
                             </label>
                             <!-- <InputText id="manager" class="flex-auto" autocomplete="off" v-model="newEmployee.manager" /> -->
-                             <Select id="manager" class="flex-auto" v-model="newEmployee.manager" :options="managers" optionLabel="name" optionValue="employeeId">
+                             <Select id="manager" class="flex-auto" v-model="newEmployee.manager" :options="employees.body" optionLabel="firstName" optionValue="employeeId">
                                 <template #option="{ option }">
                                     <div class="flex items-center space-x-2">
                                         <div class="h-12 w-12 bg-blue-900 rounded-full shrink-0 cursor-pointer hover:opacity-70 duration-300 flex items-center justify-center text-blue-500">
-                                            {{ employee.firstName.charAt(0).toUpperCase() + employee.lastName.charAt(0).toUpperCase() }}
+                                            {{ option.firstName.charAt(0).toUpperCase() + option.lastName.charAt(0).toUpperCase() }}
                                         </div>
                                         <div>
                                             <p>
-                                                {{ option.name }}
+                                                {{ option.firstName + ' ' + option.lastName }}
                                             </p>
                                             <p class="text-sm text-slate-400">
                                                 {{ option.role }}
@@ -404,7 +330,7 @@
                     </div>
         
                     <div class="flex justify-center gap-2">
-                        <Button type="submit" icon="pi pi-copy" label="Submit & Copy to Clipboard" severity="primary"></Button>
+                        <Button type="submit" icon="pi pi-copy" label="Submit & Copy to Clipboard" severity="primary" @click="addEmployee = false"></Button>
                     </div>
                 </div>
             </form>
@@ -414,9 +340,8 @@
             <div class="flex items-center space-x-2 text-xl cursor-pointer hover:opacity-80 duration-300" @click="navigateTo('/')">
                 <i class="pi pi-sitemap text-2xl rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
                 <p>
-                    {{ orgName }}
+                    {{ organisation.body.name }}
                 </p>
-                <div class="rounded-full text-xs p-1 px-2 bg-emerald-700 border-2 border-emerald-800">Org Admin</div>
             </div>
             <div class="flex items-center space-x-6 justify-end flex-shrink-0">
                 <div class="flex items-center space-x-6 hover:*:bg-slate-700 *:rounded-full *:duration-300 *:cursor-pointer">
@@ -440,7 +365,7 @@
                     </div>
                 </div>
                 <div class="  shrink-0 cursor-pointer hover:opacity-70 duration-300 flex items-center justify-center" @click="toggle">
-                    <div v-if="gravatar.value !== '' && !loadingGrav">
+                    <div v-if="gravatar !== '' && !loadingGrav">
                         <!-- <Chip :image="gravatar" :label="account.firstName + ' ' + account.lastName" class="text-xs rounded-full"/> -->
                         <div class="rounded-full text-xs p-1 bg-slate-800 border-2 border-slate-700 flex items-center space-x-2 pr-2">
                             <img :src="gravatar" alt="Gravatar" class="h-8 w-8 rounded-full" />

@@ -1,6 +1,8 @@
 import { pool, poolPromise } from './connection';  // Assuming `sql` is exported from your connection module
 import sql from 'mssql';
 import bcrypt from 'bcrypt';
+import type { Employee } from '~/interfaces/Employee';
+import { Organisation } from '~/interfaces/Organisation';
 
 export const getEmployee = async (email: string) => {
     await poolPromise;
@@ -38,19 +40,10 @@ export const authenticateEmployee = async (email: string, password: string) => {
     }
 }
 
-export const createEmployee = async (employee: {
-    firstName: string,
-    lastName: string,
-    birthDate: Date,
-    linkedIn: string,
-    email: string,
-    password: string
-    orgId: string,
-    employeeId: string,
-    hierarchyId: string,
-    gravatarURL: string,
-    bio: string,
-}) => {
+export const createEmployee = async (employee : Employee) => {
+    if (!employee.password) {
+        return false;
+    }
     const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
 
     await poolPromise;
@@ -84,20 +77,9 @@ export const createEmployee = async (employee: {
     return true;
 };
 
-export const updateEmployee = async (employee: {
-    firstName: string,
-    lastName: string,
-    birthDate: Date,
-    linkedIn: string,
-    email: string,
-    password: string | null,
-    employeeId: string,
-    bio: string,
-    gravatarURL: string,
-    hierarchyId: string,
-}) => {
+export const updateEmployee = async (employee: Employee) => {
     if (employee.password) {
-        // console.log("Updating password");
+        console.log("Updating password");
         const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
 
         await poolPromise;
@@ -107,11 +89,17 @@ export const updateEmployee = async (employee: {
             .input('BirthDate', sql.Date, employee.birthDate)
             .input('LinkedIn', sql.NVarChar, employee.linkedIn)
             .input('Email', sql.NVarChar, employee.email)
-            .input('Password', sql.NVarChar, hashedPassword)
             .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
             .input('Bio', sql.Text, employee.bio)
             .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
             .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
+            .input('OrgId', sql.UniqueIdentifier, employee.orgId)
+            .input('LeaveDays', sql.Int, employee.leaveDays)
+            .input('Salary', sql.Float, employee.salary)
+            .input('Role', sql.NVarChar, employee.role)
+            .input('ManagerId', sql.UniqueIdentifier, employee.manager)
+            .input('JoinDate', sql.Date, employee.joiningDate)
+            .input('Password', sql.NVarChar, hashedPassword)
             .query(`
                 UPDATE employee
                 SET firstName = @FirstName,
@@ -119,10 +107,16 @@ export const updateEmployee = async (employee: {
                     birthDate = @BirthDate,
                     linkedIn = @LinkedIn,
                     email = @Email,
-                    password = @Password,
                     bio = @Bio,
                     gravatarURL = @GravatarURL,
-                    hierarchyId = @HierarchyId
+                    hierarchyId = @HierarchyId,
+                    orgId = @OrgId,
+                    leaveDays = @LeaveDays,
+                    salary = @Salary,
+                    role = @Role,
+                    manager = @ManagerId,
+                    joiningDate = @JoinDate,
+                    password = @Password
                 WHERE employeeId = @EmployeeId
             `);
 
@@ -145,6 +139,13 @@ export const updateEmployee = async (employee: {
             .input('Bio', sql.Text, employee.bio)
             .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
             .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
+            .input('OrgId', sql.UniqueIdentifier, employee.orgId)
+            .input('LeaveDays', sql.Int, employee.leaveDays)
+            .input('Salary', sql.Float, employee.salary)
+            .input('Role', sql.NVarChar, employee.role)
+            .input('ManagerId', sql.UniqueIdentifier, employee.manager)
+            .input('JoinDate', sql.Date, employee.joiningDate)
+            // .input('Password', sql.NVarChar, null)
             .query(`
                 UPDATE employee
                 SET firstName = @FirstName,
@@ -154,10 +155,15 @@ export const updateEmployee = async (employee: {
                     email = @Email,
                     bio = @Bio,
                     gravatarURL = @GravatarURL,
-                    hierarchyId = @HierarchyId
+                    hierarchyId = @HierarchyId,
+                    orgId = @OrgId,
+                    leaveDays = @LeaveDays,
+                    salary = @Salary,
+                    role = @Role,
+                    manager = @ManagerId,
+                    joiningDate = @JoinDate
                 WHERE employeeId = @EmployeeId
             `);
-            // console.log("Result", result);
             
             if (result.rowsAffected[0] === 0) {
                 return false;
@@ -175,10 +181,7 @@ export const getOrg = async (orgId: string) => {
     return result.recordset[0];
 };
 
-export const createOrg = async (org: {
-    id: string,
-    name: string,
-}) => {
+export const createOrg = async (org: Organisation) => {
     await poolPromise;
     const result = await pool.request()
         .input('ID', sql.UniqueIdentifier, org.id)

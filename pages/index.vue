@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import type { Employee } from '~/interfaces/Employee';
+import { fetchEmployees } from '~/services/fetchEmployees';
+
 definePageMeta({
     middleware: ['auth']
 });
@@ -6,12 +9,8 @@ definePageMeta({
 const orgID = ref('');
 const loading = ref(true);
 
-const orgData = ref<any>();
-
 const { data } = useAuth();
 orgID.value = data.value?.user?.orgId || '';
-
-// console.log(orgID.value);
 
 const totalTenure = ref(0);
 const totalSalary = ref(0);
@@ -19,61 +18,43 @@ const newEmployees = ref(0);
 
 const toast = useToast();
 
-const employees = ref();
+const employees = ref<any>([]);
 
 try {
-    const response = await useFetch('/api/read/employees', {
-        method: 'POST',
-        body: JSON.stringify({ orgId: orgID.value }),
-        headers: { 'Content-Type': 'application/json' }
-    });
-
-    if (response.error.value) {
-        throw new Error('Error fetching data');
-    } else {
-        // console.log(response.data.value);
-        orgData.value = response.data.value;
-        // console.log(orgData.value);
-    }
-
-    // calculate average tenure from orgData.value.body
-    orgData.value.body.forEach((employee) => {
-        totalTenure.value += new Date().getFullYear() - new Date(employee.joiningDate).getFullYear();
-        totalSalary.value += employee.salary;
-    });
-
-    newEmployees.value = orgData.value.body.filter((employee) => new Date(employee.joiningDate).getFullYear() === new Date().getFullYear()).length;
-
-    // monthly salary expenditure
-    totalSalary.value = totalSalary.value * orgData.value.body.length;
+    employees.value = await fetchEmployees(orgID.value);
 } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
+    toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to fetch employees',
+        life: 3000
+    });
 } finally {
     loading.value = false;
-
-    // console.log(orgData.value.body);
-
-    employees.value = orgData.value.body.map((employee) => {
-        return {
-            id: employee.id,
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            birthDate: employee.birthDate,
-            employeeId: employee.employeeId,
-            salary: employee.salary,
-            role: employee.role,
-            manager: employee.manager,
-            joiningDate: employee.joiningDate,
-            leaveDays: employee.leaveDays,
-            linkedIn: employee.linkedIn,
-            email: employee.email,
-            bio: employee.bio,
-            gravatarURL: employee.gravatarURL
-        }
-    });
-
-    // console.log(employees.value);
 }
+
+// calculate total tenure using employees' joined date
+employees.value.forEach((employee: Employee) => {
+    const joinedDate = new Date(employee.joiningDate);
+    const currentDate = new Date();
+    const years = currentDate.getFullYear() - joinedDate.getFullYear();
+    totalTenure.value += years;
+});
+
+// calculate total salary expenditure
+employees.value.forEach((employee: Employee) => {
+    totalSalary.value += employee.salary;
+});
+
+// calculate new employees
+employees.value.forEach((employee: Employee) => {
+    const joinedDate = new Date(employee.joiningDate);
+    const currentDate = new Date();
+    const years = currentDate.getFullYear() - joinedDate.getFullYear();
+    if (years === 0) {
+        newEmployees.value += 1;
+    }
+});
 
 </script>
 
@@ -98,7 +79,7 @@ try {
                             <p class="pi pi-user text-blue-500"></p>
                         </div>
                         <p class="text-2xl font-bold">
-                            {{ orgData.body.length }}
+                            {{ employees.length }}
                         </p>
                         <p class="text-xs text-slate-400 flex items-center space-x-1">
                             Total number of employees in the organisation
@@ -110,7 +91,7 @@ try {
                             <p class="pi pi-sitemap text-blue-500"></p>
                         </div>
                         <p class="text-2xl font-bold">
-                            {{ totalTenure / orgData.body.length }}
+                            {{ totalTenure / employees.length }} years
                         </p>
                         <p class="text-xs text-slate-400">
                             Average years employees worked in the organisation
@@ -137,7 +118,7 @@ try {
                             +{{ newEmployees }}
                         </p>
                         <p class="text-xs text-slate-400">
-                            New employees this year that joined the organisation
+                            New employees that joined the organisation this year
                         </p>
                     </div>
                 </div>

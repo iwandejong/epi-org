@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@primevue/nuxt-module": "^4.0.4",
-    "@sidebase/nuxt-auth": "^0.6.7",
+    "@sidebase/nuxt-auth": "^0.8.2",
     "@types/bcrypt": "^5.0.2",
     "@types/mssql": "^9.1.5",
     "@types/uuid": "^10.0.0",

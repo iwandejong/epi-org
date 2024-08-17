@@ -1,17 +1,21 @@
 import { poolPromise, pool } from '../db/connection';
 import sql from 'mssql';
+import type { ServerResponse } from '~/interfaces/ServerResponse';
 
-export default defineEventHandler(async (event) => {
-    if (event.req.method === 'POST') {
+export default defineEventHandler(async (event): Promise<ServerResponse> => {
+    if (event.node.req.method === 'POST') {
         const body = await readBody(event);
 
         if (!body || !body.orgId) {
-            return new Response('Invalid request', { status: 400 });
+            return {
+                statusCode: 400,
+                body: 'Bad Request'
+            }
         }
 
         const orgId = body.orgId;
 
-        // console.log('orgId', orgId);
+        console.log('orgId', orgId);
 
         await poolPromise;
         try {
@@ -19,13 +23,21 @@ export default defineEventHandler(async (event) => {
                 .input('OrgID', sql.UniqueIdentifier, orgId)
                 .query('SELECT * FROM employee WHERE orgId = @OrgID');
 
+            // console.log('result', result.recordset);
+
             return {
                 statusCode: 200,
                 body: result.recordset
             };
         } catch (error) {
-            return new Response('Database query error', { status: 500 });
+            return {
+                statusCode: 500,
+                body: error
+            };
         }
     }
-    return new Response('Invalid request method', { status: 405 });
+    return {
+        statusCode: 405,
+        body: 'Method Not Allowed'
+    }
 });
