@@ -6,6 +6,16 @@ definePageMeta({
 const checked = ref(false)
 const isLoading = ref(false)
 
+// .input('FirstName', sql.NVarChar, employee.firstName)
+// .input('LastName', sql.NVarChar, employee.lastName)
+// .input('BirthDate', sql.Date, employee.birthDate)
+// .input('LinkedIn', sql.NVarChar, employee.linkedIn)
+// .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
+// .input('Bio', sql.Text, employee.bio)
+// .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
+// .input('JoinDate', sql.Date, employee.joiningDate)
+// .input('Password', sql.NVarChar, hashedPassword)
+
 const form = ref({
     firstName: 'John',
     lastName: 'Doe',
@@ -13,12 +23,9 @@ const form = ref({
     linkedIn: 'https://linkedin.com/in/johndoe',
     gravatarURL: 'https://gravatar.com/iwandejong',
     bio: 'I am a software engineer',
-
-    email: 'john.doe@example.com',
     password: 'uI61+g6£+X%=',
-
-    orgId: 'a7a9d4da-d6c6-42bc-911f-5ac38215cd4d',
-    employeeId: 'e4ecacbf-6390-4bbd-a4d3-4d041f1bc553',
+    employeeId: '',
+    joiningDate: new Date().toISOString().split('T')[0],
 });
 
 const toast = useToast();
@@ -29,7 +36,7 @@ async function submitForm() {
     try {
         isLoading.value = true;
         // console.log(form.value);
-        const result = await $fetch('/api/auth/register/emp', {
+        const result = await $fetch('/api/create/employee', {
             method: 'POST',
             body: form.value
         });
@@ -43,7 +50,6 @@ async function submitForm() {
             return;
         } else {
             toast.add({ severity: 'success', summary: 'Registration Complete', detail: data.body.message, life: 3000 });
-            // delay the navigation to allow the user to see the success message
             await new Promise(resolve => setTimeout(resolve, 3000));
             navigateTo('/login?registered=true');
         }
@@ -150,15 +156,6 @@ async function submitForm() {
                     <hr class="border-gray-600 opacity-30"/>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="flex flex-col space-y-1">
-                            <label for="email" class="">
-                                <span>
-                                    Email Address
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <input type="email" id="email" class="bg-slate-700 p-2 rounded-md" required v-model="form.email"/>
-                        </div>
-                        <div class="flex flex-col space-y-1">
                             <label for="password" class="">
                                 <span>
                                     Password
@@ -166,31 +163,6 @@ async function submitForm() {
                                 </span>
                             </label>
                             <input type="password" id="password" class="bg-slate-700 p-2 rounded-md" required v-model="form.password"/>
-                        </div>
-                    </div>
-                    
-                    <div class="text-lg pt-4">
-                        <p class="text-lg">
-                            Organisation Information
-                        </p>
-                        <p class="text-sm text-gray-400">
-                            Please provide your organisation ID and your employee ID to join an organisation
-                        </p>
-                    </div>
-                    <hr class="border-gray-600 opacity-30"/>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="flex flex-col space-y-1">
-                            <label for="orgID" class="">
-                                <span>
-                                    Organisation ID
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <input type="text" id="orgID" class="bg-slate-700 p-2 rounded-md" required v-model="form.orgId"/>
-                            <div class="flex space-x-1">
-                                <p>Don't have an Organisation ID?</p>
-                                <RouterLink to="/register/organisation" class="text-blue-500">Create Organisation</RouterLink>
-                            </div>
                         </div>
                         <div class="flex flex-col space-y-1">
                             <label for="empID" class="">

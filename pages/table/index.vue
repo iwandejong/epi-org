@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { FilterMatchMode } from '@primevue/core/api';
+import type { Employee } from '~/interfaces/Employee';
+import { fetchEmployees } from '~/services/fetchEmployees';
+
 definePageMeta({
     middleware: ['auth'],
 });
@@ -8,12 +12,9 @@ const orgID = ref('');
 const { data } = useAuth();
 orgID.value = data.value?.user?.orgId || '';
 
-// console.log(orgID.value);
-import { FilterMatchMode } from '@primevue/core/api';
 
 const toast = useToast();
 
-const employees = ref();
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     firstName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -32,51 +33,19 @@ const filters = ref({
 })
 
 const loading = ref(true);
-
-const orgData = ref<any>();
+const employees = ref<any>([]);
 
 try {
-    const response = await useFetch('/api/read/employees', {
-        method: 'POST',
-        body: JSON.stringify({ orgId: orgID.value }),
-        headers: { 'Content-Type': 'application/json' }
-    });
-
-    if (response.error.value) {
-        throw new Error('Error fetching data');
-    } else {
-        // console.log(response.data.value);
-        orgData.value = response.data.value;
-        // console.log(orgData.value);
-    }
-    employees.value = orgData.value.body;
+    employees.value = await fetchEmployees(orgID.value);
 } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
+    toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to fetch employees',
+        life: 3000
+    });
 } finally {
     loading.value = false;
-    // console.log(employees.value);
-
-    // convert employee data to PrimeVue DataTable format
-    employees.value = orgData.value.body.map((employee) => {
-        return {
-            id: employee.id,
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            birthDate: employee.birthDate,
-            employeeId: employee.employeeId,
-            salary: employee.salary,
-            role: employee.role,
-            manager: employee.manager,
-            joiningDate: employee.joiningDate,
-            leaveDays: employee.leaveDays,
-            linkedIn: employee.linkedIn,
-            email: employee.email,
-            bio: employee.bio,
-            gravatarURL: employee.gravatarURL
-        }
-    });
-
-    // console.log(employees.value);
 }
 
 const formatDate = (value) => {
@@ -121,6 +90,13 @@ const clearFilter = () => {
 
 <template>
     <div class="">
+        <div class="absolute top-0 left-0 w-screen h-screen bg-slate-900 z-50" v-if="loading">
+            <div class="flex items-center justify-center w-full h-full">
+                <div class="flex flex-col items-center space-y-4">
+                    <p class="pi pi-spin pi-spinner text-blue-500"></p>
+                </div>
+            </div>
+        </div>
         <div class="flex justify-center w-1/2 space-x-2 absolute top-0 left-1/4 h-20 items-center">
             <IconField class="w-1/3 m-2">
                 <InputIcon>
@@ -132,7 +108,7 @@ const clearFilter = () => {
         </div>
         <Toast />
         <DataTable v-model:filters="filters" v-model:expandedRows="expandedRows" :value="employees" dataKey="id" filterDisplay="row" :loading="loading"
-                :globalFilterFields="['firstName', 'lastName', 'birthDate', 'employeeId', 'salary', 'role', 'manager', 'joiningDate', 'leaveDays', 'linkedIn', 'email', 'bio']" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" :options="{ rowExpansionTemplate: 'expansion', size: 'small' }" stripedRows class="text-sm">
+                :globalFilterFields="['firstName', 'lastName', 'birthDate', 'employeeId', 'salary', 'role', 'manager', 'joiningDate', 'leaveDays', 'linkedIn', 'email', 'bio']" :options="{ rowExpansionTemplate: 'expansion', size: 'small' }" stripedRows class="text-sm">
             <template #empty> No employees found. </template>
             <template #loading> Loading employees data. Please wait. </template>
             <Column expander style="width: 5rem" />

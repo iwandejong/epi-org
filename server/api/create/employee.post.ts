@@ -17,7 +17,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
 
         const employee = body as Employee;
 
-
+        // user has already been invited, must fill in missing details
         if (employee.password) {
             console.log("Updating password");
             const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
@@ -28,16 +28,9 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                 .input('LastName', sql.NVarChar, employee.lastName)
                 .input('BirthDate', sql.Date, employee.birthDate)
                 .input('LinkedIn', sql.NVarChar, employee.linkedIn)
-                .input('Email', sql.NVarChar, employee.email)
                 .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
                 .input('Bio', sql.Text, employee.bio)
                 .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
-                // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
-                .input('OrgId', sql.UniqueIdentifier, employee.orgId)
-                .input('LeaveDays', sql.Int, employee.leaveDays)
-                .input('Salary', sql.Float, employee.salary)
-                .input('Role', sql.NVarChar, employee.role)
-                .input('ManagerId', sql.UniqueIdentifier, employee.manager)
                 .input('JoinDate', sql.Date, employee.joiningDate)
                 .input('Password', sql.NVarChar, hashedPassword)
                 .query(`
@@ -46,14 +39,8 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                         lastName = @LastName,
                         birthDate = @BirthDate,
                         linkedIn = @LinkedIn,
-                        email = @Email,
                         bio = @Bio,
                         gravatarURL = @GravatarURL,
-                        orgId = @OrgId,
-                        leaveDays = @LeaveDays,
-                        salary = @Salary,
-                        role = @Role,
-                        manager = @ManagerId,
                         joiningDate = @JoinDate,
                         password = @Password
                     WHERE employeeId = @EmployeeId
@@ -76,38 +63,17 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
         } else {
             await poolPromise;
             const result = await pool.request()
-                .input('FirstName', sql.NVarChar, employee.firstName)
-                .input('LastName', sql.NVarChar, employee.lastName)
-                .input('BirthDate', sql.Date, employee.birthDate)
-                .input('LinkedIn', sql.NVarChar, employee.linkedIn)
                 .input('Email', sql.NVarChar, employee.email)
                 .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
-                .input('Bio', sql.Text, employee.bio)
-                .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
                 // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
                 .input('OrgId', sql.UniqueIdentifier, employee.orgId)
                 .input('LeaveDays', sql.Int, employee.leaveDays)
                 .input('Salary', sql.Float, employee.salary)
                 .input('Role', sql.NVarChar, employee.role)
                 .input('ManagerId', sql.UniqueIdentifier, employee.manager)
-                .input('JoinDate', sql.Date, employee.joiningDate)
-                // .input('Password', sql.NVarChar, null)
                 .query(`
-                    UPDATE employee
-                    SET firstName = @FirstName,
-                        lastName = @LastName,
-                        birthDate = @BirthDate,
-                        linkedIn = @LinkedIn,
-                        email = @Email,
-                        bio = @Bio,
-                        gravatarURL = @GravatarURL,
-                        orgId = @OrgId,
-                        leaveDays = @LeaveDays,
-                        salary = @Salary,
-                        role = @Role,
-                        manager = @ManagerId,
-                        joiningDate = @JoinDate
-                    WHERE employeeId = @EmployeeId
+                    INSERT INTO employee (email, employeeId, orgId, leaveDays, salary, role, manager)
+                    VALUES (@Email, @EmployeeId, @OrgId, @LeaveDays, @Salary, @Role, @ManagerId)
                 `);
                 // hierarchyId = @HierarchyId,
                 
