@@ -27,9 +27,9 @@ export const authenticateEmployee = async (email: string, password: string) => {
     try {
         const passwordMatch = await bcrypt.compare(password, pw);
         if (!passwordMatch) {
-            console.log("Password mismatch");
+            // console.log("Password mismatch");
         } else {
-            console.log("Password match");
+            // console.log("Password match");
         }
         return passwordMatch ? employee : false;
     } catch (error) {
@@ -84,31 +84,6 @@ export const createEmployee = async (employee: {
     return true;
 };
 
-// CREATE TABLE [dbo].[employee] (
-//     [id]          INT                 IDENTITY (1, 1) NOT NULL,
-//     [firstName]   NVARCHAR (50)       NULL,
-//     [lastName]    NVARCHAR (50)       NULL,
-//     [birthDate]   DATE                NULL,
-//     [employeeId]  UNIQUEIDENTIFIER    NULL,
-//     [salary]      FLOAT (53)          NULL,
-//     [role]        NVARCHAR (50)       NULL,
-//     [manager]     UNIQUEIDENTIFIER    NULL,
-//     [joiningDate] DATE                NULL,
-//     [leaveDays]   INT                 NULL,
-//     [linkedIn]    VARCHAR (MAX)       NULL,
-//     [orgId]       UNIQUEIDENTIFIER    NULL,
-//     [email]       VARCHAR (MAX)       NULL,
-//     [password]    VARCHAR (MAX)       NULL,
-//     [hierarchyId] [sys].[hierarchyid] NULL,
-//     [bio]         TEXT                NULL,
-//     [gravatarURL] NVARCHAR (MAX)      NULL,
-//     CONSTRAINT [PK_emp] PRIMARY KEY CLUSTERED ([id] ASC),
-//     CONSTRAINT [FK_org] FOREIGN KEY ([orgId]) REFERENCES [dbo].[organisation] ([id]) ON DELETE CASCADE ON UPDATE CASCADE,
-//     INDEX [GRAPH_UNIQUE_INDEX_60C23A527BEC49ABB7E8AFC627A748CB] UNIQUE NONCLUSTERED ($node_id)
-// ) AS NODE;
-
-
-
 export const updateEmployee = async (employee: {
     firstName: string,
     lastName: string,
@@ -122,7 +97,7 @@ export const updateEmployee = async (employee: {
     hierarchyId: string,
 }) => {
     if (employee.password) {
-        console.log("Updating password");
+        // console.log("Updating password");
         const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
 
         await poolPromise;
@@ -151,7 +126,7 @@ export const updateEmployee = async (employee: {
                 WHERE employeeId = @EmployeeId
             `);
 
-            console.log("Result", result);
+            // console.log("Result", result);
             
             if (result.rowsAffected[0] === 0) {
                 return false;
@@ -182,7 +157,7 @@ export const updateEmployee = async (employee: {
                     hierarchyId = @HierarchyId
                 WHERE employeeId = @EmployeeId
             `);
-            console.log("Result", result);
+            // console.log("Result", result);
             
             if (result.rowsAffected[0] === 0) {
                 return false;

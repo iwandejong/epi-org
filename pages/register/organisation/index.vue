@@ -37,7 +37,7 @@ async function submitForm() {
     
     try {
         isLoading.value = true;
-        console.log(form.value);
+        // console.log(form.value);
         const result = await $fetch('/api/auth/register/org', {
             method: 'POST',
             body: form.value

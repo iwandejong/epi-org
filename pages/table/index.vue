@@ -8,7 +8,7 @@ const orgID = ref('');
 const { data } = useAuth();
 orgID.value = data.value?.user?.orgId || '';
 
-console.log(orgID.value);
+// console.log(orgID.value);
 import { FilterMatchMode } from '@primevue/core/api';
 
 const toast = useToast();
@@ -45,16 +45,16 @@ try {
     if (response.error.value) {
         throw new Error('Error fetching data');
     } else {
-        console.log(response.data.value);
+        // console.log(response.data.value);
         orgData.value = response.data.value;
-        console.log(orgData.value);
+        // console.log(orgData.value);
     }
     employees.value = orgData.value.body;
 } catch (error) {
     toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
 } finally {
     loading.value = false;
-    console.log(employees.value);
+    // console.log(employees.value);
 
     // convert employee data to PrimeVue DataTable format
     employees.value = orgData.value.body.map((employee) => {
@@ -76,7 +76,7 @@ try {
         }
     });
 
-    console.log(employees.value);
+    // console.log(employees.value);
 }
 
 const formatDate = (value) => {

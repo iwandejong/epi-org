@@ -80,7 +80,7 @@ salary = "R" + salary + "k";
 props.employee.joiningDate = new Date(props.employee.joiningDate).toLocaleDateString();
 props.employee.birthDate = new Date(props.employee.birthDate).toLocaleDateString();
 
-console.log(props.employee);
+// console.log(props.employee);
 
 const gravatar = ref('');
 const gravatarProfileUrl = props.employee.gravatarURL;
@@ -90,7 +90,7 @@ fetch(`${gravatarProfileUrl}.json`)
 .then(response => response.json())
 .then(data => {
     gravatar.value = data.entry[0].thumbnailUrl;
-    console.log(gravatar.value);
+    // console.log(gravatar.value);
     loadingGrav.value = false;
 })
 .catch(err => {
@@ -103,7 +103,7 @@ const toast = useToast();
 async function handleUpdate() {
     if (loading.value) return;
 
-    console.log(employee.value);
+    // console.log(employee.value);
 
     try {
         loading.value = true;
@@ -113,7 +113,7 @@ async function handleUpdate() {
         });
         let data : any = await result;
 
-        console.log(data);
+        // console.log(data);
 
         if (data.statusCode > 400) {
             toast.add({ severity: 'error', summary: 'Update Failed', detail: 'Please try again', life: 3000 });

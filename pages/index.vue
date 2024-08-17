@@ -11,7 +11,7 @@ const orgData = ref<any>();
 const { data } = useAuth();
 orgID.value = data.value?.user?.orgId || '';
 
-console.log(orgID.value);
+// console.log(orgID.value);
 
 const totalTenure = ref(0);
 const totalSalary = ref(0);
@@ -31,9 +31,9 @@ try {
     if (response.error.value) {
         throw new Error('Error fetching data');
     } else {
-        console.log(response.data.value);
+        // console.log(response.data.value);
         orgData.value = response.data.value;
-        console.log(orgData.value);
+        // console.log(orgData.value);
     }
 
     // calculate average tenure from orgData.value.body
@@ -51,7 +51,7 @@ try {
 } finally {
     loading.value = false;
 
-    console.log(orgData.value.body);
+    // console.log(orgData.value.body);
 
     employees.value = orgData.value.body.map((employee) => {
         return {
@@ -72,7 +72,7 @@ try {
         }
     });
 
-    console.log(employees.value);
+    // console.log(employees.value);
 }
 
 </script>

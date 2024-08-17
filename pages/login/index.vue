@@ -29,7 +29,7 @@ async function login() {
         // get session
         const { data } = useAuth();
         
-        console.log(data);
+        // console.log(data);
 
         // get user.body from data
         const user = data.value?.user?.id || '';
@@ -52,7 +52,7 @@ onMounted(() => {
     const route = useRoute();
     const queryParams = route.query.registered;
     
-    console.log(queryParams);
+    // console.log(queryParams);
     
     if (queryParams) {
         registeredMessage.value = true;

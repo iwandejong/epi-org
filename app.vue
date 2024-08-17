@@ -14,7 +14,7 @@ onBeforeMount(async () => {
     const orgID = ref('');
     orgID.value = data.value?.user?.orgId || '';
 
-    console.log(orgID.value);
+    // console.log(orgID.value);
 
     try {
         const response = await useFetch('/api/read/employees', {
@@ -24,7 +24,7 @@ onBeforeMount(async () => {
         });
 
         if (response.data.value) {
-            console.log(response.data.value);
+            // console.log(response.data.value);
         }
     } catch (error) {
         console.error('Error fetching data:', error);

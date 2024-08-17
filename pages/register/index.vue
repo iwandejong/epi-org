@@ -28,14 +28,14 @@ async function submitForm() {
 
     try {
         isLoading.value = true;
-        console.log(form.value);
+        // console.log(form.value);
         const result = await $fetch('/api/auth/register/emp', {
             method: 'POST',
             body: form.value
         });
         let data : any = await result;
 
-        console.log(data);
+        // console.log(data);
 
         if (data.statusCode > 400) {
             toast.add({ severity: 'error', summary: 'Registration Failed', detail: data.body.message, life: 3000 });

@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
         const employeeId = body.empId;
 
-        console.log('employeeId', employeeId);
+        // console.log('employeeId', employeeId);
 
         await poolPromise;
         try {
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
                 .input('EmployeeID', sql.UniqueIdentifier, employeeId)
                 .query('SELECT * FROM employee WHERE employeeId = @EmployeeID');
 
-            console.log('Result', result.recordset[0]);
+            // console.log('Result', result.recordset[0]);
 
             return {
                 statusCode: 200,

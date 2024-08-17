@@ -38,7 +38,7 @@
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
     } finally {
-        console.log(orgName.value);
+        // console.log(orgName.value);
     }
 
     // try {
@@ -51,12 +51,12 @@
     //     if (response.error.value) {
     //         throw new Error('Error fetching data');
     //     }
-    //     console.log(response.data.value.body);
+    //     // console.log(response.data.value.body);
     //     account.value = response.data.value.body;
     // } catch (error) {
     //     toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
     // } finally {
-    //     console.log(account.value);
+    //     // console.log(account.value);
     // }
 
     const employees = ref();
@@ -76,9 +76,9 @@
         if (response.error.value) {
             throw new Error('Error fetching data');
         } else {
-            console.log(response.data.value);
+            // console.log(response.data.value);
             orgData.value = response.data.value;
-            console.log(orgData.value);
+            // console.log(orgData.value);
         }
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error fetching data', detail: 'Please try again later', life: 3000 });
@@ -105,7 +105,7 @@
             }
         });
 
-        console.log(employees.value);
+        // console.log(employees.value);
     }
 
     // managers is all employees (just store the employeeId and name and gravatar and role)
@@ -120,7 +120,7 @@
 
     account.value = employees.value.find((emp) => emp.employeeId === empID.value);
 
-    console.log(account.value);
+    // console.log(account.value);
 
     const form = ref({
         firstName: account.value.firstName,
@@ -136,7 +136,7 @@
         employeeId: account.value.employeeId,
     });
 
-    console.log(form.value);
+    // console.log(form.value);
 
     const gravatar = ref('');
     const gravatarProfileUrl = account.value.gravatarURL;
@@ -146,7 +146,7 @@
     .then(response => response.json())
     .then(data => {
         gravatar.value = data.entry[0].thumbnailUrl;
-        console.log(gravatar.value);
+        // console.log(gravatar.value);
         loadingGrav.value = false;
     })
     .catch(err => {
@@ -163,14 +163,14 @@
         .then(response => response.json())
         .then(data => {
             manager.gravatar = data.entry[0].thumbnailUrl;
-            console.log(manager.gravatar);
+            // console.log(manager.gravatar);
         })
         .catch(err => {
             console.error('Error fetching Gravatar profile:', err);
         })
     });
 
-    console.log(managers.value);
+    // console.log(managers.value);
 
 
     const op = ref();
@@ -186,7 +186,7 @@
     async function handleUpdate() {
         if (loading.value) return;
 
-        console.log(employee.value);
+        // console.log(employee.value);
 
         try {
             loading.value = true;
@@ -196,7 +196,7 @@
             });
             let data : any = await result;
 
-            console.log(data);
+            // console.log(data);
 
             if (data.statusCode > 400) {
                 toast.add({ severity: 'error', summary: 'Update Failed', detail: 'Please try again', life: 3000 });
@@ -226,7 +226,7 @@
         () => route.path,
         (newPath) => {
             isTable.value = newPath === '/table';
-            console.log('URL changed to:', newPath);
+            // console.log('URL changed to:', newPath);
         }
     );
 
@@ -269,7 +269,7 @@
             });
             let data : any = await result;
 
-            console.log(data);
+            // console.log(data);
 
             if (data.statusCode > 400) {
                 toast.add({ severity: 'error', summary: 'Account Creation Failed', detail: 'Please try again', life: 3000 });
@@ -456,7 +456,7 @@
                     </div>
                 </div>
                 <Popover ref="op">
-                    <div class="flex flex-col w-56">
+                    <div class="flex flex-col w-56 *:rounded-md">
                         <div class="hover:bg-slate-800 p-4 cursor-pointer" @click="visible = true">
                             Manage Account
                         </div>

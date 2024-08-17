@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
         const employee = body;
 
-        console.log('employee', employee);
+        // console.log('employee', employee);
 
         // let payload = {
         //     firstName: employee.firstName,
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
         //     hierarchyId: employee.hierarchyId
         // };
 
-        // console.log('payload', payload);
+        // // console.log('payload', payload);
 
 
         await poolPromise;

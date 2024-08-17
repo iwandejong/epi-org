@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
         const orgId = body.orgId;
 
-        console.log('orgId', orgId);
+        // console.log('orgId', orgId);
 
         await poolPromise;
         try {
