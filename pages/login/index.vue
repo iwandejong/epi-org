@@ -11,25 +11,60 @@ const email = ref('');
 const password = ref('');
 const error = ref('');
 const isLoading = ref(false);
+const registeredMessage = ref(false);
 
 const { signIn } = useAuth();
 
+const toast = useToast();
+
 async function login() {
     try {
-        await signIn('credentials', {
+        isLoading.value = true;
+        const result = await signIn('credentials', {
             email: email.value,
             password: password.value,
-            callbackUrl: '/'
+            redirect: false
         });
+
+        // get session
+        const { data } = useAuth();
+        
+        console.log(data);
+
+        // get user.body from data
+        const user = data.value?.user?.id || '';
+
+        if (user) {
+            toast.add({ severity: 'success', summary: 'Login Successful', detail: 'Redirecting...', life: 3000 });
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            navigateTo('/');
+        } else {
+            toast.add({ severity: 'error', summary: 'Login Failed', detail: 'Invalid email or password', life: 3000 });
+        }
     } catch (err) {
-        error.value = err.message;
-        alert(error.value);
+        toast.add({ severity: 'error', summary: 'Login Failed', detail: 'Invalid email or password', life: 3000 }); 
+    } finally {
+        isLoading.value = false;
     }
 }
+
+onMounted(() => {
+    const route = useRoute();
+    const queryParams = route.query.registered;
+    
+    console.log(queryParams);
+    
+    if (queryParams) {
+        registeredMessage.value = true;
+        toast.add({ severity: 'success', summary: 'Registration Complete', detail: 'You can now sign in with your account details', life: 3000 });
+    }
+});
 </script>
 
 <template>
     <div class="flex w-full h-screen bg-slate-900 justify-center items-center py-8">
+        <Toast></Toast>
+
         <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
                 <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>

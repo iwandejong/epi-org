@@ -11,36 +11,61 @@ const form = ref({
     lastName: 'Doe',
     birthDate: '2000-01-01',
     linkedIn: 'https://linkedin.com/in/johndoe',
+    gravatarUrl: 'https://gravatar.com/iwandejong',
+    bio: 'I am a software engineer',
+
     email: 'john.doe@example.com',
     password: 'uI61+g6£+X%=',
+
     orgId: 'a7a9d4da-d6c6-42bc-911f-5ac38215cd4d',
     employeeId: 'e4ecacbf-6390-4bbd-a4d3-4d041f1bc553',
 });
 
+const toast = useToast();
+
 async function submitForm() {
+    if (isLoading.value) return;
+
     try {
         isLoading.value = true;
         console.log(form.value);
-        const result = await useFetch('/api/auth/register', {
+        const result = await $fetch('/api/auth/register/emp', {
             method: 'POST',
             body: form.value
         });
+        let data : any = await result;
 
-        return result;
+        console.log(data);
+
+        if (data.statusCode > 400) {
+            toast.add({ severity: 'error', summary: 'Registration Failed', detail: data.body.message, life: 3000 });
+            isLoading.value = false;
+            return;
+        } else {
+            toast.add({ severity: 'success', summary: 'Registration Complete', detail: data.body.message, life: 3000 });
+            // delay the navigation to allow the user to see the success message
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            navigateTo('/login?registered=true');
+        }
     } catch (err) {
-        console.error(err);
+        toast.add({ severity: 'error', summary: 'Registration Failed', detail: 'Internal Server Error', life: 3000 });
+        return err;
     } finally {
         isLoading.value = false;
+        return;
     }
 }
 </script>
 
 <template>
     <div class="flex w-full h-screen bg-slate-900 justify-center items-center py-8">
+        <Toast></Toast>
         <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
-                <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
-                <p class="text-3xl ">Welcome to EPI-Org</p>
+                <div class="flex items-center space-x-2">
+                    <i class="pi pi-sitemap text-3xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
+                    <p class="text-3xl ">EPI-Org</p>
+                </div>
                 <p class="text-gray-400">Create an account to continue</p>
             </div>
         
@@ -82,11 +107,15 @@ async function submitForm() {
                         <div class="flex flex-col space-y-1">
                             <label for="picture" class="">
                                 <span>
-                                    Profile Picture
+                                    Gravatar URL
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="file" id="picture" class="bg-slate-700 p-2 rounded-md" required />
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarUrl"/>
+                            <div class="flex space-x-1">
+                                <p>Don't have a Gravatar Profile?</p>
+                                <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>
+                            </div>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -106,7 +135,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="bio" class="bg-slate-700 p-2 rounded-md" required />
+                            <input type="text" id="bio" class="bg-slate-700 p-2 rounded-md" required v-model="form.bio"/>
                         </div>
                     </div>
 

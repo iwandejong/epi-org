@@ -20,12 +20,15 @@ export default NuxtAuthHandler ({
                 try {
                     const user = await getEmployee(email);
                     if (!user) {
-                        throw new Error('User not found');
+                        throw new Error('User not found. Please register.');
                     }
 
                     const authUser = await authenticateEmployee(email, password);
+                    
+                    console.log(authUser);
 
                     if (!authUser) {
+                        console.log('Invalid password');
                         throw new Error('Invalid password');
                     }
 
@@ -41,9 +44,13 @@ export default NuxtAuthHandler ({
                         ...user
                     }
                 }
-                catch (error) {
-                    console.error('Error during authorization:', error);
-                    return null;
+                catch (error : any) {
+                    return {
+                        statusCode: 401,
+                        body : {
+                            error: error.message
+                        }
+                    }
                 }
             }
         }),

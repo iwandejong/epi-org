@@ -7,6 +7,9 @@ export const getEmployee = async (email: string) => {
     const result = await pool.request()
         .input('Email', sql.NVarChar, email)
         .query('SELECT * FROM employee WHERE email = @Email');
+    if (result.recordset.length === 0) {
+        return false;
+    }
     return result.recordset[0];
 };
 
@@ -75,3 +78,66 @@ export const createEmployee = async (employee: {
 
     return true;
 };
+
+export const updateEmployee = async (employee: {
+    firstName: string,
+    lastName: string,
+    birthDate: Date,
+    linkedIn: string,
+    email: string,
+    password: string
+    employeeId: string,
+    orgId: string,
+}) => {
+    const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
+
+    await poolPromise;
+    const result = await pool.request()
+        .input('FirstName', sql.NVarChar, employee.firstName)
+        .input('LastName', sql.NVarChar, employee.lastName)
+        .input('BirthDate', sql.Date, employee.birthDate)
+        .input('LinkedIn', sql.NVarChar, employee.linkedIn)
+        .input('Email', sql.NVarChar, employee.email)
+        .input('Password', sql.NVarChar, hashedPassword)
+        .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
+        .input('OrgId', sql.UniqueIdentifier, employee.orgId)
+        .query(`
+            UPDATE employee
+            SET firstName = @FirstName, lastName = @LastName, birthDate = @BirthDate, linkedIn = @LinkedIn, orgId = @OrgId, email = @Email, password = @Password
+            WHERE employeeId = @EmployeeId AND orgId = @OrgId
+        `);
+
+    if (result.rowsAffected[0] === 0) {
+        return false;
+    }
+
+    return true;
+}
+
+export const getOrg = async (orgId: string) => {
+    await poolPromise;
+    const result = await pool.request()
+        .input('OrgId', sql.UniqueIdentifier, orgId)
+        .query('SELECT * FROM organisation WHERE orgId = @OrgId');
+    return result.recordset[0];
+};
+
+export const createOrg = async (org: {
+    id: string,
+    name: string,
+}) => {
+    await poolPromise;
+    const result = await pool.request()
+        .input('ID', sql.UniqueIdentifier, org.id)
+        .input('Name', sql.NVarChar, org.name)
+        .query(`
+            INSERT INTO organisation (id, name)
+            VALUES (@ID, @Name)
+        `);
+
+    if (result.rowsAffected[0] === 0) {
+        return false;
+    }
+
+    return true;
+}

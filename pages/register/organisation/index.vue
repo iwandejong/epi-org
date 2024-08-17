@@ -11,35 +11,71 @@ const form = ref({
     lastName: 'Doe',
     birthDate: '2000-01-01',
     linkedIn: 'https://linkedin.com/in/johndoe',
+    bio: 'I am a software engineer',
+    gravatarUrl: 'https://gravatar.com/iwandejong',
+
     email: 'john.doe@example.com',
     password: 'uI61+g6£+X%=',
+    
     orgName: 'EPI-Org',
 });
 
+const toast = useToast();
+
 async function submitForm() {
+    if (isLoading.value) return;
+
+    const result = await Promise.all(
+        Object.keys(form.value).map(async key => {
+            if (!form.value[key]) {
+                toast.add({ severity: 'error', summary: 'Validation Error', detail: `${key} is required`, life: 3000 });
+                return false;
+            }
+            return true;
+        })
+    );
+    
     try {
         isLoading.value = true;
         console.log(form.value);
-        const result = await useFetch('/api/auth/register', {
+        const result = await $fetch('/api/auth/register/org', {
             method: 'POST',
             body: form.value
         });
 
-        return result;
+        let data : any = await result;
+
+        if (data.statusCode > 400) {
+            toast.add({ severity: 'error', summary: 'Registration Failed', detail: data.body.message, life: 3000 });
+            isLoading.value = false;
+            return;
+        } else {
+            toast.add({ severity: 'success', summary: 'Registration Complete', detail: data.body.message, life: 3000 });
+            // delay the navigation to allow the user to see the success message
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            navigateTo('/login?registered=true');
+        }
     } catch (err) {
-        console.error(err);
+        toast.add({ severity: 'error', summary: 'Registration Failed', detail: err.body.message, life: 3000 });
+        return;
     } finally {
         isLoading.value = false;
+        return;
     }
 }
+
 </script>
 
 <template>
     <div class="flex w-full h-screen bg-slate-900 justify-center items-center">
+        <Toast></Toast>
+
         <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
-                <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
-                <p class="text-3xl ">Welcome to EPI-Org</p>
+                <div class="flex items-center space-x-2">
+                    <i class="pi pi-sitemap text-3xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
+                    <p class="text-3xl ">EPI-Org</p>
+                </div>
                 <p class="text-gray-400">Create an account to continue</p>
             </div>
         
@@ -55,7 +91,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstName"/>
+                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstName" :disabled="isLoading"/>
                         </div>
     
                         <div class="flex flex-col space-y-1">
@@ -65,7 +101,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastName"/>
+                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastName" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -75,17 +111,21 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthDate"/>
+                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthDate" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
                             <label for="picture" class="">
                                 <span>
-                                    Profile Picture
+                                    Gravatar URL
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="file" id="picture" class="bg-slate-700 p-2 rounded-md" required />
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarUrl" :disabled="isLoading"/>
+                            <div class="flex space-x-1">
+                                <p>Don't have a Gravatar Profile?</p>
+                                <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>
+                            </div>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -95,7 +135,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn"/>
+                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -105,7 +145,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="bio" class="bg-slate-700 p-2 rounded-md" required />
+                            <input type="text" id="bio" class="bg-slate-700 p-2 rounded-md" required v-model="form.bio" :disabled="isLoading"/>
                         </div>
                     </div>
 
@@ -126,7 +166,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="email" id="email" class="bg-slate-700 p-2 rounded-md" required v-model="form.email"/>
+                            <input type="email" id="email" class="bg-slate-700 p-2 rounded-md" required v-model="form.email" :disabled="isLoading"/>
                         </div>
                         <div class="flex flex-col space-y-1">
                             <label for="password" class="">
@@ -135,7 +175,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="password" id="password" class="bg-slate-700 p-2 rounded-md" required v-model="form.password"/>
+                            <input type="password" id="password" class="bg-slate-700 p-2 rounded-md" required v-model="form.password" :disabled="isLoading"/>
                         </div>
                     </div>
                     
@@ -156,17 +196,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.orgName"/>
-                        </div>
-
-                        <div class="flex flex-col space-y-1">
-                            <label for="avatar" class="">
-                                <span>
-                                    Organisation Logo
-                                    <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                            <input type="file" id="avatar" class="bg-slate-700 p-2 rounded-md" required />
+                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.orgName" :disabled="isLoading"/>
                         </div>
                     </div>
                 </div>

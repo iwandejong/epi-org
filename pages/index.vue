@@ -76,7 +76,7 @@ try {
                                 {{ orgData.body.length }}
                             </p>
                             <p class="text-xs text-slate-400 flex items-center space-x-1">
-                                Total number of employees in the organization
+                                Total number of employees in the organisation
                             </p>
                         </div>
                         <div class="border border-slate-600 p-6 rounded-lg space-y-1">
@@ -88,7 +88,7 @@ try {
                                 {{ totalTenure / orgData.body.length }}
                             </p>
                             <p class="text-xs text-slate-400">
-                                Average years employees worked in the organization
+                                Average years employees worked in the organisation
                             </p>
                         </div>
                         <div class="border border-slate-600 p-6 rounded-lg space-y-1">
@@ -112,7 +112,7 @@ try {
                                 +{{ newEmployees }}
                             </p>
                             <p class="text-xs text-slate-400">
-                                New employees this year that joined the organization
+                                New employees this year that joined the organisation
                             </p>
                         </div>
                     </div>
