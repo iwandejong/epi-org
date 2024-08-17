@@ -28,7 +28,7 @@ const filters = ref({
     linkedIn: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     bio: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    gravatarUrl: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    gravatarURL: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 })
 
 const loading = ref(true);
@@ -72,7 +72,7 @@ try {
             linkedIn: employee.linkedIn,
             email: employee.email,
             bio: employee.bio,
-            gravatarUrl: employee.gravatarURL
+            gravatarURL: employee.gravatarURL
         }
     });
 
@@ -191,9 +191,9 @@ const clearFilter = () => {
                     {{ data.email }}
                 </template>
             </Column>
-            <Column field="gravatarUrl" header="Gravatar" sortable>
+            <Column field="gravatarURL" header="Gravatar" sortable>
                 <template #body="{ data }">
-                    <a :href="data.gravatarUrl" target="_blank" class="text-blue-500">{{ data.gravatarUrl }}</a>
+                    <a :href="data.gravatarURL" target="_blank" class="text-blue-500">{{ data.gravatarURL }}</a>
                 </template>
             </Column>
             <Column field="bio" header="Bio" sortable>

@@ -12,7 +12,7 @@ const form = ref({
     birthDate: '2000-01-01',
     linkedIn: 'https://linkedin.com/in/johndoe',
     bio: 'I am a software engineer',
-    gravatarUrl: 'https://gravatar.com/iwandejong',
+    gravatarURL: 'https://gravatar.com/iwandejong',
 
     email: 'john.doe@example.com',
     password: 'uI61+g6£+X%=',
@@ -121,7 +121,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarUrl" :disabled="isLoading"/>
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL" :disabled="isLoading"/>
                             <div class="flex space-x-1">
                                 <p>Don't have a Gravatar Profile?</p>
                                 <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>

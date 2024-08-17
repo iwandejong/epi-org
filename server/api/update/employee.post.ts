@@ -14,26 +14,26 @@ export default defineEventHandler(async (event) => {
 
         console.log('employee', employee);
 
-        let payload = {
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            birthDate: employee.birthDate,
-            linkedIn: employee.linkedIn,
-            email: employee.email,
-            password: employee.password || null,
-            employeeId: employee.employeeId,
-            orgId: employee.orgId,
-            bio: employee.bio,
-            gravatarURL: employee.gravatarUrl,
-            hierarchyId: employee.hierarchyId
-        };
+        // let payload = {
+        //     firstName: employee.firstName,
+        //     lastName: employee.lastName,
+        //     birthDate: employee.birthDate,
+        //     linkedIn: employee.linkedIn,
+        //     email: employee.email,
+        //     password: employee.password || null,
+        //     employeeId: employee.employeeId,
+        //     orgId: employee.orgId,
+        //     bio: employee.bio,
+        //     gravatarURL: employee.gravatarURL,
+        //     hierarchyId: employee.hierarchyId
+        // };
 
-        console.log('payload', payload);
+        // console.log('payload', payload);
 
 
         await poolPromise;
         try {
-            const result = await updateEmployee(payload);
+            const result = await updateEmployee(employee);
 
             return {
                 statusCode: 200,

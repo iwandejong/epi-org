@@ -51,6 +51,8 @@ try {
 } finally {
     loading.value = false;
 
+    console.log(orgData.value.body);
+
     employees.value = orgData.value.body.map((employee) => {
         return {
             id: employee.id,
@@ -66,7 +68,7 @@ try {
             linkedIn: employee.linkedIn,
             email: employee.email,
             bio: employee.bio,
-            gravatarUrl: employee.gravatarURL
+            gravatarURL: employee.gravatarURL
         }
     });
 

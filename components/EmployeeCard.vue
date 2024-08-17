@@ -63,7 +63,7 @@ const visible = ref(false);
 //             linkedIn: employee.linkedIn,
 //             email: employee.email,
 //             bio: employee.bio,
-//             gravatarUrl: employee.gravatarUrl
+//             gravatarURL: employee.gravatarURL
 //         }
 //     });
 
@@ -83,7 +83,7 @@ props.employee.birthDate = new Date(props.employee.birthDate).toLocaleDateString
 console.log(props.employee);
 
 const gravatar = ref('');
-const gravatarProfileUrl = props.employee.gravatarUrl;
+const gravatarProfileUrl = props.employee.gravatarURL;
 const loadingGrav = ref(true);
 
 fetch(`${gravatarProfileUrl}.json`)
@@ -96,84 +96,113 @@ fetch(`${gravatarProfileUrl}.json`)
 .catch(err => {
     console.error('Error fetching Gravatar profile:', err);
 })
+
+const loading = ref(false);
+const toast = useToast();
+
+async function handleUpdate() {
+    if (loading.value) return;
+
+    console.log(employee.value);
+
+    try {
+        loading.value = true;
+        const result = await $fetch('/api/update/employee', {
+            method: 'POST',
+            body: form.value,
+        });
+        let data : any = await result;
+
+        console.log(data);
+
+        if (data.statusCode > 400) {
+            toast.add({ severity: 'error', summary: 'Update Failed', detail: 'Please try again', life: 3000 });
+            loading.value = false;
+            return;
+        } else {
+            toast.add({ severity: 'success', summary: 'Update Complete', detail: 'Your account has been updated. Refreshing page...', life: 3000 });
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+            return;
+        }
+    } catch (err) {
+        toast.add({ severity: 'error', summary: 'Update Failed', detail: 'Internal Server Error', life: 3000 });
+        return err;
+    } finally {
+        loading.value = false;
+        return;
+    }
+}
 </script>
 
 <template>
     <div>
         <Dialog v-model:visible="visible" modal header="Edit Employee Profile">
-            <div class="space-y-4">
-
-                <span class="text-surface-500 dark:text-surface-400 block">Update your information.</span>
-                <!-- <div class="flex items-center gap-4 mb-4">
-                    <label for="username" class="font-semibold w-24">Username</label>
-                    <InputText id="username" class="flex-auto" autocomplete="off" />
-                </div>
-                <div class="flex items-center gap-4 mb-8">
-                    <label for="email" class="font-semibold w-24">Email</label>
-                    <InputText id="email" class="flex-auto" autocomplete="off" />
-                </div> -->
-    
-                <!-- take from employee -->
-                <div class="grid grid-cols-2 gap-y-4 gap-x-8 *:flex *:items-center *:gap-4">
-    
-                    <div class="">
-                        <label for="firstName" class="font-semibold w-24">First Name</label>
-                        <InputText id="firstName" class="flex-auto" autocomplete="off" :value="employee.firstName" />
+            <form @submit.prevent="updateEmployee">
+                <div class="space-y-4">
+                    <span class="text-surface-500 dark:text-surface-400 block">Update your information.</span>
+                    <div class="grid grid-cols-2 gap-y-4 gap-x-8 *:flex *:items-center *:gap-4">
+        
+                        <div class="">
+                            <label for="firstName" class="font-semibold w-24">First Name</label>
+                            <InputText id="firstName" class="flex-auto" autocomplete="off" :value="employee.firstName" disabled/>
+                        </div>
+                        <div class="">
+                            <label for="lastName" class="font-semibold w-24">Last Name</label>
+                            <InputText id="lastName" class="flex-auto" autocomplete="off" :value="employee.lastName" disabled/>
+                        </div>
+                        <div class="">
+                            <label for="role" class="font-semibold w-24">Role</label>
+                            <InputText id="role" class="flex-auto" autocomplete="off" :value="employee.role" />
+                        </div>
+                        <div class="">
+                            <label for="salary" class="font-semibold w-24">Salary (R)</label>
+                            <InputText id="salary" class="flex-auto" autocomplete="off" :value="employee.salary" />
+                        </div>
+                        <div class="">
+                            <label for="leaveDays" class="font-semibold w-24">Leave Days</label>
+                            <InputText id="leaveDays" class="flex-auto" autocomplete="off" :value="employee.leaveDays" />
+                        </div>
+                        <div class="">
+                            <label for="linkedIn" class="font-semibold w-24">LinkedIn</label>
+                            <InputText id="linkedIn" class="flex-auto" autocomplete="off" :value="employee.linkedIn" disabled/>
+                        </div>
+                        <div class="">
+                            <label for="email" class="font-semibold w-24">Email</label>
+                            <InputText id="email" class="flex-auto" autocomplete="off" :value="employee.email" disabled/>
+                        </div>
+                        <div class="">
+                            <label for="bio" class="font-semibold w-24">Bio</label>
+                            <InputText id="bio" class="flex-auto" autocomplete="off" :value="employee.bio" disabled/>
+                        </div>
+                        <div class="">
+                            <label for="joiningDate" class="font-semibold w-24">Joining Date</label>
+                            <InputText id="joiningDate" class="flex-auto" autocomplete="off" :value="employee.joiningDate" disabled/>
+                        </div>
+                        <div class="">
+                            <label for="birthDate" class="font-semibold w-24">Birth Date</label>
+                            <InputText id="birthDate" class="flex-auto" autocomplete="off" :value="employee.birthDate" disabled/>
+                        </div>
+                        <div class="">
+                            <label for="manager" class="font-semibold w-24">Manager</label>
+                            <InputText id="manager" class="flex-auto" autocomplete="off" :value="employee.manager" />
+                        </div>
+                        <div class="">
+                            <label for="gravatarURL" class="font-semibold w-24">Gravatar URL</label>
+                            <InputText id="gravatarURL" class="flex-auto" autocomplete="off" :value="employee.gravatarURL" disabled/>
+                        </div>
                     </div>
-                    <div class="">
-                        <label for="lastName" class="font-semibold w-24">Last Name</label>
-                        <InputText id="lastName" class="flex-auto" autocomplete="off" :value="employee.lastName" />
-                    </div>
-                    <div class="">
-                        <label for="role" class="font-semibold w-24">Role</label>
-                        <InputText id="role" class="flex-auto" autocomplete="off" :value="employee.role" />
-                    </div>
-                    <div class="">
-                        <label for="salary" class="font-semibold w-24">Salary</label>
-                        <InputText id="salary" class="flex-auto" autocomplete="off" :value="salary" />
-                    </div>
-                    <div class="">
-                        <label for="leaveDays" class="font-semibold w-24">Leave Days</label>
-                        <InputText id="leaveDays" class="flex-auto" autocomplete="off" :value="employee.leaveDays" />
-                    </div>
-                    <div class="">
-                        <label for="linkedIn" class="font-semibold w-24">LinkedIn</label>
-                        <InputText id="linkedIn" class="flex-auto" autocomplete="off" :value="employee.linkedIn" />
-                    </div>
-                    <div class="">
-                        <label for="email" class="font-semibold w-24">Email</label>
-                        <InputText id="email" class="flex-auto" autocomplete="off" :value="employee.email" />
-                    </div>
-                    <div class="">
-                        <label for="bio" class="font-semibold w-24">Bio</label>
-                        <InputText id="bio" class="flex-auto" autocomplete="off" :value="employee.bio" />
-                    </div>
-                    <div class="">
-                        <label for="joiningDate" class="font-semibold w-24">Joining Date</label>
-                        <InputText id="joiningDate" class="flex-auto" autocomplete="off" :value="employee.joiningDate" />
-                    </div>
-                    <div class="">
-                        <label for="birthDate" class="font-semibold w-24">Birth Date</label>
-                        <InputText id="birthDate" class="flex-auto" autocomplete="off" :value="employee.birthDate" />
-                    </div>
-                    <div class="">
-                        <label for="manager" class="font-semibold w-24">Manager</label>
-                        <InputText id="manager" class="flex-auto" autocomplete="off" :value="employee.manager" />
-                    </div>
-                    <div class="">
-                        <label for="gravatarUrl" class="font-semibold w-24">Gravatar URL</label>
-                        <InputText id="gravatarUrl" class="flex-auto" autocomplete="off" :value="employee.gravatarUrl" />
-                    </div>
-                </div>
-    
-                <div class="flex justify-between gap-2">
-                    <Button type="button" label="Delete Employee" severity="danger" outlined @click="visible = false" class="text-red-500"></Button>
-                    <div class="flex gap-2">
-                        <Button type="button" label="Update Employee" @click="visible = false"></Button>
-                        <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
+        
+                    <div class="flex justify-between gap-2">
+                        <Button type="button" label="Delete Employee" severity="danger" outlined @click="visible = false" class="text-red-500"></Button>
+                        <div class="flex gap-2">
+                            <Button type="button" label="Update Employee" @click="visible = false"></Button>
+                            <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </Dialog>
         <div class="bg-slate-900 border border-slate-700 rounded-md p-6 w-full h-full hover:border-blue-500 cursor-pointer duration-300">
             <div ref="wrapper" class="grid grid-cols-5 items-center w-full h-full _transition-all duration-1000 ease-in-out">
@@ -186,7 +215,7 @@ fetch(`${gravatarProfileUrl}.json`)
                             {{ employee.firstName.charAt(0).toUpperCase() + employee.lastName.charAt(0).toUpperCase() }}
                         </div>
                     </div>
-                    <div class="space-y-2">
+                    <div class="space-y-px">
                         <div class="text-lg flex items-center space-x-2">
                             <p>
                                 {{ employee.firstName + " " + employee.lastName }}

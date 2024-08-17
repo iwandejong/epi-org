@@ -48,7 +48,7 @@ export const createEmployee = async (employee: {
     orgId: string,
     employeeId: string,
     hierarchyId: string,
-    gravatarUrl: string,
+    gravatarURL: string,
     bio: string,
 }) => {
     const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
@@ -70,7 +70,7 @@ export const createEmployee = async (employee: {
         .input('Password', sql.NVarChar, hashedPassword)
         .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
         .input('Bio', sql.Text, employee.bio)
-        .input('GravatarUrl', sql.NVarChar, employee.gravatarUrl)
+        .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
 
         .query(`
             INSERT INTO employee (firstName, lastName, birthDate, employeeId, salary, role, manager, joiningDate, leaveDays, linkedIn, orgId, email, password, hierarchyId, bio, gravatarURL)
@@ -117,7 +117,6 @@ export const updateEmployee = async (employee: {
     email: string,
     password: string | null,
     employeeId: string,
-    orgId: string,
     bio: string,
     gravatarURL: string,
     hierarchyId: string,
@@ -135,7 +134,6 @@ export const updateEmployee = async (employee: {
             .input('Email', sql.NVarChar, employee.email)
             .input('Password', sql.NVarChar, hashedPassword)
             .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
-            .input('OrgId', sql.UniqueIdentifier, employee.orgId)
             .input('Bio', sql.Text, employee.bio)
             .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
             .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
@@ -150,7 +148,7 @@ export const updateEmployee = async (employee: {
                     bio = @Bio,
                     gravatarURL = @GravatarURL,
                     hierarchyId = @HierarchyId
-                WHERE employeeId = @EmployeeId AND orgId = @OrgId
+                WHERE employeeId = @EmployeeId
             `);
 
             console.log("Result", result);
@@ -169,7 +167,6 @@ export const updateEmployee = async (employee: {
             .input('LinkedIn', sql.NVarChar, employee.linkedIn)
             .input('Email', sql.NVarChar, employee.email)
             .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
-            .input('OrgId', sql.UniqueIdentifier, employee.orgId)
             .input('Bio', sql.Text, employee.bio)
             .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
             .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
@@ -183,7 +180,7 @@ export const updateEmployee = async (employee: {
                     bio = @Bio,
                     gravatarURL = @GravatarURL,
                     hierarchyId = @HierarchyId
-                WHERE employeeId = @EmployeeId AND orgId = @OrgId
+                WHERE employeeId = @EmployeeId
             `);
             console.log("Result", result);
             
