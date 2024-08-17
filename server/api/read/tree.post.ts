@@ -18,20 +18,30 @@ export default defineEventHandler(async (event) => {
         const result = await pool.request()
             .input('OrgID', sql.UniqueIdentifier, orgId)
             .query(`
-                WITH cte AS (
+                WITH RECURSIVE EmployeeHierarchy AS (
                     SELECT
-                        *,
-                        ROW_NUMBER() OVER (ORDER BY Level) AS RowNumber
-                    FROM
-                        dbo.employee
+                        id AS key,
+                        employeeId AS empId,
+                        manager,
+                        firstName + ' ' + lastName AS name,
+                        role AS title,
+                        gravatarURL AS image,
+                        1 AS level
+                    FROM Employees
+                    WHERE manager IS NULL
+                    UNION ALL
+                    SELECT
+                        e.id AS key,
+                        e.manager,
+                        e.name,
+                        e.title,
+                        e.image,
+                        eh.level + 1
+                    FROM Employees e
+                    INNER JOIN EmployeeHierarchy eh ON e.manager = eh.key
                 )
-                SELECT
-                    *,
-                    CONCAT('/', RowNumber, '/') AS Path
-                FROM
-                    cte
-                WHERE
-                    orgId = @OrgID
+                SELECT * FROM EmployeeHierarchy;
+
             `);
 
         const locations = result.recordset;
