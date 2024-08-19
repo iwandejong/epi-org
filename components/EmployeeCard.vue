@@ -14,11 +14,12 @@ const dropdown = ref();
 const toggle = () => {
     active.value = !active.value;
     if (active.value) { // show
-        profile.value.classList.add('flex-col');
-        profile.value.classList.add('justify-end');
-        profile.value.classList.add('space-y-4');
+        profile.value.classList.add('lg:flex-col');
+        profile.value.classList.add('lg:justify-end');
+        profile.value.classList.add('lg:space-y-4');
         profile.value.classList.add('bg-gradient-to-t');
-        profile.value.classList.add('p-6');
+        profile.value.classList.add('lg:p-6');
+        profile.value.classList.add('p-2');
         profile.value.classList.add('rounded-md');
         profile.value.classList.add('col-span-2');
         profile.value.classList.remove('items-center');
@@ -30,11 +31,12 @@ const toggle = () => {
 
         dropdown.value.classList.add('hidden');
     } else { // hide
-        profile.value.classList.remove('flex-col');
-        profile.value.classList.remove('justify-end');
-        profile.value.classList.remove('space-y-4');
+        profile.value.classList.remove('lg:flex-col');
+        profile.value.classList.remove('lg:justify-end');
+        profile.value.classList.remove('lg:space-y-4');
         profile.value.classList.remove('bg-gradient-to-t');
-        profile.value.classList.remove('p-6');
+        profile.value.classList.remove('lg:p-6');
+        profile.value.classList.remove('p-2');
         profile.value.classList.remove('col-span-2');
         profile.value.classList.remove('rounded-md');
         profile.value.classList.add('items-center');
@@ -182,7 +184,7 @@ async function deleteEmp() {
             <form @submit.prevent="handleUpdate">
                 <div class="space-y-4">
                     <span class="text-surface-500 dark:text-surface-400 block">Update your information.</span>
-                    <div class="grid grid-cols-2 gap-y-4 gap-x-8 *:flex *:items-center *:gap-4">
+                    <div class="grid lg:grid-cols-2 gap-y-4 gap-x-8 *:flex *:items-center *:gap-4">
         
                         <div class="">
                             <label for="firstName" class="font-semibold w-24">First Name</label>
@@ -261,7 +263,7 @@ async function deleteEmp() {
             </form>
         </Dialog>
         <div class="bg-slate-900 border border-slate-700 rounded-md p-6 w-full h-full hover:border-blue-500 cursor-pointer duration-300">
-            <div ref="wrapper" class="grid grid-cols-5 items-center w-full h-full _transition-all duration-1000 ease-in-out">
+            <div ref="wrapper" class="grid lg:grid-cols-5 items-center w-full h-full _transition-all duration-1000 ease-in-out">
                 <div ref="profile" class="flex _flex-col _justify-end col-span-4 items-center space-x-4 _space-y-4 _bg-gradient-to-t from-blue-700 to-emerald-500 _p-6 _rounded-md h-full bg-opacity-0">
                     <div class="h-12 w-12 bg-blue-900 rounded-full shrink-0 cursor-pointer hover:opacity-70 duration-300 flex items-center justify-center" @click="toggle">
                         <div v-if="gravatar !== '' && !loadingGrav">
@@ -284,7 +286,7 @@ async function deleteEmp() {
                         </p>
                     </div>
                 </div>
-                <div ref="info" class="hidden col-span-3 pl-8 space-y-8 _transition-all duration-1000 ease-in-out"> 
+                <div ref="info" class="hidden col-span-3 lg:pl-8 space-y-8 _transition-all duration-1000 ease-in-out"> 
                     <div>
                         <p class="text-lg">Bio</p>
                         <p class="text-slate-400 text-sm">
