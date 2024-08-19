@@ -8,11 +8,9 @@ export default defineNuxtConfig({
  ],
 
  auth: {
-     isEnabled: true,
      baseURL: process.env.AUTH_BASE_URL,
      provider: {
-         type: 'authjs',
-         addDefaultCallbackUrl: true
+         type: 'authjs'
      },
  },
 
