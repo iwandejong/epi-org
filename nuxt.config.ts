@@ -45,9 +45,5 @@ export default defineNuxtConfig({
      strict: false,
  },
 
- runtimeConfig: {
-     authSecret: process.env.AUTH_SECRET,
- },
-
  compatibilityDate: '2024-08-16',
 })

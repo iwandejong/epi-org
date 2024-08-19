@@ -6,7 +6,7 @@ import {
 } from '../db/auth';
 
 export default NuxtAuthHandler ({
-    secret: useRuntimeConfig().authSecret,
+    secret: process.env.AUTH_SECRET,
     pages: {
         signIn: '/login'
     },
@@ -66,6 +66,7 @@ export default NuxtAuthHandler ({
             return token;
         },
         async session({session, token}) {
+            // @ts-expect-error
             session.user = {
                 ...token,
                 ...session.user
