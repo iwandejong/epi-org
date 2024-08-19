@@ -1,0 +1,8 @@
+{
+    "routes": [
+        {
+            "route": "/.auth/login/aad",
+            "statusCode": 404
+        }
+    ]
+}
