@@ -111,7 +111,6 @@ const clearFilter = () => {
                 :globalFilterFields="['firstName', 'lastName', 'birthDate', 'employeeId', 'salary', 'role', 'manager', 'joiningDate', 'leaveDays', 'linkedIn', 'email', 'bio']" :options="{ rowExpansionTemplate: 'expansion', size: 'small' }" stripedRows class="text-sm">
             <template #empty> No employees found. </template>
             <template #loading> Loading employees data. Please wait. </template>
-            <Column expander style="width: 5rem" />
             <Column field="employeeId" header="Employee ID" sortable>
                 <template #body="{ data }">
                     {{ data.employeeId }}
@@ -177,11 +176,6 @@ const clearFilter = () => {
                     {{ data.bio || 'N/A' }}
                 </template>
             </Column>
-            <template #expansion="slotProps">
-                <div class="p-4">
-                    <OrgView />
-                </div>
-            </template>
         </DataTable>
 
         <div class="fixed right-0 bottom-0 z-10 p-8">

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Employee } from '~/interfaces/Employee';
 import { fetchEmployees } from '~/services/fetchEmployees';
+import type { ServerResponse } from '~/interfaces/ServerResponse';
+import type { Tree } from '~/interfaces/Tree';
 
 definePageMeta({
     middleware: ['auth']
@@ -11,6 +13,9 @@ const loading = ref(true);
 
 const { data } = useAuth();
 orgID.value = data.value?.user?.orgId || '';
+
+const empID = ref('');
+empID.value = data.value?.user?.employeeId || '';
 
 const totalTenure = ref(0);
 const totalSalary = ref(0);
@@ -29,9 +34,12 @@ try {
         detail: 'Failed to fetch employees',
         life: 3000
     });
-} finally {
-    loading.value = false;
 }
+
+// get current user
+console.log(empID.value);
+const currentUser = employees.value.find((employee: Employee) => employee.employeeId === empID.value);
+console.log(currentUser);
 
 // calculate total tenure using employees' joined date
 employees.value.forEach((employee: Employee) => {
@@ -56,6 +64,70 @@ employees.value.forEach((employee: Employee) => {
     }
 });
 
+// try Tree fetch
+const treeData = ref<any>([]);
+try {
+    const {statusCode, body} : ServerResponse = await $fetch('/api/read/tree', {
+        method: 'POST',
+        body: {
+            orgId: orgID.value
+        }
+    });
+    if (statusCode == 200) {
+        treeData.value = body;
+    } else {
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to fetch tree',
+            life: 3000
+        });
+    }
+} catch (error) {
+    toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to fetch tree',
+        life: 3000
+    });
+}
+
+// select all employees that are not the current user, and under the current user's supervision
+// TODO: traverse the Tree
+let travTree = (tree: Tree) => {
+    let arr = [];
+    if (tree.children.length > 0) {
+        tree.children.forEach((child: Tree) => {
+            arr.push(child);
+            arr.push(...travTree(child));
+        });
+    }
+    return arr;
+};
+
+const tree = travTree(treeData.value[0]);
+// select all ids of employees under the current user
+const empIDs = tree.map((emp: Tree) => emp.id);
+
+// filter employees that are under the current user
+let otherEmployees = (currentUser.manager === null) ? employees.value : employees.value.filter((employee: Employee) => empIDs.includes(employee.id));
+
+// also filter out the current user if manager is not null
+if (currentUser.manager !== null) {
+    otherEmployees = otherEmployees.filter((employee: Employee) => employee.employeeId !== currentUser.employeeId);
+}
+
+if (currentUser.manager !== null) {
+    otherEmployees = otherEmployees.filter((employee: Employee) => employee.manager !== currentUser.manager);
+}
+
+console.log(otherEmployees);
+
+
+onMounted(() => {
+    loading.value = false;
+});
+
 </script>
 
 <template>
@@ -64,7 +136,7 @@ employees.value.forEach((employee: Employee) => {
         <div class="absolute top-0 left-0 w-screen h-screen bg-slate-900 z-50" v-if="loading">
             <div class="flex items-center justify-center w-full h-full">
                 <div class="flex flex-col items-center space-y-4">
-                    <p class="pi pi-spin pi-spinner text-blue-500"></p>
+                    <p class="pi pi-spin pi-spinner text-blue-500 text-xl"></p>
                 </div>
             </div>
         </div>
@@ -124,8 +196,8 @@ employees.value.forEach((employee: Employee) => {
                 </div>
             </div>
             <div class="grid w-full 2xl:grid-cols-2 xl:grid-cols-5 2xl:px-40 xl:px-32 p-4 gap-8">
-                <EmployeeSection class="xl:col-span-2 2xl:col-span-1" :employees="employees"/>
-                <OrgView class="xl:col-span-3 2xl:col-span-1"/>
+                <EmployeeSection class="xl:col-span-2 2xl:col-span-1" :employees="otherEmployees" :employee="currentUser"/>
+                <OrgView class="xl:col-span-3 2xl:col-span-1" :tree="treeData" :authData="data"/>
             </div>
     
             <div class="fixed right-0 bottom-0 z-10 p-8">

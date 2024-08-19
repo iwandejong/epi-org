@@ -36,7 +36,6 @@ interface DefineEmployee {
     orgId: string;
     email: string;
     password: string;
-    hierarchyId: { type: string; data: number[] }; // Adjust to match the API response
     bio: string;
     gravatarURL: string;
 }

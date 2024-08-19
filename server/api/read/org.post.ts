@@ -8,12 +8,16 @@
 
 import { poolPromise, pool } from '../db/connection';
 import sql from 'mssql';
+import type { ServerResponse } from '~/interfaces/ServerResponse';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<ServerResponse> => {
     const body = await readBody(event);
 
     if (!body || !body.orgId) {
-        return new Response('Invalid request', { status: 400 });
+        return {
+            statusCode: 400,
+            body: 'Bad Request'
+        }
     }
 
     const orgId = body.orgId;

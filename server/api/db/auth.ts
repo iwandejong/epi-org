@@ -61,13 +61,12 @@ export const createEmployee = async (employee : Employee) => {
         .input('OrgId', sql.UniqueIdentifier, employee.orgId)
         .input('Email', sql.NVarChar, employee.email)
         .input('Password', sql.NVarChar, hashedPassword)
-        .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
         .input('Bio', sql.Text, employee.bio)
         .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
 
         .query(`
-            INSERT INTO employee (firstName, lastName, birthDate, employeeId, salary, role, manager, joiningDate, leaveDays, linkedIn, orgId, email, password, hierarchyId, bio, gravatarURL)
-            VALUES (@FirstName, @LastName, @BirthDate, @EmployeeId, @Salary, @Role, @ManagerId, @JoinDate, @LeaveDays, @LinkedIn, @OrgId, @Email, @Password, @HierarchyId, @Bio, @GravatarURL)
+            INSERT INTO employee (firstName, lastName, birthDate, employeeId, salary, role, manager, joiningDate, leaveDays, linkedIn, orgId, email, password, bio, gravatarURL)
+            VALUES (@FirstName, @LastName, @BirthDate, @EmployeeId, @Salary, @Role, @ManagerId, @JoinDate, @LeaveDays, @LinkedIn, @OrgId, @Email, @Password, @Bio, @GravatarURL)
         `);
 
     if (result.rowsAffected[0] === 0) {
@@ -92,7 +91,6 @@ export const updateEmployee = async (employee: Employee) => {
             .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
             .input('Bio', sql.Text, employee.bio)
             .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
-            .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
             .input('OrgId', sql.UniqueIdentifier, employee.orgId)
             .input('LeaveDays', sql.Int, employee.leaveDays)
             .input('Salary', sql.Float, employee.salary)
@@ -109,7 +107,6 @@ export const updateEmployee = async (employee: Employee) => {
                     email = @Email,
                     bio = @Bio,
                     gravatarURL = @GravatarURL,
-                    hierarchyId = @HierarchyId,
                     orgId = @OrgId,
                     leaveDays = @LeaveDays,
                     salary = @Salary,
@@ -138,7 +135,6 @@ export const updateEmployee = async (employee: Employee) => {
             .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
             .input('Bio', sql.Text, employee.bio)
             .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
-            .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
             .input('OrgId', sql.UniqueIdentifier, employee.orgId)
             .input('LeaveDays', sql.Int, employee.leaveDays)
             .input('Salary', sql.Float, employee.salary)
@@ -155,7 +151,6 @@ export const updateEmployee = async (employee: Employee) => {
                     email = @Email,
                     bio = @Bio,
                     gravatarURL = @GravatarURL,
-                    hierarchyId = @HierarchyId,
                     orgId = @OrgId,
                     leaveDays = @LeaveDays,
                     salary = @Salary,

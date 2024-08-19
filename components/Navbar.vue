@@ -2,7 +2,6 @@
     import { ref } from "vue";
     import { v4 as uuidv4 } from 'uuid';
     import { useClipboard } from '@vueuse/core';
-    import { fetchOrganisation } from "~/services/fetchOrganisation";
     import { fetchEmployees } from "~/services/fetchEmployees";
     import type { Employee } from "~/interfaces/Employee";
     import type { Organisation } from "~/interfaces/Organisation";
@@ -71,22 +70,27 @@
         .then(response => response.json())
         .then(data => {
             gravatars.value.push(data.entry[0].thumbnailUrl);
-        })
-        .catch(err => {
-            toast.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Failed to fetch Gravatar profile',
-                life: 3000
-            });
-        })
-        .finally(() => {
             if (emp.employeeId === empID.value) {
                 gravatar.value = gravatars.value[gravatars.value.length - 1];
             }
+        })
+        .catch(err => {
+            if (emp.employeeId === empID.value) {
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Failed to fetch your Gravatar profile. Please update your Gravatar URL.',
+                    life: 3000
+                });
+            }
+        })
+        .finally(() => {
             loadingGrav.value = false;
         });
     });
+
+    console.log(gravatars.value);
+    console.log(gravatar.value);
 
     const op = ref();
 
@@ -214,6 +218,37 @@
             return;
         }
     }
+
+    async function deleteOrg() {
+        if (loading.value) return;
+
+        try {
+            loading.value = true;
+            const result = await $fetch('/api/delete/org', {
+                method: 'POST',
+                body: { orgId: account.value.orgId },
+            });
+            let data : any = await result;
+
+            if (data.statusCode > 400) {
+                toast.add({ severity: 'error', summary: 'Deletion Failed', detail: 'Please try again', life: 3000 });
+                loading.value = false;
+                return;
+            } else {
+                toast.add({ severity: 'success', summary: 'Deletion Complete', detail: 'Your organisation has been deleted. Redirecting...', life: 3000 });
+                setTimeout(() => {
+                    navigateTo('/login');
+                }, 3000);
+                return;
+            }
+        } catch (err) {
+            toast.add({ severity: 'error', summary: 'Deletion Failed', detail: 'Internal Server Error', life: 3000 });
+            return err;
+        } finally {
+            loading.value = false;
+            return;
+        }
+    }
 </script>
 
 <template>
@@ -260,7 +295,8 @@
                     </div>
         
                     <div class="flex justify-between gap-2">
-                        <Button type="button" label="Leave Organisation" severity="danger" outlined @click="visible = false" class="text-red-500"></Button>
+                        <Button type="button" label="Delete Organisation" severity="danger" outlined @click="deleteOrg" class="text-red-500" v-if="account.manager === null"/>
+                        <div v-else></div>
                         <div class="flex gap-2">
                             <Button label="Update Employee" type="submit"></Button>
                             <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
@@ -356,17 +392,9 @@
                         <!-- <i class="pi pi-moon text-xl"></i> -->
                         <i class="pi pi-plus text-xl"></i>
                     </div>
-                    <div class="h-12 w-12 flex items-center justify-center">
-                        <i class="pi pi-question-circle text-xl"></i>
-                    </div>
-                    <div class="h-12 w-12 flex items-center justify-center">
-                        <!-- <i class="pi pi-moon text-xl"></i> -->
-                        <i class="pi pi-sun text-xl"></i>
-                    </div>
                 </div>
                 <div class="  shrink-0 cursor-pointer hover:opacity-70 duration-300 flex items-center justify-center" @click="toggle">
-                    <div v-if="gravatar !== '' && !loadingGrav">
-                        <!-- <Chip :image="gravatar" :label="account.firstName + ' ' + account.lastName" class="text-xs rounded-full"/> -->
+                    <div v-if="gravatar != '' && !loadingGrav">
                         <div class="rounded-full text-xs p-1 bg-slate-800 border-2 border-slate-700 flex items-center space-x-2 pr-2">
                             <img :src="gravatar" alt="Gravatar" class="h-8 w-8 rounded-full" />
                             <p>
@@ -384,6 +412,7 @@
                     <div class="flex flex-col w-56 *:rounded-md">
                         <div class="hover:bg-slate-800 p-4 cursor-pointer" @click="visible = true">
                             Manage Account
+                            <span v-if="account.manager === null"> & Organisation</span>
                         </div>
                         <div class="hover:bg-slate-800 p-4 cursor-pointer" @click="handleLogout">
                             Sign out

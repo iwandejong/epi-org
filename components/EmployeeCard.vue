@@ -61,6 +61,9 @@ console.log(props.employees);
 const otherEmployees = ref(props.employees);
 otherEmployees.value = props.employees.filter(e => e.employeeId !== props.employee.employeeId);
 
+// filter out if other employee is already managed by current employee
+otherEmployees.value = otherEmployees.value.filter(e => e.manager !== props.employee.employeeId);
+
 console.log(otherEmployees.value);
 
 let salary = props.employee.salary / 1000;
@@ -112,6 +115,9 @@ const leaveDaysString = computed({
 async function handleUpdate() {
     if (loading.value) return;
 
+    // drop props.employee.password
+    delete props.employee.password;
+
     try {
         loading.value = true;
         const result = await $fetch('/api/update/employee', {
@@ -132,6 +138,36 @@ async function handleUpdate() {
         }
     } catch (err) {
         toast.add({ severity: 'error', summary: 'Update Failed', detail: 'Internal Server Error', life: 3000 });
+        return err;
+    } finally {
+        loading.value = false;
+        return;
+    }
+}
+
+async function deleteEmp() {
+    if (loading.value) return;
+
+    try {
+        loading.value = true;
+        const result = await $fetch('/api/delete/employee', {
+            method: 'POST',
+            body: { employeeId: props.employee.employeeId },
+        });
+
+        if (result.statusCode !== 200) {
+            toast.add({ severity: 'error', summary: 'Delete Failed', detail: 'Please try again', life: 3000 });
+            loading.value = false;
+            return;
+        } else {
+            toast.add({ severity: 'success', summary: 'Delete Complete', detail: 'Employee has been deleted. Refreshing page...', life: 3000 });
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+            return;
+        }
+    } catch (err) {
+        toast.add({ severity: 'error', summary: 'Delete Failed', detail: 'Internal Server Error', life: 3000 });
         return err;
     } finally {
         loading.value = false;
@@ -215,7 +251,7 @@ async function handleUpdate() {
                     </div>
         
                     <div class="flex justify-between gap-2">
-                        <Button type="button" label="Delete Employee" severity="danger" outlined @click="visible = false" class="text-red-500"></Button>
+                        <Button type="button" label="Delete Employee" severity="danger" outlined @click="deleteEmp" class="text-red-500"></Button>
                         <div class="flex gap-2">
                             <Button type="submit" label="Update Employee"></Button>
                             <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
