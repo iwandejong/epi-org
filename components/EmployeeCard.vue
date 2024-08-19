@@ -262,7 +262,7 @@ async function deleteEmp() {
         </Dialog>
         <div class="bg-slate-900 border border-slate-700 rounded-md p-6 w-full h-full hover:border-blue-500 cursor-pointer duration-300">
             <div ref="wrapper" class="grid grid-cols-5 items-center w-full h-full _transition-all duration-1000 ease-in-out">
-                <div ref="profile" class="flex _flex-col _justify-end col-span-4 items-center space-x-4 _space-y-4 _bg-gradient-to-t from-blue-700 to-pink-600 _p-6 _rounded-md h-full bg-opacity-0">
+                <div ref="profile" class="flex _flex-col _justify-end col-span-4 items-center space-x-4 _space-y-4 _bg-gradient-to-t from-blue-700 to-emerald-500 _p-6 _rounded-md h-full bg-opacity-0">
                     <div class="h-12 w-12 bg-blue-900 rounded-full shrink-0 cursor-pointer hover:opacity-70 duration-300 flex items-center justify-center" @click="toggle">
                         <div v-if="gravatar !== '' && !loadingGrav">
                             <img :src="gravatar" alt="Gravatar" class="rounded-full h-12 w-12">

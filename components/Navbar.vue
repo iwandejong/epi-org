@@ -372,15 +372,15 @@
             </form>
         </Dialog>
 
-        <div class="w-full grid grid-cols-2 justify-between py-4 px-40 sticky top-0 bg-slate-900 bg-opacity-40 backdrop-blur-lg">
+        <div class="w-full grid grid-cols-2 justify-between py-4 lg:px-40 px-2 sticky top-0 bg-slate-900 bg-opacity-40 backdrop-blur-lg">
             <div class="flex items-center space-x-2 text-xl cursor-pointer hover:opacity-80 duration-300" @click="navigateTo('/')">
-                <i class="pi pi-sitemap text-2xl rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
+                <i class="pi pi-sitemap text-2xl rotate-180 bg-gradient-to-tr from-blue-700 to-emerald-500 bg-clip-text text-transparent"></i>
                 <p>
                     {{ organisation.body.name }}
                 </p>
             </div>
-            <div class="flex items-center space-x-6 justify-end flex-shrink-0">
-                <div class="flex items-center space-x-6 hover:*:bg-slate-700 *:rounded-full *:duration-300 *:cursor-pointer">
+            <div class="flex items-center lg:space-x-6 space-x-2 justify-end flex-shrink-0">
+                <div class="flex items-center lg:space-x-6 space-x-2 hover:*:bg-slate-700 *:rounded-full *:duration-300 *:cursor-pointer">
                     <!-- v-if current url is not /table -->
                     <div class="h-12 w-12 flex items-center justify-center" @click="navigateTo('/table')" v-if="!isTable">
                         <i class="pi pi-search text-xl"></i>

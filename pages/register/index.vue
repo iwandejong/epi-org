@@ -64,12 +64,12 @@ async function submitForm() {
 </script>
 
 <template>
-    <div class="flex w-full h-screen bg-slate-900 justify-center items-center py-8">
+    <div class="flex w-full lg:h-screen bg-slate-900 justify-center items-center py-8">
         <Toast></Toast>
-        <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
+        <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 lg:w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
                 <div class="flex items-center space-x-2">
-                    <i class="pi pi-sitemap text-3xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
+                    <i class="pi pi-sitemap text-3xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-emerald-500 bg-clip-text text-transparent"></i>
                     <p class="text-3xl ">EPI-Org</p>
                 </div>
                 <p class="text-gray-400">Create an account to continue</p>
@@ -79,7 +79,7 @@ async function submitForm() {
                 <div class="space-y-2">
                     <p class="text-lg">Personal Information</p>
                     <hr class="border-gray-600 opacity-30"/>
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid lg:grid-cols-2 gap-2">
                         <div class="flex flex-col space-y-1">
                             <label for="name" class="">
                                 <span>
@@ -188,16 +188,16 @@ async function submitForm() {
                     </span>
                 </button>
 
-                <div class="flex justify-center space-x-2">
+                <div class="lg:flex lg:justify-center lg:space-x-2 text-sm">
                     <div class="flex justify-center space-x-2">
                         <p class="text-gray-400">Already have an account?</p>
                         <RouterLink to="/login" class="text-blue-500">Login</RouterLink>
                     </div>
-                    <div>
+                    <div class="hidden lg:block">
                         <span class="text-gray-400">|</span>
                     </div>
                     <div class="flex justify-center space-x-2">
-                        <p class="text-gray-400">Want to create an organisation?</p>
+                        <p class="text-gray-400">Create an organisation?</p>
                         <RouterLink to="/register/organisation" class="text-blue-500">Create Organisation</RouterLink>
                     </div>
                 </div>

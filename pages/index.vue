@@ -142,9 +142,9 @@ onMounted(() => {
         </div>
         <div v-else class="h-full pb-8">
             <!-- <Navbar class="z-20"/> -->
-            <div class="2xl:px-40 xl:px-32">
+            <div class="2xl:px-40 xl:px-32 px-2">
                 <p class="text-xl">Organisation Statistics</p>
-                <div class="grid grid-cols-4 gap-4 py-4">
+                <div class="grid lg:grid-cols-4 gap-4 py-4">
                     <div class="border border-slate-600 p-6 rounded-lg space-y-1">
                         <div class="flex justify-between items-center">
                             <p class="text-blue-500">Total Employees</p>

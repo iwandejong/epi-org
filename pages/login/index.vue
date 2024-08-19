@@ -65,14 +65,14 @@ onMounted(() => {
     <div class="flex w-full h-screen bg-slate-900 justify-center items-center py-8">
         <Toast></Toast>
 
-        <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 w-1/2 h-full justify-center">
+        <div class="flex flex-col items-center p-6 lg:p-12 rounded-lg shadow-lg space-y-6 lg:w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
-                <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-pink-600 bg-clip-text text-transparent"></i>
+                <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-emerald-500 bg-clip-text text-transparent"></i>
                 <p class="text-3xl text-white">Welcome to EPI-Org</p>
                 <p class="text-gray-400">Sign up or login to continue</p>
             </div>
         
-            <form class="flex flex-col space-y-6 w-1/2" @submit.prevent="login">
+            <form class="flex flex-col space-y-6 lg:w-1/2" @submit.prevent="login">
                 <div class="flex flex-col space-y-1">
                     <label for="email" class="text-white">Email</label>
                     <input type="email" id="email" class="bg-slate-700 p-2 rounded-md text-white" placeholder="Email" v-model="email"/>
@@ -96,7 +96,7 @@ onMounted(() => {
                 </button>
 
             </form>
-            <div class="grid gap-3">
+            <div class="grid gap-3 text-sm lg:text-base">
                 <div class="flex justify-center space-x-2">
                     <p class="text-gray-400">Join an organisation?</p>
                     <RouterLink to="/register" class="text-blue-500">Join Organisation</RouterLink>
