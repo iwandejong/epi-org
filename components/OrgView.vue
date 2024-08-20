@@ -10,7 +10,7 @@
                     v-model="searchQuery" 
                     type="text" 
                     placeholder="Search employees..." 
-                    class="p-2 border border-slate-700 rounded-md w-full"
+                    class="p-2 border border-slate-700 rounded-md w-full bg-slate-800"
                 />
                 <button 
                     @click="search" 

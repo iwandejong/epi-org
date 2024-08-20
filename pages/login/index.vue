@@ -62,7 +62,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex w-full bg-slate-900 justify-center items-center py-8">
+    <div class="flex w-full h-full bg-slate-900 justify-center items-center py-8">
         <Toast></Toast>
 
         <div class="flex flex-col items-center p-6 lg:p-12 rounded-lg shadow-lg space-y-6 lg:w-1/2 h-full justify-center">

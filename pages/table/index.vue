@@ -97,8 +97,8 @@ const clearFilter = () => {
                 </div>
             </div>
         </div>
-        <div class="flex justify-center w-1/2 space-x-2 absolute top-0 left-1/4 h-20 items-center">
-            <IconField class="w-1/3 m-2">
+        <div class="flex justify-center space-x-2 top-0 w-full px-2 lg:w-1/2 m-auto h-20 items-center">
+            <IconField class="m-2 w-full">
                 <InputIcon>
                     <i class="pi pi-search" />
                 </InputIcon>
