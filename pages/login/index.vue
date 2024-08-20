@@ -67,7 +67,7 @@ onMounted(() => {
 
         <div class="flex flex-col items-center p-6 lg:p-12 rounded-lg shadow-lg space-y-6 lg:w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
-                <i class="pi pi-sitemap text-5xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-emerald-500 bg-clip-text text-transparent"></i>
+                <img src="/favi.png" alt="EPI-Org" class="w-14 h-auto"/>
                 <p class="text-3xl text-white">Welcome to EPI-Org</p>
                 <p class="text-gray-400">Sign up or login to continue</p>
             </div>
