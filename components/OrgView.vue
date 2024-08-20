@@ -32,7 +32,7 @@
                                     </span>
                                 </div>
                                 <span class="font-bold mb-2">{{ slotProps.node.data.name }}</span>
-                                <span class="text-slate-400 text-sm">{{ slotProps.node.data.title }}</span>
+                                <span class="text-sm">{{ slotProps.node.data.title }}</span>
                             </div>
                         </div>
                     </template>

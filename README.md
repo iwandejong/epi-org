@@ -46,6 +46,10 @@ To install the application, follow these steps:
 2. Run `npm install` to install the dependencies.
 3. Run `npm run dev` to start the development server.
 
+### Deployment
+
+The application is deployed on Vercel. You can access the live version of the application [here](https://epi-hub.vercel.app/).
+
 ### Creating an account & logging in
 
 To use the application, follow these steps:
