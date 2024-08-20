@@ -26,11 +26,11 @@ This web application is designed to manage an organization's employee hierarchy.
 
 ### User Story 1: Manager
 
-As a manager I want to be able to perform CRUD operations on the staff from our company for who I’m responsible. I also want to receive notifications from them, and should be able to pass it on to the next person that works above me (if necessary). The idea is to solve the problem as quickly as possible.
+As a manager I want to be able to perform CRUD operations on the staff from our company for who I’m responsible. I want full control over the staff and be able to see the hierarchy tree to keep my company organized and well-structured.
 
 ### User Story 2: Employee
 
-As an employee I want to be able to perform CRUD operations on the staff from our company for who I’m responsible. I also want to receive notifications from them, and should be able to pass it on to the next person that works above me (if necessary). The idea is to solve the problem as quickly as possible.
+As an employee I want to be able to perform CRUD operations on the staff from our company for who I’m responsible. I also want to see the hierarchy tree to be able to see where I fit in the organization. I want to be able to see my own details and update them if necessary.
 
 ## Architecture
 
@@ -42,7 +42,7 @@ Due to the nature of the project, time constraints were a major factor in the de
 
 Here are some things I would have done differently if I had more time:
 
-Can include staff satisfaction, average response time, clock-in and clock-out times, contract specific details (in a profile page: verlof, years at company, cover letter, resume, review, reference letter, performance, store CV), salary history (maybe through graphs). Other staff related measures can be added if there’s time. An in-app help menu might also be helpful if one gets stuck.
+Can include staff satisfaction, average response time, clock-in and clock-out times, contract specific details (in a profile page: booking leave, employee's resume, reviews, reference letters, performance metrics, and ability to store the employee's CV), salary history (maybe through graphs). Other staff related measures can be added if there’s time. An in-app help menu might also be helpful if one gets stuck.
 
 ## User Manual
 
