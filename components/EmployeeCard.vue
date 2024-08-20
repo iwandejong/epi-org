@@ -293,7 +293,7 @@ async function deleteEmp() {
                             {{ props.employee.bio }}
                         </p>
                     </div>
-                    <div class="flex w-full justify-between">
+                    <div class="flex w-full justify-between text-sm">
                         <div>
                             <p class="">Salary</p>
                             <p class="text-slate-400">

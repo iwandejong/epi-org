@@ -81,8 +81,8 @@ export const updateEmployee = async (employee: Employee) => {
             .update(employee.password.trim())
             .digest('hex');
 
-        await poolPromise;
-        const result = await pool.query(
+        const client = await pool.connect();
+        const result = await client.query(
             `
             UPDATE employee
             SET firstname = $1,
@@ -119,13 +119,14 @@ export const updateEmployee = async (employee: Employee) => {
                 employee.employeeid
             ]
         );
+        client.release();
         if (result === null || result.rowCount === null) {
             return false;
         }
         return result.rowCount > 0;
     } else {
-        await poolPromise;
-        const result = await pool.query(
+        const client = await pool.connect();
+        const result = await client.query(
             `
             UPDATE employee
             SET firstname = $1,
@@ -160,6 +161,7 @@ export const updateEmployee = async (employee: Employee) => {
                 employee.employeeid
             ]
         );
+        client.release();
         if (result === null || result.rowCount === null) {
             return false;
         }

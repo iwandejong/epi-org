@@ -50,27 +50,34 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //     `);
                 // hierarchyId = @HierarchyId,
     
-            const result = await pool.query(
+            const client = await pool.connect();
+            const result = await client.query(
                 `
                 UPDATE employee
-                SET email = $1,
-                    orgid = $2,
-                    leavedays = $3,
-                    salary = $4,
-                    role = $5,
-                    manager = $6
-                WHERE employeeid = $7
+                SET firstname = $1,
+                    lastname = $2,
+                    birthdate = $3,
+                    linkedin = $4,
+                    bio = $5,
+                    gravatarurl = $6,
+                    joiningdate = $7,
+                    password = $8
+                WHERE employeeid = $9
                 `,
                 [
-                    employee.email,
-                    employee.orgid,
-                    employee.leavedays,
-                    employee.salary,
-                    employee.role,
-                    employee.manager,
+                    employee.firstname,
+                    employee.lastname,
+                    employee.birthdate,
+                    employee.linkedin,
+                    employee.bio,
+                    employee.gravatarurl,
+                    employee.joiningdate,
+                    hashedPassword,
                     employee.employeeid
                 ]
             );
+
+            client.release();
 
             // console.log("Result", result);
             
@@ -102,7 +109,8 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //     `);
                 // hierarchyId = @HierarchyId,
 
-            const result = await pool.query(
+            const client = await pool.connect();
+            const result = await client.query(
                 `
                 INSERT INTO employee (email, orgid, leavedays, salary, role, manager, employeeid)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -117,6 +125,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                     employee.employeeid
                 ]
             );
+            client.release();
                 
             if (result.rowCount === 0) {
                 return {

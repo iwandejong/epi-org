@@ -71,7 +71,7 @@ function convertTreeToPrimeVueFormat(tree: Tree): any {
         styleClass: `${tree.id === empID.value ? '!bg-blue-500' : ''}`,
         data: {
             image: tree.gravatarurl,
-            name: `${tree.firstname} ${tree.lastname}`,
+            name: tree.firstname ? `${tree.firstname} ${tree.lastname}` : 'Invited User',
             title: tree.role
         },
         children: Array.isArray(tree.children)

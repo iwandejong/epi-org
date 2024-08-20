@@ -20,10 +20,8 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
         await poolPromise;
         try {
             const result = await pool.query(
-                'SELECT * FROM employee WHERE orgid = $1', [orgid]
+                'SELECT * FROM employee WHERE orgid = $1 AND joiningdate IS NOT NULL', [orgid]
             );
-
-            console.log('result', result);
 
             return {
                 statusCode: 200,

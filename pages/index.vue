@@ -18,7 +18,7 @@ const empID = ref('');
 empID.value = data.value?.user?.employeeid || '';
 
 const totalTenure = ref(0);
-const totalSalary = ref(0);
+let totalSalary = 0;
 const newEmployees = ref(0);
 
 const toast = useToast();
@@ -51,7 +51,10 @@ employees.value.forEach((employee: Employee) => {
 
 // calculate total salary expenditure
 employees.value.forEach((employee: Employee) => {
-    totalSalary.value += employee.salary;
+    console.log(typeof employee.salary);
+    let salary = employee.salary.toString().replace(/,/g, '');
+    employee.salary = parseFloat(salary);
+    totalSalary += employee.salary;
 });
 
 // calculate new employees
@@ -142,7 +145,7 @@ onMounted(() => {
         </div>
         <div v-else class="h-full pb-8">
             <!-- <Navbar class="z-20"/> -->
-            <div class="2xl:px-40 xl:px-32 px-2">
+            <div class="2xl:px-40 xl:px-20 px-2">
                 <p class="text-xl">Organisation Statistics</p>
                 <div class="grid lg:grid-cols-4 gap-4 py-4">
                     <div class="border border-slate-600 p-6 rounded-lg space-y-1">
@@ -195,7 +198,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="grid w-full 2xl:grid-cols-2 xl:grid-cols-5 2xl:px-40 xl:px-32 p-4 gap-8">
+            <div class="grid w-full 2xl:grid-cols-2 xl:grid-cols-5 2xl:px-40 xl:px-20 p-4 gap-8">
                 <EmployeeSection class="xl:col-span-2 2xl:col-span-1" :employees="otherEmployees" :employee="currentUser"/>
                 <OrgView class="xl:col-span-3 2xl:col-span-1" :tree="treeData" :authData="data"/>
             </div>
