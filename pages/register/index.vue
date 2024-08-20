@@ -17,13 +17,13 @@ const isLoading = ref(false)
 // .input('Password', sql.NVarChar, hashedPassword)
 
 const form = ref({
-    firstname: 'John',
-    lastname: 'Doe',
-    birthdate: '2000-01-01',
+    firstname: '',
+    lastname: '',
+    birthdate: '',
     linkedin: 'https://linkedin.com/in/johndoe',
     gravatarURL: 'https://gravatar.com/iwandejong',
-    bio: 'I am a software engineer',
-    password: 'uI61+g6£+X%=',
+    bio: '',
+    password: '',
     employeeid: '',
     joiningdate: new Date().toISOString().split('T')[0],
 });
@@ -117,7 +117,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL"/>
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL" placeholder="https://gravatar.com/johndoe"/>
                             <div class="flex space-x-1">
                                 <p>Don't have a Gravatar Profile?</p>
                                 <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>
@@ -131,7 +131,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedin"/>
+                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedin" placeholder="https://linkedin.com/in/johndoe"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">

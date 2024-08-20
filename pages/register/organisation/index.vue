@@ -7,17 +7,17 @@ const checked = ref(false)
 const isLoading = ref(false)
 
 const form = ref({
-    firstname: 'John',
-    lastname: 'Doe',
-    birthdate: '2000-01-01',
-    linkedin: 'https://linkedin.com/in/johndoe',
-    bio: 'I am a software engineer',
-    gravatarURL: 'https://gravatar.com/iwandejong',
+    firstname: '',
+    lastname: '',
+    birthdate: '',
+    linkedin: '',
+    bio: '',
+    gravatarURL: '',
 
-    email: 'john.doe@example.com',
-    password: 'uI61+g6£+X%=',
+    email: '',
+    password: '',
     
-    orgName: 'EPI-Org',
+    orgName: '',
 });
 
 const toast = useToast();
@@ -121,7 +121,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL" :disabled="isLoading"/>
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL" :disabled="isLoading" placeholder="https://gravatar.com/johndoe"/>
                             <div class="flex space-x-1">
                                 <p>Don't have a Gravatar Profile?</p>
                                 <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>
@@ -135,7 +135,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedin" :disabled="isLoading"/>
+                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedin" :disabled="isLoading" placeholder="https://linkedin.com/in/johndoe"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
