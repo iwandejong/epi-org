@@ -64,7 +64,7 @@ async function submitForm() {
 </script>
 
 <template>
-    <div class="flex w-full lg:h-screen bg-slate-900 justify-center items-center py-8">
+    <div class="flex w-full bg-slate-900 justify-center items-center py-8">
         <Toast></Toast>
         <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 lg:w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">

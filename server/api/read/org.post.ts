@@ -25,7 +25,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
     await poolPromise;
     try {
         const result = await pool.query(
-            'SELECT * FROM organisation WHERE orgid = $1', [orgid]
+            'SELECT * FROM organisation WHERE id = $1', [orgid]
         );
         
         return {
