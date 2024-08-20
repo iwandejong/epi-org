@@ -1,12 +1,9 @@
-import { createClient } from '@vercel/postgres';
+import { createPool } from "@vercel/postgres";
 
-const client = createClient({
+const pool = createPool({
     connectionString: process.env.POSTGRES_URL,
-    ssl: {
-        rejectUnauthorized: false,
-    },
 });
 
-export const poolPromise = client.connect();
+export const poolPromise = pool.connect();
 
-export default client;
+export default pool;

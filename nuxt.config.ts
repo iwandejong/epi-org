@@ -2,7 +2,10 @@ import path from 'path';
 import Lara from './assets/lara';
 
 export default defineNuxtConfig({
- modules: ['@primevue/nuxt-module', "@sidebase/nuxt-auth"],
+ modules: [
+     '@primevue/nuxt-module',
+     "@sidebase/nuxt-auth"
+ ],
 
  auth: {
      baseURL: process.env.AUTH_BASE_URL,
@@ -28,35 +31,19 @@ export default defineNuxtConfig({
      },
  },
 
-    components: {
-        global: true,
-        dirs: ['./components'],
-    },
-    css: [
-        '~/assets/css/main.css',
-        'primeicons/primeicons.css'
-    ],
-    typescript: {
-        strict: false,
-    },
-    compatibilityDate: '2024-08-16',
-    alias: {
-        'string_decoder': 'string_decoder/',
-    },
-    vite: {
-        build: {
-            rollupOptions: {
-                external: [
-                    'bufferutil',
-                    'utf-8-validate',
-                    'string_decoder',
-                    'unenv',
-                ],
-            },
-        },
-    },
-    nitro: {
-        preset: 'vercel'
-    }
-      
+ components: {
+     global: true,
+     dirs: ['./components'],
+	},
+
+ css: [
+     '~/assets/css/main.css',
+     'primeicons/primeicons.css'
+ ],
+
+ typescript: {
+     strict: false,
+ },
+
+ compatibilityDate: '2024-08-16',
 })

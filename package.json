@@ -19,9 +19,7 @@
     "nuxt": "^3.12.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.4",
-    "rollup": "^4.21.0",
     "typescript": "^5.5.4",
-    "unenv": "^1.10.0",
     "uuid": "^10.0.0",
     "vue": "latest"
   },
@@ -30,11 +28,9 @@
     "@sidebase/nuxt-auth": "^0.8.2",
     "@types/bcrypt": "^5.0.2",
     "@types/mssql": "^9.1.5",
-    "@types/pg": "^8.11.6",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.10",
-    "wrangler": "^3.72.0"
+    "tailwindcss": "^3.4.10"
   }
 }
