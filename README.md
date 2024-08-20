@@ -4,6 +4,13 @@
 
 This web application is designed to manage an organization's employee hierarchy. It allows authorized users to create, read, update, and delete (CRUD) staff information. The app features a visual representation of the organization's hierarchy for easy understanding. 
 
+## Project Badges
+
+![GitHub repo size](https://img.shields.io/github/repo-size/iwandejong/epi-org)
+![GitHub last commit](https://img.shields.io/github/last-commit/iwandejong/epi-org)
+![Vercel](https://vercelbadge.vercel.app/api/iwandejong/epi-org)
+<a href="https://wakatime.com/badge/user/47623a7b-3423-456c-8fc6-cbf861f9eb2d/project/a37f668f-9c18-4718-98a1-4f3a6e3dda89"><img src="https://wakatime.com/badge/user/47623a7b-3423-456c-8fc6-cbf861f9eb2d/project/a37f668f-9c18-4718-98a1-4f3a6e3dda89.svg" alt="wakatime"></a>
+
 ## Technologies
 
 ![Nuxtjs](https://img.shields.io/badge/Nuxt-002E3B?style=for-the-badge&logo=nuxtdotjs&logoColor=#00DC82)
@@ -48,7 +55,7 @@ To install the application, follow these steps:
 
 ### Deployment
 
-The application is deployed on Vercel. You can access the live version of the application [here](https://epi-hub.vercel.app/).
+The application is deployed on Vercel. You can access the live version of the application [here](https://epi-org.vercel.app/).
 
 ### Creating an account & logging in
 
