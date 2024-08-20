@@ -1,4 +1,4 @@
-import pool,  { poolPromise } from './connection';  // Ensure this points to your updated connection module
+import pool, { poolPromise } from './connection';  // Ensure this points to your updated connection module
 import crypto from 'crypto';
 import type { Employee } from '~/interfaces/Employee';
 import { Organisation } from '~/interfaces/Organisation';
