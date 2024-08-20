@@ -1,29 +1,4 @@
 {
-    "routes": [
-        {
-            "route": "/.auth/login/aad",
-            "statusCode": 404
-        },
-        {
-            "route": "/.auth/logout",
-            "statusCode": 404
-        },
-        {
-            "route": "/.auth/me",
-            "statusCode": 404
-        },
-        {
-            "route": "/api",
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "route": "/api/auth/*",
-            "rewrite": "/api/auth/[...].ts"
-        }
-    ],
     "auth": {
         "identityProviders": {}
     }
