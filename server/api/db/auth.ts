@@ -1,6 +1,7 @@
 import { pool, poolPromise } from './connection';  // Assuming `sql` is exported from your connection module
 import sql from 'mssql';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import type { Employee } from '~/interfaces/Employee';
 import { Organisation } from '~/interfaces/Organisation';
 
@@ -27,7 +28,10 @@ export const authenticateEmployee = async (email: string, password: string) => {
     const pw = employee.password.trim();
 
     try {
-        const passwordMatch = await bcrypt.compare(password, pw);
+        // const passwordMatch = await bcrypt.compare(password, pw);
+        const passwordMatch = crypto.createHash('sha256').
+            update(password).
+            digest('hex') === pw;
         if (!passwordMatch) {
             // console.log("Password mismatch");
         } else {
@@ -44,7 +48,10 @@ export const createEmployee = async (employee : Employee) => {
     if (!employee.password) {
         return false;
     }
-    const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
+    // const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
+    const hashedPassword = crypto.createHash('sha256').
+        update(employee.password.trim()).
+        digest('hex');
 
     await poolPromise;
     const result = await pool.request()
@@ -79,7 +86,10 @@ export const createEmployee = async (employee : Employee) => {
 export const updateEmployee = async (employee: Employee) => {
     if (employee.password) {
         console.log("Updating password");
-        const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
+        // const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
+        const hashedPassword = crypto.createHash('sha256').
+            update(employee.password.trim()).
+            digest('hex');
 
         await poolPromise;
         const result = await pool.request()

@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import {
     createEmployee,
     createOrg,
@@ -78,7 +77,10 @@ export default defineEventHandler(async (req) => {
         employee.orgId = orgId;
 
         // create org
-        const org = await createOrg({ id: orgId, name: employee.orgName });
+        const org = await createOrg({
+            id: orgId, name: employee.orgName,
+            createdAt: new Date()
+        });
         // console.log(org);
 
         if (!org) {

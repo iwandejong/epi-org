@@ -13,7 +13,6 @@
     "@primevue/themes": "^4.0.4",
     "@vueuse/core": "^11.0.0",
     "axios": "^1.7.4",
-    "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
     "mssql": "^11.0.1",
     "nuxt": "^3.12.4",

@@ -2,7 +2,7 @@ import { poolPromise, pool } from '../db/connection';
 import sql from 'mssql';
 import type { ServerResponse } from '~/interfaces/ServerResponse';
 import type { Employee } from '~/interfaces/Employee';
-import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 export default defineEventHandler(async (event): Promise<ServerResponse> => {
     if (event.req.method === 'POST') {
@@ -20,7 +20,10 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
         // user has already been invited, must fill in missing details
         if (employee.password) {
             console.log("Updating password");
-            const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
+            // const hashedPassword = await bcrypt.hash(employee.password.trim(), 10);
+            const hashedPassword = crypto.createHash('sha256').
+                update(employee.password.trim()).
+                digest('hex');
     
             await poolPromise;
             const result = await pool.request()
