@@ -16,27 +16,27 @@ export default defineEventHandler(async (req) => {
             throw new Error('Invalid request');
         }
     
-        if (typeof employee.firstName !== 'string' || /\d/.test(employee.firstName)) {
+        if (typeof employee.firstname !== 'string' || /\d/.test(employee.firstname)) {
             throw new Error('Invalid first name');
         }
     
-        if (typeof employee.lastName !== 'string' || /\d/.test(employee.lastName)) {
+        if (typeof employee.lastname !== 'string' || /\d/.test(employee.lastname)) {
             throw new Error('Invalid last name');
         }
     
-        if (isNaN(Date.parse(employee.birthDate))) {
+        if (isNaN(Date.parse(employee.birthdate))) {
             throw new Error('Invalid birth date');
         }
     
-        if (typeof employee.linkedIn !== 'string') {
-            throw new Error('Invalid LinkedIn URL');
+        if (typeof employee.linkedin !== 'string') {
+            throw new Error('Invalid linkedin URL');
         }
     
-        // check if LinkedIn is a valid URL
+        // check if linkedin is a valid URL
         try {
-            new URL(employee.linkedIn);
+            new URL(employee.linkedin);
         } catch (error) {
-            throw new Error('Invalid LinkedIn URL');
+            throw new Error('Invalid linkedin URL');
         }
     
         if (typeof employee.email !== 'string') {
@@ -64,22 +64,22 @@ export default defineEventHandler(async (req) => {
             throw new Error('Password is not strong enough');
         }
     
-        if (typeof employee.orgId !== 'string') {
-            throw new Error('Invalid orgId');
+        if (typeof employee.orgid !== 'string') {
+            throw new Error('Invalid orgid');
         }
     
-        // check if orgId is a valid UUID
-        if (!validate(employee.orgId)) {
-            throw new Error('Invalid orgId');
+        // check if orgid is a valid UUID
+        if (!validate(employee.orgid)) {
+            throw new Error('Invalid orgid');
         }
     
-        if (typeof employee.employeeId !== 'string') {
-            throw new Error('Invalid employeeId');
+        if (typeof employee.employeeid !== 'string') {
+            throw new Error('Invalid employeeid');
         }
     
-        // check if employeeId is a valid UUID
-        if (!validate(employee.employeeId)) {
-            throw new Error('Invalid employeeId');
+        // check if employeeid is a valid UUID
+        if (!validate(employee.employeeid)) {
+            throw new Error('Invalid employeeid');
         }
     
         // create the employee

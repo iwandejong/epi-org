@@ -32,10 +32,10 @@ export default NuxtAuthHandler ({
                         throw new Error('Invalid password');
                     }
 
-                    // console.log('User authenticated:', user);
+                    console.log('User authenticated:', user);
 
                     // combine first and last name
-                    user.name = `${user.firstName} ${user.lastName}`;
+                    user.name = `${user.firstname} ${user.lastname}`;
 
                     // remove password from user object
                     delete user.password;
@@ -71,7 +71,7 @@ export default NuxtAuthHandler ({
                 ...token,
                 ...session.user
             };
-            // console.log('Session:', session);
+            console.log('Session:', session);
             return session;
         },
         async redirect({url, baseUrl}) {

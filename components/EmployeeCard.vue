@@ -61,10 +61,10 @@ console.log(props.employees);
 
 // remove employee from employees list
 const otherEmployees = ref(props.employees);
-otherEmployees.value = props.employees.filter(e => e.employeeId !== props.employee.employeeId);
+otherEmployees.value = props.employees.filter(e => e.employeeid !== props.employee.employeeid);
 
 // filter out if other employee is already managed by current employee
-otherEmployees.value = otherEmployees.value.filter(e => e.manager !== props.employee.employeeId);
+otherEmployees.value = otherEmployees.value.filter(e => e.manager !== props.employee.employeeid);
 
 console.log(otherEmployees.value);
 
@@ -73,13 +73,13 @@ salary = Math.round(salary * 10) / 10;
 let s = "R" + salary + "k";
 
 // convert dates to short format
-props.employee.joiningDate = new Date(props.employee.joiningDate).toLocaleDateString();
-props.employee.birthDate = new Date(props.employee.birthDate).toLocaleDateString();
+props.employee.joiningdate = new Date(props.employee.joiningdate).toLocaleDateString();
+props.employee.birthdate = new Date(props.employee.birthdate).toLocaleDateString();
 
 // console.log(props.employee);
 
 const gravatar = ref('');
-const gravatarProfileUrl = props.employee.gravatarURL;
+const gravatarProfileUrl = props.employee.gravatarurl;
 const loadingGrav = ref(true);
 
 fetch(`${gravatarProfileUrl}.json`)
@@ -105,12 +105,12 @@ const salaryString = computed({
   },
 });
 
-const leaveDaysString = computed({
+const leavedaysString = computed({
   get() {
-    return props.employee.leaveDays.toString();
+    return props.employee.leavedays.toString();
   },
   set(value) {
-    props.employee.leaveDays = Number(value);
+    props.employee.leavedays = Number(value);
   },
 });
 
@@ -154,7 +154,7 @@ async function deleteEmp() {
         loading.value = true;
         const result = await $fetch('/api/delete/employee', {
             method: 'POST',
-            body: { employeeId: props.employee.employeeId },
+            body: { employeeid: props.employee.employeeid },
         });
 
         if (result.statusCode !== 200) {
@@ -187,12 +187,12 @@ async function deleteEmp() {
                     <div class="grid lg:grid-cols-2 gap-y-4 gap-x-8 *:flex *:items-center *:gap-4">
         
                         <div class="">
-                            <label for="firstName" class="font-semibold w-24">First Name</label>
-                            <InputText id="firstName" class="flex-auto" autocomplete="off" v-model="props.employee.firstName" disabled/>
+                            <label for="firstname" class="font-semibold w-24">First Name</label>
+                            <InputText id="firstname" class="flex-auto" autocomplete="off" v-model="props.employee.firstname" disabled/>
                         </div>
                         <div class="">
-                            <label for="lastName" class="font-semibold w-24">Last Name</label>
-                            <InputText id="lastName" class="flex-auto" autocomplete="off" v-model="props.employee.lastName" disabled/>
+                            <label for="lastname" class="font-semibold w-24">Last Name</label>
+                            <InputText id="lastname" class="flex-auto" autocomplete="off" v-model="props.employee.lastname" disabled/>
                         </div>
                         <div class="">
                             <label for="role" class="font-semibold w-24">Role</label>
@@ -203,12 +203,12 @@ async function deleteEmp() {
                             <InputText id="salary" type="number" class="flex-auto" autocomplete="off" v-model="salaryString" />
                         </div>
                         <div class="">
-                            <label for="leaveDays" class="font-semibold w-24">Leave Days</label>
-                            <InputText id="leaveDays" type="number" class="flex-auto" autocomplete="off" v-model="leaveDaysString" />
+                            <label for="leavedays" class="font-semibold w-24">Leave Days</label>
+                            <InputText id="leavedays" type="number" class="flex-auto" autocomplete="off" v-model="leavedaysString" />
                         </div>
                         <div class="">
-                            <label for="linkedIn" class="font-semibold w-24">LinkedIn</label>
-                            <InputText id="linkedIn" class="flex-auto" autocomplete="off" v-model="props.employee.linkedIn" disabled/>
+                            <label for="linkedin" class="font-semibold w-24">linkedin</label>
+                            <InputText id="linkedin" class="flex-auto" autocomplete="off" v-model="props.employee.linkedin" disabled/>
                         </div>
                         <div class="">
                             <label for="email" class="font-semibold w-24">Email</label>
@@ -219,24 +219,24 @@ async function deleteEmp() {
                             <InputText id="bio" class="flex-auto" autocomplete="off" v-model="props.employee.bio" disabled/>
                         </div>
                         <div class="">
-                            <label for="joiningDate" class="font-semibold w-24">Joining Date</label>
-                            <InputText id="joiningDate" class="flex-auto" autocomplete="off" v-model="props.employee.joiningDate" disabled/>
+                            <label for="joiningdate" class="font-semibold w-24">Joining Date</label>
+                            <InputText id="joiningdate" class="flex-auto" autocomplete="off" v-model="props.employee.joiningdate" disabled/>
                         </div>
                         <div class="">
-                            <label for="birthDate" class="font-semibold w-24">Birth Date</label>
-                            <InputText id="birthDate" class="flex-auto" autocomplete="off" v-model="props.employee.birthDate" disabled/>
+                            <label for="birthdate" class="font-semibold w-24">Birth Date</label>
+                            <InputText id="birthdate" class="flex-auto" autocomplete="off" v-model="props.employee.birthdate" disabled/>
                         </div>
                         <div class="">
                             <label for="manager" class="font-semibold w-24">Manager</label>
-                            <Select id="manager" class="flex-auto" v-model="props.employee.manager" :options="otherEmployees" optionLabel="firstName" optionValue="employeeId">
+                            <Select id="manager" class="flex-auto" v-model="props.employee.manager" :options="otherEmployees" optionLabel="firstname" optionValue="employeeid">
                                 <template #option="{ option }">
                                     <div class="flex items-center space-x-2">
                                         <div class="h-12 w-12 bg-blue-900 rounded-full shrink-0 cursor-pointer hover:opacity-70 duration-300 flex items-center justify-center text-blue-500">
-                                            {{ option.firstName.charAt(0).toUpperCase() + option.lastName.charAt(0).toUpperCase() }}
+                                            {{ option.firstname.charAt(0).toUpperCase() + option.lastname.charAt(0).toUpperCase() }}
                                         </div>
                                         <div>
                                             <p>
-                                                {{ option.firstName + ' ' + option.lastName }}
+                                                {{ option.firstname + ' ' + option.lastname }}
                                             </p>
                                             <p class="text-sm text-slate-400">
                                                 {{ option.role }}
@@ -247,8 +247,8 @@ async function deleteEmp() {
                              </Select>
                         </div>
                         <div class="">
-                            <label for="gravatarURL" class="font-semibold w-24">Gravatar URL</label>
-                            <InputText id="gravatarURL" class="flex-auto" autocomplete="off" v-model="props.employee.gravatarURL" disabled/>
+                            <label for="gravatarurl" class="font-semibold w-24">Gravatar URL</label>
+                            <InputText id="gravatarurl" class="flex-auto" autocomplete="off" v-model="props.employee.gravatarurl" disabled/>
                         </div>
                     </div>
         
@@ -270,15 +270,15 @@ async function deleteEmp() {
                             <img :src="gravatar" alt="Gravatar" class="rounded-full h-12 w-12">
                         </div>
                         <div v-else class="text-blue-500">
-                            {{ props.employee.firstName.charAt(0).toUpperCase() + props.employee.lastName.charAt(0).toUpperCase() }}
+                            {{ props.employee.firstname.charAt(0).toUpperCase() + props.employee.lastname.charAt(0).toUpperCase() }}
                         </div>
                     </div>
                     <div class="space-y-px">
                         <div class="text-lg flex items-center space-x-2">
                             <p>
-                                {{ props.employee.firstName + " " + props.employee.lastName }}
+                                {{ props.employee.firstname + " " + props.employee.lastname }}
                             </p>
-                            <a class="pi pi-linkedin hover:opacity-70 duration-300" :href="props.employee.linkedIn" target="_blank" v-if="active"></a>
+                            <a class="pi pi-linkedin hover:opacity-70 duration-300" :href="props.employee.linkedin" target="_blank" v-if="active"></a>
                             <a class="pi pi-envelope hover:opacity-70 duration-300" :href="`mailto:${props.employee.email}`" v-if="active"></a>
                         </div>
                         <p class="text-slate-400 text-sm">
@@ -293,7 +293,7 @@ async function deleteEmp() {
                             {{ props.employee.bio }}
                         </p>
                     </div>
-                    <div class="flex w-full justify-between">
+                    <div class="flex w-full justify-between text-sm">
                         <div>
                             <p class="">Salary</p>
                             <p class="text-slate-400">
@@ -303,13 +303,13 @@ async function deleteEmp() {
                         <div>
                             <p class="">Joining Date</p>
                             <p class="text-slate-400">
-                                {{ props.employee.joiningDate }}
+                                {{ props.employee.joiningdate }}
                             </p>
                         </div>
                         <div>
                             <p class="">Leave Days</p>
                             <p class="text-slate-400">
-                                {{ props.employee.leaveDays }}
+                                {{ props.employee.leavedays }}
                             </p>
                         </div>
                     </div>
@@ -323,8 +323,8 @@ async function deleteEmp() {
                     </div>
                 </div>
                 <div ref="dropdown" class="h-full flex items-center col-span-1 justify-end _transition-all duration-1000 ease-in-out space-x-2">
-                    <a class="flex items-center space-x-4 h-12 w-12 justify-center rounded-full hover:bg-slate-700 shrink-0" :href="props.employee.linkedIn">
-                        <p class="pi pi-linkedin" :href="props.employee.linkedIn" target="_blank"></p>
+                    <a class="flex items-center space-x-4 h-12 w-12 justify-center rounded-full hover:bg-slate-700 shrink-0" :href="props.employee.linkedin">
+                        <p class="pi pi-linkedin" :href="props.employee.linkedin" target="_blank"></p>
                     </a>
                     <a class="flex items-center space-x-4 h-12 w-12 justify-center rounded-full hover:bg-slate-700 shrink-0" :href="`mailto:${props.employee.email}`">
                         <p class="pi pi-envelope"></p>

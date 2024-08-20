@@ -4,7 +4,7 @@ import Lara from './assets/lara';
 export default defineNuxtConfig({
  modules: [
      '@primevue/nuxt-module',
-     "@sidebase/nuxt-auth",
+     "@sidebase/nuxt-auth"
  ],
 
  auth: {

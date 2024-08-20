@@ -10,7 +10,7 @@
                     v-model="searchQuery" 
                     type="text" 
                     placeholder="Search employees..." 
-                    class="p-2 border border-slate-700 rounded-md w-full"
+                    class="p-2 border border-slate-700 rounded-md w-full bg-slate-800"
                 />
                 <button 
                     @click="search" 
@@ -70,8 +70,8 @@ function convertTreeToPrimeVueFormat(tree: Tree): any {
         type: 'person',
         styleClass: `${tree.id === empID.value ? '!bg-blue-500' : ''}`,
         data: {
-            image: tree.gravatarURL,
-            name: `${tree.firstName} ${tree.lastName}`,
+            image: tree.gravatarurl,
+            name: tree.firstname ? `${tree.firstname} ${tree.lastname}` : 'Invited User',
             title: tree.role
         },
         children: Array.isArray(tree.children)

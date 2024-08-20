@@ -1,33 +1,31 @@
-import { poolPromise, pool } from '../db/connection';
-import sql from 'mssql';
+import pool, { poolPromise } from '../db/connection';
 import type { ServerResponse } from '~/interfaces/ServerResponse';
 
 export default defineEventHandler(async (event): Promise<ServerResponse> => {
     if (event.node.req.method === 'POST') {
         const body = await readBody(event);
 
-        if (!body || !body.orgId) {
+        console.log('body', body);
+        if (!body || !body.orgid) {
             return {
                 statusCode: 400,
                 body: 'Bad Request'
             }
         }
 
-        const orgId = body.orgId;
+        const orgid = body.orgid;
 
-        console.log('orgId', orgId);
+        console.log('orgid', orgid);
 
         await poolPromise;
         try {
-            const result = await pool.request()
-                .input('OrgID', sql.UniqueIdentifier, orgId)
-                .query('SELECT * FROM employee WHERE orgId = @OrgID');
-
-            // console.log('result', result.recordset);
+            const result = await pool.query(
+                'SELECT * FROM employee WHERE orgid = $1 AND joiningdate IS NOT NULL', [orgid]
+            );
 
             return {
                 statusCode: 200,
-                body: result.recordset
+                body: result.rows
             };
         } catch (error) {
             return {

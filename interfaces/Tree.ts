@@ -1,11 +1,11 @@
 interface Tree {
     id: number;
-    firstName: string;
-    lastName: string;
-    employeeId: string;
+    firstname: string;
+    lastname: string;
+    employeeid: string;
     role: string;
     manager: string | null;
-    gravatarURL: string;
+    gravatarurl: string;
 
     children?: Tree[] | null;
 }

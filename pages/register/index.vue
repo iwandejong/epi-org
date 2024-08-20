@@ -6,26 +6,26 @@ definePageMeta({
 const checked = ref(false)
 const isLoading = ref(false)
 
-// .input('FirstName', sql.NVarChar, employee.firstName)
-// .input('LastName', sql.NVarChar, employee.lastName)
-// .input('BirthDate', sql.Date, employee.birthDate)
-// .input('LinkedIn', sql.NVarChar, employee.linkedIn)
-// .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
+// .input('firstname', sql.NVarChar, employee.firstname)
+// .input('lastname', sql.NVarChar, employee.lastname)
+// .input('birthdate', sql.Date, employee.birthdate)
+// .input('linkedin', sql.NVarChar, employee.linkedin)
+// .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
 // .input('Bio', sql.Text, employee.bio)
-// .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
-// .input('JoinDate', sql.Date, employee.joiningDate)
+// .input('GravatarURL', sql.NVarChar, employee.gravatarurl)
+// .input('JoinDate', sql.Date, employee.joiningdate)
 // .input('Password', sql.NVarChar, hashedPassword)
 
 const form = ref({
-    firstName: 'John',
-    lastName: 'Doe',
-    birthDate: '2000-01-01',
-    linkedIn: 'https://linkedin.com/in/johndoe',
-    gravatarURL: 'https://gravatar.com/iwandejong',
-    bio: 'I am a software engineer',
-    password: 'uI61+g6£+X%=',
-    employeeId: '',
-    joiningDate: new Date().toISOString().split('T')[0],
+    firstname: '',
+    lastname: '',
+    birthdate: '',
+    linkedin: 'https://linkedin.com/in/johndoe',
+    gravatarurl: 'https://gravatar.com/iwandejong',
+    bio: '',
+    password: '',
+    employeeid: '',
+    joiningdate: new Date().toISOString().split('T')[0],
 });
 
 const toast = useToast();
@@ -64,12 +64,12 @@ async function submitForm() {
 </script>
 
 <template>
-    <div class="flex w-full lg:h-screen bg-slate-900 justify-center items-center py-8">
+    <div class="flex w-full bg-slate-900 justify-center items-center py-8">
         <Toast></Toast>
         <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 lg:w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
                 <div class="flex items-center space-x-2">
-                    <i class="pi pi-sitemap text-3xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-emerald-500 bg-clip-text text-transparent"></i>
+                    <img src="/favi.png" alt="EPI-Org" class="w-14 h-auto"/>
                     <p class="text-3xl ">EPI-Org</p>
                 </div>
                 <p class="text-gray-400">Create an account to continue</p>
@@ -87,7 +87,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstName"/>
+                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstname"/>
                         </div>
     
                         <div class="flex flex-col space-y-1">
@@ -97,7 +97,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastName"/>
+                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastname"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -107,7 +107,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthDate"/>
+                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthdate"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -117,7 +117,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL"/>
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarurl" placeholder="https://gravatar.com/johndoe"/>
                             <div class="flex space-x-1">
                                 <p>Don't have a Gravatar Profile?</p>
                                 <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>
@@ -127,11 +127,11 @@ async function submitForm() {
                         <div class="flex flex-col space-y-1">
                             <label for="linkedin" class="">
                                 <span>
-                                    LinkedIn Profile
+                                    linkedin Profile
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn"/>
+                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedin" placeholder="https://linkedin.com/in/johndoe"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -171,7 +171,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="empID" class="bg-slate-700 p-2 rounded-md" required v-model="form.employeeId"/>
+                            <input type="text" id="empID" class="bg-slate-700 p-2 rounded-md" required v-model="form.employeeid"/>
                         </div>
                     </div>
                 </div>

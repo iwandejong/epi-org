@@ -8,17 +8,17 @@ definePageMeta({
     middleware: ['auth']
 });
 
-const orgID = ref('');
+const orgid = ref('');
 const loading = ref(true);
 
 const { data } = useAuth();
-orgID.value = data.value?.user?.orgId || '';
+orgid.value = data.value?.user?.orgid || '';
 
 const empID = ref('');
-empID.value = data.value?.user?.employeeId || '';
+empID.value = data.value?.user?.employeeid || '';
 
 const totalTenure = ref(0);
-const totalSalary = ref(0);
+let totalSalary = 0;
 const newEmployees = ref(0);
 
 const toast = useToast();
@@ -26,7 +26,7 @@ const toast = useToast();
 const employees = ref<any>([]);
 
 try {
-    employees.value = await fetchEmployees(orgID.value);
+    employees.value = await fetchEmployees(orgid.value);
 } catch (error) {
     toast.add({
         severity: 'error',
@@ -38,12 +38,12 @@ try {
 
 // get current user
 console.log(empID.value);
-const currentUser = employees.value.find((employee: Employee) => employee.employeeId === empID.value);
+const currentUser = employees.value.find((employee: Employee) => employee.employeeid === empID.value);
 console.log(currentUser);
 
 // calculate total tenure using employees' joined date
 employees.value.forEach((employee: Employee) => {
-    const joinedDate = new Date(employee.joiningDate);
+    const joinedDate = new Date(employee.joiningdate);
     const currentDate = new Date();
     const years = currentDate.getFullYear() - joinedDate.getFullYear();
     totalTenure.value += years;
@@ -51,12 +51,15 @@ employees.value.forEach((employee: Employee) => {
 
 // calculate total salary expenditure
 employees.value.forEach((employee: Employee) => {
-    totalSalary.value += employee.salary;
+    console.log(typeof employee.salary);
+    let salary = employee.salary.toString().replace(/,/g, '');
+    employee.salary = parseFloat(salary);
+    totalSalary += employee.salary;
 });
 
 // calculate new employees
 employees.value.forEach((employee: Employee) => {
-    const joinedDate = new Date(employee.joiningDate);
+    const joinedDate = new Date(employee.joiningdate);
     const currentDate = new Date();
     const years = currentDate.getFullYear() - joinedDate.getFullYear();
     if (years === 0) {
@@ -70,7 +73,7 @@ try {
     const {statusCode, body} : ServerResponse = await $fetch('/api/read/tree', {
         method: 'POST',
         body: {
-            orgId: orgID.value
+            orgid: orgid.value
         }
     });
     if (statusCode == 200) {
@@ -114,7 +117,7 @@ let otherEmployees = (currentUser.manager === null) ? employees.value : employee
 
 // also filter out the current user if manager is not null
 if (currentUser.manager !== null) {
-    otherEmployees = otherEmployees.filter((employee: Employee) => employee.employeeId !== currentUser.employeeId);
+    otherEmployees = otherEmployees.filter((employee: Employee) => employee.employeeid !== currentUser.employeeid);
 }
 
 if (currentUser.manager !== null) {
@@ -142,7 +145,7 @@ onMounted(() => {
         </div>
         <div v-else class="h-full pb-8">
             <!-- <Navbar class="z-20"/> -->
-            <div class="2xl:px-40 xl:px-32 px-2">
+            <div class="2xl:px-40 xl:px-20 px-2">
                 <p class="text-xl">Organisation Statistics</p>
                 <div class="grid lg:grid-cols-4 gap-4 py-4">
                     <div class="border border-slate-600 p-6 rounded-lg space-y-1">
@@ -175,7 +178,7 @@ onMounted(() => {
                             <p class="pi pi-dollar text-blue-500"></p>
                         </div>
                         <p class="text-2xl font-bold">
-                            {{ "R" + totalSalary + ".00" }}
+                            {{ "R" + totalSalary }}
                         </p>
                         <p class="text-xs text-slate-400">
                             Total monthly salary expenditure
@@ -195,12 +198,12 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="grid w-full 2xl:grid-cols-2 xl:grid-cols-5 2xl:px-40 xl:px-32 p-4 gap-8">
+            <div class="grid w-full 2xl:grid-cols-2 xl:grid-cols-5 2xl:px-40 xl:px-20 p-4 gap-8">
                 <EmployeeSection class="xl:col-span-2 2xl:col-span-1" :employees="otherEmployees" :employee="currentUser"/>
                 <OrgView class="xl:col-span-3 2xl:col-span-1" :tree="treeData" :authData="data"/>
             </div>
     
-            <div class="fixed right-0 bottom-0 z-10 p-8">
+            <div class="fixed right-0 bottom-0 z-40 p-8">
                 <NuxtLink to="/table">
                     <div class="bg-blue-500 border border-blue-700 p-2 px-4 rounded-full flex space-x-2 cursor-pointer hover:bg-opacity-70 duration-300">
                         <i class="pi pi-table text-2xl"></i>

@@ -1,19 +1,9 @@
-import sql from 'mssql';
+import { createPool } from "@vercel/postgres";
 
-// Configuration for your Azure SQL database connection
-const cfg: sql.config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    server: process.env.DB_SERVER || '',
-    database: process.env.DB_DATABASE,
-    options: {
-        enableArithAbort: true,
-        encrypt: true
-    }
-};
+const pool = createPool({
+    connectionString: process.env.POSTGRES_URL,
+});
 
-// Create and connect the pool globally
-export const pool = new sql.ConnectionPool(cfg);
-
-// Connect the pool
 export const poolPromise = pool.connect();
+
+export default pool;

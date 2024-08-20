@@ -1,4 +1,4 @@
-import { poolPromise, pool } from '../db/connection';
+import pool, { poolPromise } from '../db/connection';
 import sql from 'mssql';
 import type { ServerResponse } from '~/interfaces/ServerResponse';
 import type { Employee } from '~/interfaces/Employee';
@@ -26,33 +26,62 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                 digest('hex');
     
             await poolPromise;
-            const result = await pool.request()
-                .input('FirstName', sql.NVarChar, employee.firstName)
-                .input('LastName', sql.NVarChar, employee.lastName)
-                .input('BirthDate', sql.Date, employee.birthDate)
-                .input('LinkedIn', sql.NVarChar, employee.linkedIn)
-                .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
-                .input('Bio', sql.Text, employee.bio)
-                .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
-                .input('JoinDate', sql.Date, employee.joiningDate)
-                .input('Password', sql.NVarChar, hashedPassword)
-                .query(`
-                    UPDATE employee
-                    SET firstName = @FirstName,
-                        lastName = @LastName,
-                        birthDate = @BirthDate,
-                        linkedIn = @LinkedIn,
-                        bio = @Bio,
-                        gravatarURL = @GravatarURL,
-                        joiningDate = @JoinDate,
-                        password = @Password
-                    WHERE employeeId = @EmployeeId
-                `);
+            // const result = await pool.request()
+            //     .input('firstname', sql.NVarChar, employee.firstname)
+            //     .input('lastname', sql.NVarChar, employee.lastname)
+            //     .input('birthdate', sql.Date, employee.birthdate)
+            //     .input('linkedin', sql.NVarChar, employee.linkedin)
+            //     .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
+            //     .input('Bio', sql.Text, employee.bio)
+            //     .input('GravatarURL', sql.NVarChar, employee.gravatarurl)
+            //     .input('JoinDate', sql.Date, employee.joiningdate)
+            //     .input('Password', sql.NVarChar, hashedPassword)
+            //     .query(`
+            //         UPDATE employee
+            //         SET firstname = @firstname,
+            //             lastname = @lastname,
+            //             birthdate = @birthdate,
+            //             linkedin = @linkedin,
+            //             bio = @Bio,
+            //             gravatarurl = @GravatarURL,
+            //             joiningdate = @JoinDate,
+            //             password = @Password
+            //         WHERE employeeid = @employeeid
+            //     `);
                 // hierarchyId = @HierarchyId,
     
+            const client = await pool.connect();
+            const result = await client.query(
+                `
+                UPDATE employee
+                SET firstname = $1,
+                    lastname = $2,
+                    birthdate = $3,
+                    linkedin = $4,
+                    bio = $5,
+                    gravatarurl = $6,
+                    joiningdate = $7,
+                    password = $8
+                WHERE employeeid = $9
+                `,
+                [
+                    employee.firstname,
+                    employee.lastname,
+                    employee.birthdate,
+                    employee.linkedin,
+                    employee.bio,
+                    employee.gravatarurl,
+                    employee.joiningdate,
+                    hashedPassword,
+                    employee.employeeid
+                ]
+            );
+
+            client.release();
+
             // console.log("Result", result);
             
-            if (result.rowsAffected[0] === 0) {
+            if (result.rowCount === 0) {
                 return {
                     statusCode: 400,
                     body: 'Bad Request'
@@ -65,22 +94,40 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             }
         } else {
             await poolPromise;
-            const result = await pool.request()
-                .input('Email', sql.NVarChar, employee.email)
-                .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
-                // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
-                .input('OrgId', sql.UniqueIdentifier, employee.orgId)
-                .input('LeaveDays', sql.Int, employee.leaveDays)
-                .input('Salary', sql.Float, employee.salary)
-                .input('Role', sql.NVarChar, employee.role)
-                .input('ManagerId', sql.UniqueIdentifier, employee.manager)
-                .query(`
-                    INSERT INTO employee (email, employeeId, orgId, leaveDays, salary, role, manager)
-                    VALUES (@Email, @EmployeeId, @OrgId, @LeaveDays, @Salary, @Role, @ManagerId)
-                `);
+            // const result = await pool.request()
+            //     .input('Email', sql.NVarChar, employee.email)
+            //     .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
+            //     // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
+            //     .input('orgid', sql.UniqueIdentifier, employee.orgid)
+            //     .input('leavedays', sql.Int, employee.leavedays)
+            //     .input('Salary', sql.Float, employee.salary)
+            //     .input('Role', sql.NVarChar, employee.role)
+            //     .input('ManagerId', sql.UniqueIdentifier, employee.manager)
+            //     .query(`
+            //         INSERT INTO employee (email, employeeid, orgid, leavedays, salary, role, manager)
+            //         VALUES (@Email, @employeeid, @orgid, @leavedays, @Salary, @Role, @ManagerId)
+            //     `);
                 // hierarchyId = @HierarchyId,
+
+            const client = await pool.connect();
+            const result = await client.query(
+                `
+                INSERT INTO employee (email, orgid, leavedays, salary, role, manager, employeeid)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                `,
+                [
+                    employee.email,
+                    employee.orgid,
+                    employee.leavedays,
+                    employee.salary,
+                    employee.role,
+                    employee.manager,
+                    employee.employeeid
+                ]
+            );
+            client.release();
                 
-            if (result.rowsAffected[0] === 0) {
+            if (result.rowCount === 0) {
                 return {
                     statusCode: 400,
                     body: 'Bad Request'

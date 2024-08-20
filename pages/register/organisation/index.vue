@@ -7,17 +7,17 @@ const checked = ref(false)
 const isLoading = ref(false)
 
 const form = ref({
-    firstName: 'John',
-    lastName: 'Doe',
-    birthDate: '2000-01-01',
-    linkedIn: 'https://linkedin.com/in/johndoe',
-    bio: 'I am a software engineer',
-    gravatarURL: 'https://gravatar.com/iwandejong',
+    firstname: '',
+    lastname: '',
+    birthdate: '',
+    linkedin: '',
+    bio: '',
+    gravatarurl: '',
 
-    email: 'john.doe@example.com',
-    password: 'uI61+g6£+X%=',
+    email: '',
+    password: '',
     
-    orgName: 'EPI-Org',
+    orgName: '',
 });
 
 const toast = useToast();
@@ -67,13 +67,13 @@ async function submitForm() {
 </script>
 
 <template>
-    <div class="flex w-full lg:h-screen bg-slate-900 justify-center items-center">
+    <div class="flex w-full bg-slate-900 justify-center items-center">
         <Toast></Toast>
 
         <div class="flex flex-col items-center p-12 rounded-lg shadow-lg space-y-6 lg:w-1/2 h-full justify-center">
             <div class="flex flex-col items-center space-y-4">
                 <div class="flex items-center space-x-2">
-                    <i class="pi pi-sitemap text-3xl text-[3rem] rotate-180 bg-gradient-to-tr from-blue-700 to-emerald-500 bg-clip-text text-transparent"></i>
+                    <img src="/favi.png" alt="EPI-Org" class="w-14 h-auto"/>
                     <p class="text-3xl ">EPI-Org</p>
                 </div>
                 <p class="text-gray-400">Create an account to continue</p>
@@ -91,7 +91,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstName" :disabled="isLoading"/>
+                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstname" :disabled="isLoading"/>
                         </div>
     
                         <div class="flex flex-col space-y-1">
@@ -101,7 +101,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastName" :disabled="isLoading"/>
+                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastname" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -111,7 +111,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthDate" :disabled="isLoading"/>
+                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthdate" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -121,7 +121,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL" :disabled="isLoading"/>
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarurl" :disabled="isLoading" placeholder="https://gravatar.com/johndoe"/>
                             <div class="flex space-x-1">
                                 <p>Don't have a Gravatar Profile?</p>
                                 <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>
@@ -131,11 +131,11 @@ async function submitForm() {
                         <div class="flex flex-col space-y-1">
                             <label for="linkedin" class="">
                                 <span>
-                                    LinkedIn Profile
+                                    linkedin Profile
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn" :disabled="isLoading"/>
+                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedin" :disabled="isLoading" placeholder="https://linkedin.com/in/johndoe"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
