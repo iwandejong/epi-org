@@ -2,7 +2,7 @@ import path from 'path';
 import Lara from './assets/lara';
 
 export default defineNuxtConfig({
- modules: ['@primevue/nuxt-module', "@sidebase/nuxt-auth", "@nuxthub/core"],
+ modules: ['@primevue/nuxt-module', "@sidebase/nuxt-auth"],
 
  auth: {
      baseURL: process.env.AUTH_BASE_URL,
@@ -55,4 +55,8 @@ export default defineNuxtConfig({
             },
         },
     },
+    nitro: {
+        preset: 'vercel'
+    }
+      
 })
