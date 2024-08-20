@@ -22,6 +22,6 @@ const props = defineProps<{
 }>();
 
 // get all employees except the current user
-// const otherEmployees = props.employees.filter((employee: Employee) => employee.employeeId !== props.employee.employeeId);
+// const otherEmployees = props.employees.filter((employee: Employee) => employee.employeeid !== props.employee.employeeid);
 </script>
 

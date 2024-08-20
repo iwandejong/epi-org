@@ -1,6 +1,6 @@
 // build a tree using https://learn.microsoft.com/en-us/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver16 as resource
 
-import { poolPromise, pool } from '../db/connection';
+import pool, { poolPromise } from '../db/connection';
 import sql from 'mssql';
 import type { Tree } from '~/interfaces/Tree';
 import type { ServerResponse } from '~/interfaces/ServerResponse';
@@ -10,7 +10,7 @@ function buildTree(employees: Tree[], managerId: string | null = null): Tree[] {
         .filter(employee => employee.manager === managerId)
         .map(employee => ({
             ...employee,
-            children: buildTree(employees, employee.employeeId) // Recursively find and assign subordinates
+            children: buildTree(employees, employee.employeeid) // Recursively find and assign subordinates
         }));
 }
 
@@ -28,35 +28,33 @@ async function fetchGravatarURL(url: string) {
 export default defineEventHandler(async (event): Promise<ServerResponse> => {
     const body = await readBody(event);
 
-    if (!body || !body.orgId) {
+    if (!body || !body.orgid) {
         return {
             statusCode: 400,
             body: 'Bad Request'
         }
     }
 
-    const orgId = body.orgId;
-    console.log("ORGID", orgId);
+    const orgid = body.orgid;
+    console.log("orgid", orgid);
 
     try {
         await poolPromise;
-        const result = await pool.request()
-            .input('OrgID', sql.UniqueIdentifier, orgId)
-            .query(`
-                SELECT * FROM employee WHERE OrgID = @OrgID
-            `);
+        const result = await pool.query(
+            'SELECT * FROM employee WHERE orgid = $1', [orgid]
+        );
 
         console.log("RESULT", result);
 
             // read into an array of Tree objects
         const tree: Tree[] = [];
-        for (const employee of result.recordset) {
+        for (const employee of result.rows) {
             const gravURL = await fetchGravatarURL(employee.gravatarURL);
             tree.push({
                 id: employee.id,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
-                employeeId: employee.employeeId,
+                firstname: employee.firstname,
+                lastname: employee.lastname,
+                employeeid: employee.employeeid,
                 role: employee.role,
                 manager: employee.manager,
                 gravatarURL: gravURL

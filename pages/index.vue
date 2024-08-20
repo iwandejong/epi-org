@@ -8,14 +8,14 @@ definePageMeta({
     middleware: ['auth']
 });
 
-const orgID = ref('');
+const orgid = ref('');
 const loading = ref(true);
 
 const { data } = useAuth();
-orgID.value = data.value?.user?.orgId || '';
+orgid.value = data.value?.user?.orgid || '';
 
 const empID = ref('');
-empID.value = data.value?.user?.employeeId || '';
+empID.value = data.value?.user?.employeeid || '';
 
 const totalTenure = ref(0);
 const totalSalary = ref(0);
@@ -26,7 +26,7 @@ const toast = useToast();
 const employees = ref<any>([]);
 
 try {
-    employees.value = await fetchEmployees(orgID.value);
+    employees.value = await fetchEmployees(orgid.value);
 } catch (error) {
     toast.add({
         severity: 'error',
@@ -38,12 +38,12 @@ try {
 
 // get current user
 console.log(empID.value);
-const currentUser = employees.value.find((employee: Employee) => employee.employeeId === empID.value);
+const currentUser = employees.value.find((employee: Employee) => employee.employeeid === empID.value);
 console.log(currentUser);
 
 // calculate total tenure using employees' joined date
 employees.value.forEach((employee: Employee) => {
-    const joinedDate = new Date(employee.joiningDate);
+    const joinedDate = new Date(employee.joiningdate);
     const currentDate = new Date();
     const years = currentDate.getFullYear() - joinedDate.getFullYear();
     totalTenure.value += years;
@@ -56,7 +56,7 @@ employees.value.forEach((employee: Employee) => {
 
 // calculate new employees
 employees.value.forEach((employee: Employee) => {
-    const joinedDate = new Date(employee.joiningDate);
+    const joinedDate = new Date(employee.joiningdate);
     const currentDate = new Date();
     const years = currentDate.getFullYear() - joinedDate.getFullYear();
     if (years === 0) {
@@ -70,7 +70,7 @@ try {
     const {statusCode, body} : ServerResponse = await $fetch('/api/read/tree', {
         method: 'POST',
         body: {
-            orgId: orgID.value
+            orgid: orgid.value
         }
     });
     if (statusCode == 200) {
@@ -114,7 +114,7 @@ let otherEmployees = (currentUser.manager === null) ? employees.value : employee
 
 // also filter out the current user if manager is not null
 if (currentUser.manager !== null) {
-    otherEmployees = otherEmployees.filter((employee: Employee) => employee.employeeId !== currentUser.employeeId);
+    otherEmployees = otherEmployees.filter((employee: Employee) => employee.employeeid !== currentUser.employeeid);
 }
 
 if (currentUser.manager !== null) {
@@ -175,7 +175,7 @@ onMounted(() => {
                             <p class="pi pi-dollar text-blue-500"></p>
                         </div>
                         <p class="text-2xl font-bold">
-                            {{ "R" + totalSalary + ".00" }}
+                            {{ "R" + totalSalary }}
                         </p>
                         <p class="text-xs text-slate-400">
                             Total monthly salary expenditure

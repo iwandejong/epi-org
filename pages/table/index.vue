@@ -7,26 +7,26 @@ definePageMeta({
     middleware: ['auth'],
 });
 
-const orgID = ref('');
+const orgid = ref('');
 
 const { data } = useAuth();
-orgID.value = data.value?.user?.orgId || '';
+orgid.value = data.value?.user?.orgid || '';
 
 
 const toast = useToast();
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    firstName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    lastName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    birthDate: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    employeeId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    firstname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    lastname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    birthdate: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    employeeid: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     salary: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     role: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     manager: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    joiningDate: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    leaveDays: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    linkedIn: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    joiningdate: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    leavedays: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    linkedin: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     bio: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     gravatarURL: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -36,7 +36,7 @@ const loading = ref(true);
 const employees = ref<any>([]);
 
 try {
-    employees.value = await fetchEmployees(orgID.value);
+    employees.value = await fetchEmployees(orgid.value);
 } catch (error) {
     toast.add({
         severity: 'error',
@@ -108,27 +108,27 @@ const clearFilter = () => {
         </div>
         <Toast />
         <DataTable v-model:filters="filters" v-model:expandedRows="expandedRows" :value="employees" dataKey="id" filterDisplay="row" :loading="loading"
-                :globalFilterFields="['firstName', 'lastName', 'birthDate', 'employeeId', 'salary', 'role', 'manager', 'joiningDate', 'leaveDays', 'linkedIn', 'email', 'bio']" :options="{ rowExpansionTemplate: 'expansion', size: 'small' }" stripedRows class="text-sm">
+                :globalFilterFields="['firstname', 'lastname', 'birthdate', 'employeeid', 'salary', 'role', 'manager', 'joiningdate', 'leavedays', 'linkedin', 'email', 'bio']" :options="{ rowExpansionTemplate: 'expansion', size: 'small' }" stripedRows class="text-sm">
             <template #empty> No employees found. </template>
             <template #loading> Loading employees data. Please wait. </template>
-            <Column field="employeeId" header="Employee ID" sortable>
+            <Column field="employeeid" header="Employee ID" sortable>
                 <template #body="{ data }">
-                    {{ data.employeeId }}
+                    {{ data.employeeid }}
                 </template>
             </Column>
-            <Column field="firstName" header="First Name" sortable>
+            <Column field="firstname" header="First Name" sortable>
                 <template #body="{ data }">
-                    {{ data.firstName }}
+                    {{ data.firstname }}
                 </template>
             </Column>
-            <Column field="lastName" header="Last Name" sortable>
+            <Column field="lastname" header="Last Name" sortable>
                 <template #body="{ data }">
-                    {{ data.lastName }}
+                    {{ data.lastname }}
                 </template>
             </Column>
-            <Column field="birthDate" header="Birth Date" sortable>
+            <Column field="birthdate" header="Birth Date" sortable>
                 <template #body="{ data }">
-                    {{ formatDate(new Date(data.birthDate)) }}
+                    {{ formatDate(new Date(data.birthdate)) }}
                 </template>
             </Column>
             <Column field="salary" header="Salary" sortable>
@@ -146,19 +146,19 @@ const clearFilter = () => {
                     {{ data.manager || 'N/A' }}
                 </template>
             </Column>
-            <Column field="joiningDate" header="Joining Date" sortable>
+            <Column field="joiningdate" header="Joining Date" sortable>
                 <template #body="{ data }">
-                    {{ formatDate(new Date(data.joiningDate)) }}
+                    {{ formatDate(new Date(data.joiningdate)) }}
                 </template>
             </Column>
-            <Column field="leaveDays" header="Leave Days" sortable>
+            <Column field="leavedays" header="Leave Days" sortable>
                 <template #body="{ data }">
-                    {{ data.leaveDays }}
+                    {{ data.leavedays }}
                 </template>
             </Column>
-            <Column field="linkedIn" header="LinkedIn" sortable>
+            <Column field="linkedin" header="linkedin" sortable>
                 <template #body="{ data }">
-                    <a :href="data.linkedIn" target="_blank" class="text-blue-500">{{ data.linkedIn }}</a>
+                    <a :href="data.linkedin" target="_blank" class="text-blue-500">{{ data.linkedin }}</a>
                 </template>
             </Column>
             <Column field="email" header="Email" sortable>

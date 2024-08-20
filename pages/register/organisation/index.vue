@@ -7,10 +7,10 @@ const checked = ref(false)
 const isLoading = ref(false)
 
 const form = ref({
-    firstName: 'John',
-    lastName: 'Doe',
-    birthDate: '2000-01-01',
-    linkedIn: 'https://linkedin.com/in/johndoe',
+    firstname: 'John',
+    lastname: 'Doe',
+    birthdate: '2000-01-01',
+    linkedin: 'https://linkedin.com/in/johndoe',
     bio: 'I am a software engineer',
     gravatarURL: 'https://gravatar.com/iwandejong',
 
@@ -91,7 +91,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstName" :disabled="isLoading"/>
+                            <input type="text" id="name" class="bg-slate-700 p-2 rounded-md" required v-model="form.firstname" :disabled="isLoading"/>
                         </div>
     
                         <div class="flex flex-col space-y-1">
@@ -101,7 +101,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastName" :disabled="isLoading"/>
+                            <input type="text" id="surname" class="bg-slate-700 p-2 rounded-md" required v-model="form.lastname" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -111,7 +111,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthDate" :disabled="isLoading"/>
+                            <input type="date" id="birthdate" class="bg-slate-700 p-2 rounded-md" required v-model="form.birthdate" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">
@@ -131,11 +131,11 @@ async function submitForm() {
                         <div class="flex flex-col space-y-1">
                             <label for="linkedin" class="">
                                 <span>
-                                    LinkedIn Profile
+                                    linkedin Profile
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedIn" :disabled="isLoading"/>
+                            <input type="url" id="linkedin" class="bg-slate-700 p-2 rounded-md" required v-model="form.linkedin" :disabled="isLoading"/>
                         </div>
 
                         <div class="flex flex-col space-y-1">

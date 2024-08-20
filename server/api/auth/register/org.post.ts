@@ -18,27 +18,27 @@ export default defineEventHandler(async (req) => {
             throw new Error('Invalid request');
         }
 
-        if (typeof employee.firstName !== 'string' || /\d/.test(employee.firstName)) {
+        if (typeof employee.firstname !== 'string' || /\d/.test(employee.firstname)) {
             throw new Error('Invalid first name');
         }
 
-        if (typeof employee.lastName !== 'string' || /\d/.test(employee.lastName)) {
+        if (typeof employee.lastname !== 'string' || /\d/.test(employee.lastname)) {
             throw new Error('Invalid last name');
         }
 
-        if (isNaN(Date.parse(employee.birthDate))) {
+        if (isNaN(Date.parse(employee.birthdate))) {
             throw new Error('Invalid birth date');
         }
 
-        if (typeof employee.linkedIn !== 'string') {
-            throw new Error('Invalid LinkedIn URL');
+        if (typeof employee.linkedin !== 'string') {
+            throw new Error('Invalid linkedin URL');
         }
 
-        // check if LinkedIn is a valid URL
+        // check if linkedin is a valid URL
         try {
-            new URL(employee.linkedIn);
+            new URL(employee.linkedin);
         } catch (error) {
-            throw new Error('Invalid LinkedIn URL');
+            throw new Error('Invalid linkedin URL');
         }
 
         if (typeof employee.email !== 'string') {
@@ -72,14 +72,14 @@ export default defineEventHandler(async (req) => {
             throw new Error('Invalid organisation name');
         }
 
-        // generate orgId
-        const orgId = uuidv4();
-        employee.orgId = orgId;
+        // generate orgid
+        const orgid = uuidv4();
+        employee.orgid = orgid;
 
         // create org
         const org = await createOrg({
-            id: orgId, name: employee.orgName,
-            createdAt: new Date()
+            id: orgid, name: employee.orgName,
+            createdat: new Date()
         });
         // console.log(org);
 
@@ -88,9 +88,9 @@ export default defineEventHandler(async (req) => {
             throw new Error('Failed to create organisation');
         }
 
-        // generate employeeId
-        const employeeId = uuidv4();
-        employee.employeeId = employeeId;
+        // generate employeeid
+        const employeeid = uuidv4();
+        employee.employeeid = employeeid;
 
         employee.hierarchyId = '/1/';
 

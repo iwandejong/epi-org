@@ -20,12 +20,12 @@
     const employees = ref<any>();
     const organisation = ref<any>();
     const account = ref<any>();
-    empID.value = data.value?.user?.employeeId || '';
+    empID.value = data.value?.user?.employeeid || '';
 
     try {
         organisation.value = await $fetch('/api/read/org', {
             method: 'POST',
-            body: { orgId: data.value?.user?.orgId },
+            body: { orgid: data.value?.user?.orgid },
         });
     } catch (error) {
         toast.add({
@@ -39,7 +39,7 @@
     try {
         employees.value = await $fetch('/api/read/employees', {
             method: 'POST',
-            body: { orgId: data.value?.user?.orgId },
+            body: { orgid: data.value?.user?.orgid },
         });
     } catch (error) {
         toast.add({
@@ -50,11 +50,13 @@
         });
     }
 
+    console.log(employees.value);
+
     employees.value.body.forEach((emp : Employee) => {
         delete emp.password;
     });
 
-    account.value = employees.value.body.find((emp : any) => emp.employeeId === empID.value);
+    account.value = employees.value.body.find((emp : any) => emp.employeeid === empID.value);
 
     const form = ref(account.value);
 
@@ -70,12 +72,12 @@
         .then(response => response.json())
         .then(data => {
             gravatars.value.push(data.entry[0].thumbnailUrl);
-            if (emp.employeeId === empID.value) {
+            if (emp.employeeid === empID.value) {
                 gravatar.value = gravatars.value[gravatars.value.length - 1];
             }
         })
         .catch(err => {
-            if (emp.employeeId === empID.value) {
+            if (emp.employeeid === empID.value) {
                 toast.add({
                     severity: 'error',
                     summary: 'Error',
@@ -157,7 +159,7 @@
         role: '',
         email: '',
         manager: '',
-        employeeId: textToCopy.value,
+        employeeid: textToCopy.value,
     });
 
     const { copy } = useClipboard();
@@ -170,24 +172,24 @@
             return;
         }
 
-        // first copy the employeeId to the clipboard
-        copy(newEmployee.value.employeeId);
+        // first copy the employeeid to the clipboard
+        copy(newEmployee.value.employeeid);
 
         toast.add({ severity: 'success', summary: 'Employee ID Copied', detail: 'The employee ID has been copied to the clipboard.', life: 3000 });
 
         // prepare Employee object for creation
         // .input('Email', sql.NVarChar, employee.email)
-        //         .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
+        //         .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
         //         .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
-        //         .input('OrgId', sql.UniqueIdentifier, employee.orgId)
-        //         .input('LeaveDays', sql.Int, employee.leaveDays)
+        //         .input('orgid', sql.UniqueIdentifier, employee.orgid)
+        //         .input('leavedays', sql.Int, employee.leavedays)
         //         .input('Salary', sql.Float, employee.salary)
         //         .input('Role', sql.NVarChar, employee.role)
         //         .input('ManagerId', sql.UniqueIdentifier, employee.manager)
         const newEmp = {
             ...newEmployee.value,
-            orgId: account.value.orgId,
-            leaveDays: 0,
+            orgid: account.value.orgid,
+            leavedays: 0,
             salary: 0,
         };
 
@@ -226,7 +228,7 @@
             loading.value = true;
             const result = await $fetch('/api/delete/org', {
                 method: 'POST',
-                body: { orgId: account.value.orgId },
+                body: { orgid: account.value.orgid },
             });
             let data : any = await result;
 
@@ -261,16 +263,16 @@
                     <div class="grid grid-cols-2 gap-y-4 gap-x-8 *:flex *:items-center *:gap-4">
         
                         <div class="">
-                            <label for="firstName" class="font-semibold w-24">First Name</label>
-                            <InputText id="firstName" class="flex-auto" autocomplete="off" v-model="form.firstName" />
+                            <label for="firstname" class="font-semibold w-24">First Name</label>
+                            <InputText id="firstname" class="flex-auto" autocomplete="off" v-model="form.firstname" />
                         </div>
                         <div class="">
-                            <label for="lastName" class="font-semibold w-24">Last Name</label>
-                            <InputText id="lastName" class="flex-auto" autocomplete="off" v-model="form.lastName" />
+                            <label for="lastname" class="font-semibold w-24">Last Name</label>
+                            <InputText id="lastname" class="flex-auto" autocomplete="off" v-model="form.lastname" />
                         </div>
                         <div class="">
-                            <label for="linkedIn" class="font-semibold w-24">LinkedIn</label>
-                            <InputText id="linkedIn" class="flex-auto" autocomplete="off" v-model="form.linkedIn" />
+                            <label for="linkedin" class="font-semibold w-24">linkedin</label>
+                            <InputText id="linkedin" class="flex-auto" autocomplete="off" v-model="form.linkedin" />
                         </div>
                         <div class="">
                             <label for="email" class="font-semibold w-24">Email</label>
@@ -285,8 +287,8 @@
                             <InputText id="bio" class="flex-auto" autocomplete="off" v-model="form.bio" />
                         </div>
                         <div class="">
-                            <label for="birthDate" class="font-semibold w-24">Birth Date</label>
-                            <InputText id="birthDate" class="flex-auto" autocomplete="off" v-model="form.birthDate" />
+                            <label for="birthdate" class="font-semibold w-24">Birth Date</label>
+                            <InputText id="birthdate" class="flex-auto" autocomplete="off" v-model="form.birthdate" />
                         </div>
                         <div class="">
                             <label for="gravatarURL" class="font-semibold w-24">Gravatar URL</label>
@@ -309,7 +311,7 @@
         <Dialog v-model:visible="addEmployee" modal header="Add new employee">
             <form @submit.prevent="createAccount">
                 <div class="space-y-4">
-                    <span class="text-surface-500 dark:text-surface-400 block">An <span class="font-mono text-slate-400">employeeId</span> has been generated. Copy it and share it with the employee.</span>
+                    <span class="text-surface-500 dark:text-surface-400 block">An <span class="font-mono text-slate-400">employeeid</span> has been generated. Copy it and share it with the employee.</span>
                     <div class="grid gap-y-4 gap-x-8 *:flex *:items-center *:gap-4">
         
                         <div class="">
@@ -340,15 +342,15 @@
                                 </span>
                             </label>
                             <!-- <InputText id="manager" class="flex-auto" autocomplete="off" v-model="newEmployee.manager" /> -->
-                             <Select id="manager" class="flex-auto" v-model="newEmployee.manager" :options="employees.body" optionLabel="firstName" optionValue="employeeId">
+                             <Select id="manager" class="flex-auto" v-model="newEmployee.manager" :options="employees.body" optionLabel="firstname" optionValue="employeeid">
                                 <template #option="{ option }">
                                     <div class="flex items-center space-x-2">
                                         <div class="h-12 w-12 bg-blue-900 rounded-full shrink-0 cursor-pointer hover:opacity-70 duration-300 flex items-center justify-center text-blue-500">
-                                            {{ option.firstName.charAt(0).toUpperCase() + option.lastName.charAt(0).toUpperCase() }}
+                                            {{ option.firstname.charAt(0).toUpperCase() + option.lastname.charAt(0).toUpperCase() }}
                                         </div>
                                         <div>
                                             <p>
-                                                {{ option.firstName + ' ' + option.lastName }}
+                                                {{ option.firstname + ' ' + option.lastname }}
                                             </p>
                                             <p class="text-sm text-slate-400">
                                                 {{ option.role }}
@@ -360,8 +362,8 @@
                         </div>
 
                         <div class="">
-                            <label for="employeeId" class="font-semibold w-24">Employee ID</label>
-                            <InputText id="employeeId" class="flex-auto cursor-text" autocomplete="off" v-model="newEmployee.employeeId" disabled/>
+                            <label for="employeeid" class="font-semibold w-24">Employee ID</label>
+                            <InputText id="employeeid" class="flex-auto cursor-text" autocomplete="off" v-model="newEmployee.employeeid" disabled/>
                         </div>
                     </div>
         
@@ -398,13 +400,13 @@
                         <div class="rounded-full text-xs p-1 bg-slate-800 border-2 border-slate-700 flex items-center space-x-2 pr-2">
                             <img :src="gravatar" alt="Gravatar" class="h-8 w-8 rounded-full" />
                             <p>
-                                {{ account.firstName + ' ' + account.lastName }}
+                                {{ account.firstname + ' ' + account.lastname }}
                             </p>
                         </div>
                     </div>
                     <div v-else class="h-12 w-12 text-blue-500 bg-blue-900 rounded-full  flex items-center justify-center">
                         <span>
-                            {{ account.firstName.charAt(0).toUpperCase() + account.lastName.charAt(0).toUpperCase() }}
+                            {{ account.firstname.charAt(0).toUpperCase() + account.lastname.charAt(0).toUpperCase() }}
                         </span>
                     </div>
                 </div>

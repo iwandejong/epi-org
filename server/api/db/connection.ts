@@ -1,19 +1,16 @@
-import sql from 'mssql';
+import pg from 'pg';
+const { Pool } = pg;
 
-// Configuration for your Azure SQL database connection
-const cfg: sql.config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    server: process.env.DB_SERVER || '',
-    database: process.env.DB_DATABASE,
-    options: {
-        enableArithAbort: true,
-        encrypt: true
-    }
-};
+const pool = new Pool({
+    user: process.env.POSTGRES_USER,
+    host: process.env.POSTGRES_HOST,
+    database: process.env.POSTGRES_DATABASE,
+    password: process.env.POSTGRES_PASSWORD,
+    port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
+    ssl: process.env.POSTGRES_URL?.includes('sslmode=require') || process.env.POSTGRES_URL_NO_SSL?.includes('sslmode=require')
+        ? { rejectUnauthorized: false }
+        : false
+});
 
-// Create and connect the pool globally
-export const pool = new sql.ConnectionPool(cfg);
-
-// Connect the pool
 export const poolPromise = pool.connect();
+export default pool;    

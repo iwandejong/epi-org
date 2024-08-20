@@ -1,4 +1,4 @@
-import { poolPromise, pool } from '../db/connection';
+import pool, { poolPromise } from '../db/connection';
 import sql from 'mssql';
 import type { ServerResponse } from '~/interfaces/ServerResponse';
 import type { Employee } from '~/interfaces/Employee';
@@ -27,46 +27,82 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                 digest('hex');
     
             await poolPromise;
-            const result = await pool.request()
-                .input('FirstName', sql.NVarChar, employee.firstName)
-                .input('LastName', sql.NVarChar, employee.lastName)
-                .input('BirthDate', sql.Date, employee.birthDate)
-                .input('LinkedIn', sql.NVarChar, employee.linkedIn)
-                .input('Email', sql.NVarChar, employee.email)
-                .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
-                .input('Bio', sql.Text, employee.bio)
-                .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
-                // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
-                .input('OrgId', sql.UniqueIdentifier, employee.orgId)
-                .input('LeaveDays', sql.Int, employee.leaveDays)
-                .input('Salary', sql.Float, employee.salary)
-                .input('Role', sql.NVarChar, employee.role)
-                .input('ManagerId', sql.UniqueIdentifier, employee.manager)
-                .input('JoinDate', sql.Date, employee.joiningDate)
-                .input('Password', sql.NVarChar, hashedPassword)
-                .query(`
-                    UPDATE employee
-                    SET firstName = @FirstName,
-                        lastName = @LastName,
-                        birthDate = @BirthDate,
-                        linkedIn = @LinkedIn,
-                        email = @Email,
-                        bio = @Bio,
-                        gravatarURL = @GravatarURL,
-                        orgId = @OrgId,
-                        leaveDays = @LeaveDays,
-                        salary = @Salary,
-                        role = @Role,
-                        manager = @ManagerId,
-                        joiningDate = @JoinDate,
-                        password = @Password
-                    WHERE employeeId = @EmployeeId
-                `);
-                // hierarchyId = @HierarchyId,
+            // const result = await pool.request()
+            //     .input('firstname', sql.NVarChar, employee.firstname)
+            //     .input('lastname', sql.NVarChar, employee.lastname)
+            //     .input('birthdate', sql.Date, employee.birthdate)
+            //     .input('linkedin', sql.NVarChar, employee.linkedin)
+            //     .input('Email', sql.NVarChar, employee.email)
+            //     .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
+            //     .input('Bio', sql.Text, employee.bio)
+            //     .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
+            //     // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
+            //     .input('orgid', sql.UniqueIdentifier, employee.orgid)
+            //     .input('leavedays', sql.Int, employee.leavedays)
+            //     .input('Salary', sql.Float, employee.salary)
+            //     .input('Role', sql.NVarChar, employee.role)
+            //     .input('ManagerId', sql.UniqueIdentifier, employee.manager)
+            //     .input('JoinDate', sql.Date, employee.joiningdate)
+            //     .input('Password', sql.NVarChar, hashedPassword)
+            //     .query(`
+            //         UPDATE employee
+            //         SET firstname = @firstname,
+            //             lastname = @lastname,
+            //             birthdate = @birthdate,
+            //             linkedin = @linkedin,
+            //             email = @Email,
+            //             bio = @Bio,
+            //             gravatarURL = @GravatarURL,
+            //             orgid = @orgid,
+            //             leavedays = @leavedays,
+            //             salary = @Salary,
+            //             role = @Role,
+            //             manager = @ManagerId,
+            //             joiningdate = @JoinDate,
+            //             password = @Password
+            //         WHERE employeeid = @employeeid
+            //     `);
+            const result = await pool.query(
+                `
+                UPDATE employee
+                SET firstname = $1,
+                    lastname = $2,
+                    birthdate = $3,
+                    linkedin = $4,
+                    email = $5,
+                    bio = $6,
+                    gravatarURL = $7,
+                    orgid = $8,
+                    leavedays = $9,
+                    salary = $10,
+                    role = $11,
+                    manager = $12,
+                    joiningdate = $13,
+                    password = $14
+                WHERE employeeid = $15
+                `,
+                [
+                    employee.firstname,
+                    employee.lastname,
+                    employee.birthdate,
+                    employee.linkedin,
+                    employee.email,
+                    employee.bio,
+                    employee.gravatarURL,
+                    employee.orgid,
+                    employee.leavedays,
+                    employee.salary,
+                    employee.role,
+                    employee.manager,
+                    employee.joiningdate,
+                    hashedPassword,
+                    employee.employeeid
+                ]
+            );
     
             // console.log("Result", result);
             
-            if (result.rowsAffected[0] === 0) {
+            if (result.rowCount === 0) {
                 return {
                     statusCode: 400,
                     body: 'Bad Request'
@@ -79,43 +115,79 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             }
         } else {
             await poolPromise;
-            const result = await pool.request()
-                .input('FirstName', sql.NVarChar, employee.firstName)
-                .input('LastName', sql.NVarChar, employee.lastName)
-                .input('BirthDate', sql.Date, employee.birthDate)
-                .input('LinkedIn', sql.NVarChar, employee.linkedIn)
-                .input('Email', sql.NVarChar, employee.email)
-                .input('EmployeeId', sql.UniqueIdentifier, employee.employeeId)
-                .input('Bio', sql.Text, employee.bio)
-                .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
-                // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
-                .input('OrgId', sql.UniqueIdentifier, employee.orgId)
-                .input('LeaveDays', sql.Int, employee.leaveDays)
-                .input('Salary', sql.Float, employee.salary)
-                .input('Role', sql.NVarChar, employee.role)
-                .input('ManagerId', sql.UniqueIdentifier, employee.manager)
-                .input('JoinDate', sql.Date, employee.joiningDate)
-                // .input('Password', sql.NVarChar, null)
-                .query(`
-                    UPDATE employee
-                    SET firstName = @FirstName,
-                        lastName = @LastName,
-                        birthDate = @BirthDate,
-                        linkedIn = @LinkedIn,
-                        email = @Email,
-                        bio = @Bio,
-                        gravatarURL = @GravatarURL,
-                        orgId = @OrgId,
-                        leaveDays = @LeaveDays,
-                        salary = @Salary,
-                        role = @Role,
-                        manager = @ManagerId,
-                        joiningDate = @JoinDate
-                    WHERE employeeId = @EmployeeId
-                `);
-                // hierarchyId = @HierarchyId,
+            // const result = await pool.request()
+            //     .input('firstname', sql.NVarChar, employee.firstname)
+            //     .input('lastname', sql.NVarChar, employee.lastname)
+            //     .input('birthdate', sql.Date, employee.birthdate)
+            //     .input('linkedin', sql.NVarChar, employee.linkedin)
+            //     .input('Email', sql.NVarChar, employee.email)
+            //     .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
+            //     .input('Bio', sql.Text, employee.bio)
+            //     .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
+            //     // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
+            //     .input('orgid', sql.UniqueIdentifier, employee.orgid)
+            //     .input('leavedays', sql.Int, employee.leavedays)
+            //     .input('Salary', sql.Float, employee.salary)
+            //     .input('Role', sql.NVarChar, employee.role)
+            //     .input('ManagerId', sql.UniqueIdentifier, employee.manager)
+            //     .input('JoinDate', sql.Date, employee.joiningdate)
+            //     // .input('Password', sql.NVarChar, null)
+            //     .query(`
+            //         UPDATE employee
+            //         SET firstname = @firstname,
+            //             lastname = @lastname,
+            //             birthdate = @birthdate,
+            //             linkedin = @linkedin,
+            //             email = @Email,
+            //             bio = @Bio,
+            //             gravatarURL = @GravatarURL,
+            //             orgid = @orgid,
+            //             leavedays = @leavedays,
+            //             salary = @Salary,
+            //             role = @Role,
+            //             manager = @ManagerId,
+            //             joiningdate = @JoinDate
+            //         WHERE employeeid = @employeeid
+            //     `);
+            //     // hierarchyId = @HierarchyId,
+
+            const result = await pool.query(
+                `
+                UPDATE employee
+                SET firstname = $1,
+                    lastname = $2,
+                    birthdate = $3,
+                    linkedin = $4,
+                    email = $5,
+                    bio = $6,
+                    gravatarURL = $7,
+                    orgid = $8,
+                    leavedays = $9,
+                    salary = $10,
+                    role = $11,
+                    manager = $12,
+                    joiningdate = $13
+                WHERE employeeid = $14
+                `,
+                [
+                    employee.firstname,
+                    employee.lastname,
+                    employee.birthdate,
+                    employee.linkedin,
+                    employee.email,
+                    employee.bio,
+                    employee.gravatarURL,
+                    employee.orgid,
+                    employee.leavedays,
+                    employee.salary,
+                    employee.role,
+                    employee.manager,
+                    employee.joiningdate,
+                    employee.employeeid
+                ]
+            );
                 
-            if (result.rowsAffected[0] === 0) {
+            if (result.rowCount === 0) {
                 return {
                     statusCode: 400,
                     body: 'Bad Request'
