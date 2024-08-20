@@ -1,0 +1,22 @@
+{
+    "auth": {
+        "identityProviders": {
+            "github": { "registration": { "openIdIssuer": "", "clientIdSettingName": "", "clientSecretSettingName": "" }},
+            "azureActiveDirectory": { "registration": { "openIdIssuer": "", "clientIdSettingName": "", "clientSecretSettingName": "" }},
+            "facebook": { "registration": { "clientIdSettingName": "", "clientSecretSettingName": "" }},
+            "google": { "registration": { "clientIdSettingName": "", "clientSecretSettingName": "" }}
+        }
+    },
+    "routes": [
+        {
+            "route": "/api/**",
+            "allowedRoles": ["authenticated"]
+        },
+        {
+            "route": "/api/auth/*",
+            "rewrite": "/api/auth/[...].ts",
+            "allowedRoles": ["anonymous", "authenticated"]
+        }
+    ]
+}
+  
