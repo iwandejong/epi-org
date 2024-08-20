@@ -47,7 +47,7 @@ export const createEmployee = async (employee: Employee) => {
     await poolPromise;
     const result = await pool.query(
         `
-        INSERT INTO employee (firstname, lastname, birthdate, employeeid, salary, role, manager, joiningdate, leavedays, linkedin, orgid, email, password, bio, gravatarURL)
+        INSERT INTO employee (firstname, lastname, birthdate, employeeid, salary, role, manager, joiningdate, leavedays, linkedin, orgid, email, password, bio, gravatarurl)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
         `,
         [
@@ -65,7 +65,7 @@ export const createEmployee = async (employee: Employee) => {
             employee.email,
             hashedPassword,
             employee.bio,
-            employee.gravatarURL
+            employee.gravatarurl
         ]
     );
     if (result === null || result.rowCount === null) {
@@ -91,7 +91,7 @@ export const updateEmployee = async (employee: Employee) => {
                 linkedin = $4,
                 email = $5,
                 bio = $6,
-                gravatarURL = $7,
+                gravatarurl = $7,
                 orgid = $8,
                 leavedays = $9,
                 salary = $10,
@@ -108,7 +108,7 @@ export const updateEmployee = async (employee: Employee) => {
                 employee.linkedin,
                 employee.email,
                 employee.bio,
-                employee.gravatarURL,
+                employee.gravatarurl,
                 employee.orgid,
                 employee.leavedays,
                 employee.salary,
@@ -134,7 +134,7 @@ export const updateEmployee = async (employee: Employee) => {
                 linkedin = $4,
                 email = $5,
                 bio = $6,
-                gravatarURL = $7,
+                gravatarurl = $7,
                 orgid = $8,
                 leavedays = $9,
                 salary = $10,
@@ -150,7 +150,7 @@ export const updateEmployee = async (employee: Employee) => {
                 employee.linkedin,
                 employee.email,
                 employee.bio,
-                employee.gravatarURL,
+                employee.gravatarurl,
                 employee.orgid,
                 employee.leavedays,
                 employee.salary,

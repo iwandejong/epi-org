@@ -35,7 +35,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //     .input('Email', sql.NVarChar, employee.email)
             //     .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
             //     .input('Bio', sql.Text, employee.bio)
-            //     .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
+            //     .input('GravatarURL', sql.NVarChar, employee.gravatarurl)
             //     // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
             //     .input('orgid', sql.UniqueIdentifier, employee.orgid)
             //     .input('leavedays', sql.Int, employee.leavedays)
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //             linkedin = @linkedin,
             //             email = @Email,
             //             bio = @Bio,
-            //             gravatarURL = @GravatarURL,
+            //             gravatarurl = @GravatarURL,
             //             orgid = @orgid,
             //             leavedays = @leavedays,
             //             salary = @Salary,
@@ -71,7 +71,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                     linkedin = $4,
                     email = $5,
                     bio = $6,
-                    gravatarURL = $7,
+                    gravatarurl = $7,
                     orgid = $8,
                     leavedays = $9,
                     salary = $10,
@@ -88,7 +88,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                     employee.linkedin,
                     employee.email,
                     employee.bio,
-                    employee.gravatarURL,
+                    employee.gravatarurl,
                     employee.orgid,
                     employee.leavedays,
                     employee.salary,
@@ -123,7 +123,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //     .input('Email', sql.NVarChar, employee.email)
             //     .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
             //     .input('Bio', sql.Text, employee.bio)
-            //     .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
+            //     .input('GravatarURL', sql.NVarChar, employee.gravatarurl)
             //     // .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
             //     .input('orgid', sql.UniqueIdentifier, employee.orgid)
             //     .input('leavedays', sql.Int, employee.leavedays)
@@ -140,7 +140,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //             linkedin = @linkedin,
             //             email = @Email,
             //             bio = @Bio,
-            //             gravatarURL = @GravatarURL,
+            //             gravatarurl = @GravatarURL,
             //             orgid = @orgid,
             //             leavedays = @leavedays,
             //             salary = @Salary,
@@ -160,7 +160,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                     linkedin = $4,
                     email = $5,
                     bio = $6,
-                    gravatarURL = $7,
+                    gravatarurl = $7,
                     orgid = $8,
                     leavedays = $9,
                     salary = $10,
@@ -176,7 +176,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                     employee.linkedin,
                     employee.email,
                     employee.bio,
-                    employee.gravatarURL,
+                    employee.gravatarurl,
                     employee.orgid,
                     employee.leavedays,
                     employee.salary,

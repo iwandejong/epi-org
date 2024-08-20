@@ -33,7 +33,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //     .input('linkedin', sql.NVarChar, employee.linkedin)
             //     .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
             //     .input('Bio', sql.Text, employee.bio)
-            //     .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
+            //     .input('GravatarURL', sql.NVarChar, employee.gravatarurl)
             //     .input('JoinDate', sql.Date, employee.joiningdate)
             //     .input('Password', sql.NVarChar, hashedPassword)
             //     .query(`
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             //             birthdate = @birthdate,
             //             linkedin = @linkedin,
             //             bio = @Bio,
-            //             gravatarURL = @GravatarURL,
+            //             gravatarurl = @GravatarURL,
             //             joiningdate = @JoinDate,
             //             password = @Password
             //         WHERE employeeid = @employeeid

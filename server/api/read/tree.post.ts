@@ -49,7 +49,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             // read into an array of Tree objects
         const tree: Tree[] = [];
         for (const employee of result.rows) {
-            const gravURL = await fetchGravatarURL(employee.gravatarURL);
+            const gravURL = await fetchGravatarURL(employee.gravatarurl);
             tree.push({
                 id: employee.id,
                 firstname: employee.firstname,
@@ -57,13 +57,13 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                 employeeid: employee.employeeid,
                 role: employee.role,
                 manager: employee.manager,
-                gravatarURL: gravURL
+                gravatarurl: gravURL
             });
         };
 
         // // fetch Gravatar URLs
         // for (let i = 0; i < tree.length; i++) {
-        //     tree[i].gravatarURL = ;
+        //     tree[i].gravatarurl = ;
         // }
 
         console.log("TREE", tree);

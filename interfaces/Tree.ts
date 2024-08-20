@@ -5,7 +5,7 @@ interface Tree {
     employeeid: string;
     role: string;
     manager: string | null;
-    gravatarURL: string;
+    gravatarurl: string;
 
     children?: Tree[] | null;
 }

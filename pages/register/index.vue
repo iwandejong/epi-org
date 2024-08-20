@@ -12,7 +12,7 @@ const isLoading = ref(false)
 // .input('linkedin', sql.NVarChar, employee.linkedin)
 // .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
 // .input('Bio', sql.Text, employee.bio)
-// .input('GravatarURL', sql.NVarChar, employee.gravatarURL)
+// .input('GravatarURL', sql.NVarChar, employee.gravatarurl)
 // .input('JoinDate', sql.Date, employee.joiningdate)
 // .input('Password', sql.NVarChar, hashedPassword)
 
@@ -21,7 +21,7 @@ const form = ref({
     lastname: '',
     birthdate: '',
     linkedin: 'https://linkedin.com/in/johndoe',
-    gravatarURL: 'https://gravatar.com/iwandejong',
+    gravatarurl: 'https://gravatar.com/iwandejong',
     bio: '',
     password: '',
     employeeid: '',
@@ -117,7 +117,7 @@ async function submitForm() {
                                     <span class="text-red-500">*</span>
                                 </span>
                             </label>
-                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarURL" placeholder="https://gravatar.com/johndoe"/>
+                            <input type="url" id="picture" class="bg-slate-700 p-2 rounded-md" required v-model="form.gravatarurl" placeholder="https://gravatar.com/johndoe"/>
                             <div class="flex space-x-1">
                                 <p>Don't have a Gravatar Profile?</p>
                                 <a href="https://gravatar.com/profile" target="_blank" rel="noopener noreferrer" class="text-blue-500">Create one</a>

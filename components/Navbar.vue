@@ -68,7 +68,7 @@
     // collect gravatars for all employees
     const gravatars = ref([]);
     employees.value.body.forEach((emp : Employee) => {
-        fetch(`${emp.gravatarURL}.json`)
+        fetch(`${emp.gravatarurl}.json`)
         .then(response => response.json())
         .then(data => {
             gravatars.value.push(data.entry[0].thumbnailUrl);
@@ -291,8 +291,8 @@
                             <InputText id="birthdate" class="flex-auto" autocomplete="off" v-model="form.birthdate" />
                         </div>
                         <div class="">
-                            <label for="gravatarURL" class="font-semibold w-24">Gravatar URL</label>
-                            <InputText id="gravatarURL" class="flex-auto" autocomplete="off" v-model="form.gravatarURL" />
+                            <label for="gravatarurl" class="font-semibold w-24">Gravatar URL</label>
+                            <InputText id="gravatarurl" class="flex-auto" autocomplete="off" v-model="form.gravatarurl" />
                         </div>
                     </div>
         

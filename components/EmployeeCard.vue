@@ -79,7 +79,7 @@ props.employee.birthdate = new Date(props.employee.birthdate).toLocaleDateString
 // console.log(props.employee);
 
 const gravatar = ref('');
-const gravatarProfileUrl = props.employee.gravatarURL;
+const gravatarProfileUrl = props.employee.gravatarurl;
 const loadingGrav = ref(true);
 
 fetch(`${gravatarProfileUrl}.json`)
@@ -247,8 +247,8 @@ async function deleteEmp() {
                              </Select>
                         </div>
                         <div class="">
-                            <label for="gravatarURL" class="font-semibold w-24">Gravatar URL</label>
-                            <InputText id="gravatarURL" class="flex-auto" autocomplete="off" v-model="props.employee.gravatarURL" disabled/>
+                            <label for="gravatarurl" class="font-semibold w-24">Gravatar URL</label>
+                            <InputText id="gravatarurl" class="flex-auto" autocomplete="off" v-model="props.employee.gravatarurl" disabled/>
                         </div>
                     </div>
         
