@@ -55,7 +55,7 @@ const props = defineProps<{
     employees: Employee[]
 }>();
 
-console.log(props.employees);
+
 
 // remove employee from employees list
 const otherEmployees = ref(props.employees);
@@ -64,7 +64,10 @@ otherEmployees.value = props.employees.filter(e => e.employeeid !== props.employ
 // filter out if other employee is already managed by current employee
 otherEmployees.value = otherEmployees.value.filter(e => e.manager !== props.employee.employeeid);
 
-console.log(otherEmployees.value);
+// filter out if manager is the owner
+if (props.employee.manager === null) {
+    otherEmployees.value = null;
+}
 
 let salary = props.employee.salary / 1000;
 salary = Math.round(salary * 10) / 10;

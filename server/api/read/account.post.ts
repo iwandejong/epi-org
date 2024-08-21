@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     if (event.req.method === 'POST') {
         const body = await readBody(event);
 
-        console.log('body', body);
+        
 
         if (!body || !body.empId) {
             return new Response('Invalid request', { status: 400 });

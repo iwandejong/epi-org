@@ -50,7 +50,7 @@
         });
     }
 
-    console.log(employees.value);
+    
 
     employees.value.body.forEach((emp : Employee) => {
         delete emp.password;
@@ -89,8 +89,8 @@
         });
     });
 
-    console.log(gravatars.value);
-    console.log(gravatar.value);
+    
+    
 
     const op = ref();
 

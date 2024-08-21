@@ -19,7 +19,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
 
 
         if (employee.password) {
-            console.log("Updating password");
+            
             const hashedPassword = crypto.createHash('sha256').
                 update(employee.password.trim()).
                 digest('hex');
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                 ]
             );
     
-            // console.log("Result", result);
+            // 
             
             if (result.rowCount === 0) {
                 return {

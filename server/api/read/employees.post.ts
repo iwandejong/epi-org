@@ -5,7 +5,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
     if (event.node.req.method === 'POST') {
         const body = await readBody(event);
 
-        console.log('body', body);
+        
         if (!body || !body.orgid) {
             return {
                 statusCode: 400,
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
 
         const orgid = body.orgid;
 
-        console.log('orgid', orgid);
+        
 
         await poolPromise;
         try {

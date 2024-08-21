@@ -40,7 +40,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
     }
 
     const orgid = body.orgid;
-    console.log("orgid", orgid);
+    
 
     try {
         await poolPromise;
@@ -48,7 +48,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             'SELECT * FROM employee WHERE orgid = $1', [orgid]
         );
 
-        console.log("RESULT", result);
+        
 
             // read into an array of Tree objects
         const tree: Tree[] = [];
@@ -65,13 +65,13 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
             });
         };
 
-        console.log("TREE", tree);
+        
 
         // build the tree back up
         // managerId is null for the root node
         const hierarchyTree: Tree[] = buildTree(tree);
 
-        console.log("TREE", hierarchyTree);
+        
 
         return {
             statusCode: 200,

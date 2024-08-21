@@ -18,7 +18,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
 
         // user has already been invited, must fill in missing details
         if (employee.password) {
-            console.log("Updating password");
+            
             const hashedPassword = crypto.createHash('sha256').
                 update(employee.password.trim()).
                 digest('hex');
@@ -54,7 +54,7 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
 
             client.release();
 
-            // console.log("Result", result);
+            // 
             
             if (result.rowCount === 0) {
                 return {

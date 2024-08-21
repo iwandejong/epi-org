@@ -60,9 +60,9 @@ const props = defineProps<{
 const empID = ref(0);
 empID.value = props.authData.user?.id || '';
 
-console.log(empID.value);
 
-console.log(props.tree);
+
+
 
 function convertTreeToPrimeVueFormat(tree: Tree): any {
     return {
@@ -85,7 +85,7 @@ const originalData = ref(convertTreeToPrimeVueFormat(props.tree[0]));
 const data = ref(originalData.value);
 const searchQuery = ref('');
 
-console.log(data.value);
+
 
 // highlight the current user in the tree (empID)
 const selection = ref({});

@@ -26,11 +26,11 @@ export default NuxtAuthHandler ({
                     const authUser = await authenticateEmployee(email, password);
 
                     if (!authUser) {
-                        // console.log('Invalid password');
+                        // 
                         throw new Error('Invalid password');
                     }
 
-                    console.log('User authenticated:', user);
+                    
 
                     // combine first and last name
                     user.name = `${user.firstname} ${user.lastname}`;
@@ -69,7 +69,7 @@ export default NuxtAuthHandler ({
                 ...token,
                 ...session.user
             };
-            console.log('Session:', session);
+            
             return session;
         },
         async redirect({url, baseUrl}) {

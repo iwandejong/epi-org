@@ -9,8 +9,8 @@ async function fetchEmployees(orgid: string): Promise<any> {
             headers: { 'Content-Type': 'application/json' }
         });
 
-        console.log('statusCode', statusCode);
-        console.log('body', body);
+        
+        
 
         if (statusCode > 200) {
             throw new Error('Failed to fetch employees');

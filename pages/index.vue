@@ -37,9 +37,9 @@ try {
 }
 
 // get current user
-console.log(empID.value);
+
 const currentUser = employees.value.find((employee: Employee) => employee.employeeid === empID.value);
-console.log(currentUser);
+
 
 // calculate total tenure using employees' joined date
 employees.value.forEach((employee: Employee) => {
@@ -51,7 +51,7 @@ employees.value.forEach((employee: Employee) => {
 
 // calculate total salary expenditure
 employees.value.forEach((employee: Employee) => {
-    console.log(typeof employee.salary);
+    
     let salary = employee.salary.toString().replace(/,/g, '');
     employee.salary = parseFloat(salary);
     totalSalary += employee.salary;
@@ -123,7 +123,7 @@ if (currentUser.manager !== null) {
     otherEmployees = otherEmployees.filter((employee: Employee) => employee.manager !== currentUser.manager);
 }
 
-console.log(otherEmployees);
+
 
 
 onMounted(() => {

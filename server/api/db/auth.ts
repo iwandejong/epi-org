@@ -76,7 +76,7 @@ export const createEmployee = async (employee: Employee) => {
 
 export const updateEmployee = async (employee: Employee) => {
     if (employee.password) {
-        console.log("Updating password");
+        
         const hashedPassword = crypto.createHash('sha256')
             .update(employee.password.trim())
             .digest('hex');
