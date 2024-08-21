@@ -81,8 +81,9 @@ To join an organization, follow these steps:
 
 <img src="images/image-4.png" alt="drawing" width="400"/>
 
-3. The employee can then paste the code in the "Join Organization" field on the login page and click on the "Join Organization" button.
-// ADD IMAGE HERE
+3. The employee can then paste the code in the "Join Organization" field on the login page and click on the "Join Organization" button and fill out their details.
+
+<img src="images/image-20.png" alt="drawing" width="400"/>
 
 ### Dashboard
 
