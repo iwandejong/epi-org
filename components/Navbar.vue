@@ -213,7 +213,7 @@
                 return;
             }
         } catch (err) {
-            toast.add({ severity: 'error', summary: 'Account Creation Failed', detail: 'Internal Server Error', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Account Creation Failed', detail: 'Internal Server Error. Account may already exist.', life: 3000 });
             return err;
         } finally {
             loading.value = false;
