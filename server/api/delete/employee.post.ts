@@ -16,14 +16,25 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
 
         await poolPromise;
         try {
-            const result = await pool.query(
+            const client = await pool.connect();
+            const result = await client.query(
                 'DELETE FROM employee WHERE employeeid = $1',
                 [employeeid]
             );
 
+            // also delete any references to this employee in the manager column
+            const result2 = await client.query(
+                'UPDATE employee SET manager = NULL WHERE manager = $1',
+                [employeeid]
+            );
+            client.release();
+
             return {
                 statusCode: 200,
-                body: { affectedRows: result.rowCount } // PostgreSQL uses rowCount to determine the number of affected rows
+                body: {
+                    deleted: result.rowCount,
+                    updated: result2.rowCount
+                } // PostgreSQL uses rowCount to determine the number of affected rows
             };
         } catch (error) {
             console.error("Error executing query:", error);
