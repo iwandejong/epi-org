@@ -17,6 +17,12 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
         await poolPromise;
         try {
             const client = await pool.connect();
+            // get current employee's manager id
+            const managerid = await client.query(
+                'SELECT manager FROM employee WHERE employeeid = $1',
+                [employeeid]
+            );
+
             const result = await client.query(
                 'DELETE FROM employee WHERE employeeid = $1',
                 [employeeid]
@@ -24,8 +30,8 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
 
             // also delete any references to this employee in the manager column
             const result2 = await client.query(
-                'UPDATE employee SET manager = NULL WHERE manager = $1',
-                [employeeid]
+                'UPDATE employee SET manager = $1 WHERE manager = $2',
+                [managerid.rows[0].manager, employeeid]
             );
             client.release();
 
