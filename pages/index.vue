@@ -96,7 +96,6 @@ try {
 }
 
 // select all employees that are not the current user, and under the current user's supervision
-// TODO: traverse the Tree
 let travTree = (tree: Tree) => {
     let arr = [];
     if (tree.children.length > 0) {

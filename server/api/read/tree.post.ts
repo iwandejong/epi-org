@@ -1,16 +1,20 @@
-// build a tree using https://learn.microsoft.com/en-us/sql/relational-databases/hierarchical-data-sql-server?view=sql-server-ver16 as resource
-
 import pool, { poolPromise } from '../db/connection';
-import sql from 'mssql';
 import type { Tree } from '~/interfaces/Tree';
 import type { ServerResponse } from '~/interfaces/ServerResponse';
 
-function buildTree(employees: Tree[], managerId: string | null = null): Tree[] {
+function buildTree(employees: Tree[], managerId: string | null = null, visited: Set<string> = new Set()): Tree[] {
+    if (managerId && visited.has(managerId)) {
+        return []; // Stop the recursion to avoid cycles
+    }
+
+    // Mark the current manager as visited
+    if (managerId) visited.add(managerId);
+
     return employees
         .filter(employee => employee.manager === managerId)
         .map(employee => ({
             ...employee,
-            children: buildTree(employees, employee.employeeid) // Recursively find and assign subordinates
+            children: buildTree(employees, employee.employeeid, visited) // Recursively find and assign subordinates
         }));
 }
 
@@ -60,11 +64,6 @@ export default defineEventHandler(async (event): Promise<ServerResponse> => {
                 gravatarurl: gravURL
             });
         };
-
-        // // fetch Gravatar URLs
-        // for (let i = 0; i < tree.length; i++) {
-        //     tree[i].gravatarurl = ;
-        // }
 
         console.log("TREE", tree);
 

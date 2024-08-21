@@ -24,8 +24,6 @@ export default NuxtAuthHandler ({
                     }
 
                     const authUser = await authenticateEmployee(email, password);
-                    
-                    // console.log(authUser);
 
                     if (!authUser) {
                         // console.log('Invalid password');

@@ -61,8 +61,6 @@ export default defineEventHandler(async (req) => {
             throw new Error('Email already exists');
         }
 
-        // console.log('Creating employee');
-
         // check if password is strong enough
         if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}/.test(employee.password)) {
             throw new Error('Password is not strong enough');
@@ -81,10 +79,8 @@ export default defineEventHandler(async (req) => {
             id: orgid, name: employee.orgName,
             createdat: new Date()
         });
-        // console.log(org);
 
         if (!org) {
-            // console.log('Failed to create organisation');
             throw new Error('Failed to create organisation');
         }
 
@@ -94,14 +90,10 @@ export default defineEventHandler(async (req) => {
 
         employee.hierarchyId = '/1/';
 
-        // console.log(employee);
-
         // create the employee
         const emp = await createEmployee(employee);
-        // console.log(emp);
 
         if (!emp) {
-            // console.log('Failed to create employee');
             throw new Error('Failed to create employee');
         }
 

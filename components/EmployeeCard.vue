@@ -2,8 +2,6 @@
 import { ref } from "vue";
 import type { Employee } from '~/interfaces/Employee';
 
-// TODO: add tabNo to allow only one tab to be open at a time
-
 const active = ref(false);
 
 const wrapper = ref();
@@ -76,8 +74,6 @@ let s = "R" + salary + "k";
 props.employee.joiningdate = new Date(props.employee.joiningdate).toLocaleDateString();
 props.employee.birthdate = new Date(props.employee.birthdate).toLocaleDateString();
 
-// console.log(props.employee);
-
 const gravatar = ref('');
 const gravatarProfileUrl = props.employee.gravatarurl;
 const loadingGrav = ref(true);
@@ -86,7 +82,6 @@ fetch(`${gravatarProfileUrl}.json`)
 .then(response => response.json())
 .then(data => {
     gravatar.value = data.entry[0].thumbnailUrl;
-    // console.log(gravatar.value);
     loadingGrav.value = false;
 })
 .catch(err => {

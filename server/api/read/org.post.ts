@@ -1,11 +1,3 @@
-// export const getOrg = async (orgid: string) => {
-//     await poolPromise;
-//     const result = await pool.request()
-//         .input('orgid', sql.UniqueIdentifier, orgid)
-//         .query('SELECT * FROM organisation WHERE orgid = @orgid');
-//     return result.recordset[0];
-// };
-
 import pool, { poolPromise } from '../db/connection';
 import sql from 'mssql';
 import type { ServerResponse } from '~/interfaces/ServerResponse';

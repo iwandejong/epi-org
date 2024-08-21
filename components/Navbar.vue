@@ -60,8 +60,6 @@
 
     const form = ref(account.value);
 
-    // console.log(form.value);
-
     const gravatar = ref('');
     const loadingGrav = ref(true);
 
@@ -143,7 +141,6 @@
         () => route.path,
         (newPath) => {
             isTable.value = newPath === '/table';
-            // console.log('URL changed to:', newPath);
         }
     );
 
@@ -178,14 +175,6 @@
         toast.add({ severity: 'success', summary: 'Employee ID Copied', detail: 'The employee ID has been copied to the clipboard.', life: 3000 });
 
         // prepare Employee object for creation
-        // .input('Email', sql.NVarChar, employee.email)
-        //         .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
-        //         .input('HierarchyId', sql.NVarChar, employee.hierarchyId)
-        //         .input('orgid', sql.UniqueIdentifier, employee.orgid)
-        //         .input('leavedays', sql.Int, employee.leavedays)
-        //         .input('Salary', sql.Float, employee.salary)
-        //         .input('Role', sql.NVarChar, employee.role)
-        //         .input('ManagerId', sql.UniqueIdentifier, employee.manager)
         const newEmp = {
             ...newEmployee.value,
             orgid: account.value.orgid,
@@ -200,8 +189,6 @@
                 body: newEmp,
             });
             let data : any = await result;
-
-            // console.log(data);
 
             if (data.statusCode > 400) {
                 toast.add({ severity: 'error', summary: 'Account Creation Failed', detail: 'Please try again', life: 3000 });

@@ -5,17 +5,6 @@ definePageMeta({
 
 const checked = ref(false)
 const isLoading = ref(false)
-
-// .input('firstname', sql.NVarChar, employee.firstname)
-// .input('lastname', sql.NVarChar, employee.lastname)
-// .input('birthdate', sql.Date, employee.birthdate)
-// .input('linkedin', sql.NVarChar, employee.linkedin)
-// .input('employeeid', sql.UniqueIdentifier, employee.employeeid)
-// .input('Bio', sql.Text, employee.bio)
-// .input('GravatarURL', sql.NVarChar, employee.gravatarurl)
-// .input('JoinDate', sql.Date, employee.joiningdate)
-// .input('Password', sql.NVarChar, hashedPassword)
-
 const form = ref({
     firstname: '',
     lastname: '',
@@ -35,14 +24,11 @@ async function submitForm() {
 
     try {
         isLoading.value = true;
-        // console.log(form.value);
         const result = await $fetch('/api/create/employee', {
             method: 'POST',
             body: form.value
         });
         let data : any = await result;
-
-        // console.log(data);
 
         if (data.statusCode > 400) {
             toast.add({ severity: 'error', summary: 'Registration Failed', detail: data.body.message, life: 3000 });
